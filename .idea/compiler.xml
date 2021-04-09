@@ -6,7 +6,8 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="Snake" />
+        <module name="snake-core" />
+        <module name="snake-desktop" />
       </profile>
     </annotationProcessing>
   </component>
