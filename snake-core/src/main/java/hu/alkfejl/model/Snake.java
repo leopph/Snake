@@ -58,6 +58,21 @@ public final class Snake
     }
 
 
+    public void relocate(Direction d, int coord)
+    {
+        switch (d)
+        {
+            case UP:
+            case DOWN:
+                m_BodyParts.get(0).setY(coord);
+                break;
+            case LEFT:
+            case RIGHT:
+                m_BodyParts.get(0).setX(coord);
+        }
+    }
+
+
     private boolean isSelfEating()
     {
         for (int i = 0; i < m_BodyParts.size(); i++)
@@ -89,5 +104,11 @@ public final class Snake
         }
 
         return diff.add(m_BodyParts.get(0));
+    }
+
+
+    public Point getHead()
+    {
+        return m_BodyParts.get(0);
     }
 }
