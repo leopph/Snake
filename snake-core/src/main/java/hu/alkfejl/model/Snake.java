@@ -42,12 +42,17 @@ public final class Snake
     }
 
 
-    public boolean move()
+    public boolean move(boolean shouldGrow)
     {
-        for (int i = m_BodyParts.size() - 1; i >= 1; i--)
-            m_BodyParts.set(i, m_BodyParts.get(i-1));
+        if (shouldGrow)
+            m_BodyParts.add(0, nextHeadLocation());
+        else
+        {
+            for (int i = m_BodyParts.size() - 1; i >= 1; i--)
+                m_BodyParts.set(i, m_BodyParts.get(i - 1));
 
-        m_BodyParts.set(0, nextHeadLocation());
+            m_BodyParts.set(0, nextHeadLocation());
+        }
 
         return !isSelfEating();
     }
@@ -84,14 +89,5 @@ public final class Snake
         }
 
         return diff.add(m_BodyParts.get(0));
-    }
-
-
-    public void grow(Point p)
-    {
-        if (Math.abs(p.getX()) > 1 || Math.abs(p.getY()) > 1)
-            throw new IllegalArgumentException("Head difference cannot be greater than 1 block!");
-
-        m_BodyParts.add(0, p.add(m_BodyParts.get(0)));
     }
 }

@@ -12,10 +12,10 @@ public final class Point
         y = 0;
     }
 
-    public Point(int xp, int yp)
+    public Point(int px, int py)
     {
-        x = xp;
-        y = yp;
+        x = px;
+        y = py;
     }
 
 
@@ -29,14 +29,14 @@ public final class Point
         return y;
     }
 
-    public void setX(int xp)
+    public void setX(int px)
     {
-        x = xp;
+        x = px;
     }
 
-    public void setY(int yp)
+    public void setY(int py)
     {
-        y = yp;
+        y = py;
     }
 
 
