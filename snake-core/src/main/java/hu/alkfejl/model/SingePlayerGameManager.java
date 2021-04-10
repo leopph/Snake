@@ -11,6 +11,7 @@ public class SingePlayerGameManager extends GameManager
     private boolean m_WallsMatter;
 
 
+
     public SingePlayerGameManager() {}
 
     public SingePlayerGameManager(Snake snake, Map map, boolean dieIfWallIsHit)

@@ -6,12 +6,19 @@ import javafx.util.Duration;
 
 public abstract class GameManager
 {
+    public enum GameState
+    {
+        READY, INPROGRESS, WON, LOST
+    }
+
     private ScheduledService<Void> m_Loop;
+    private GameState m_State;
 
 
     GameManager()
     {
         m_Loop = createLoop();
+        m_State = GameState.READY;
     }
 
 
@@ -19,6 +26,7 @@ public abstract class GameManager
 
     public void startGame()
     {
+        m_State = GameState.INPROGRESS;
         m_Loop.start();
     }
 
