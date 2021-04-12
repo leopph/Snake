@@ -1,18 +1,18 @@
 package hu.alkfejl.model;
 
-public final class Point
+public final class Vector2
 {
     private int x;
     private int y;
 
 
-    public Point()
+    public Vector2()
     {
         x = 0;
         y = 0;
     }
 
-    public Point(int px, int py)
+    public Vector2(int px, int py)
     {
         x = px;
         y = py;
@@ -43,21 +43,21 @@ public final class Point
     @Override
     public boolean equals(Object p)
     {
-        if (!(p instanceof Point))
+        if (!(p instanceof Vector2))
             return false;
 
-        return ((Point) p).x == x && ((Point) p).y == y;
+        return ((Vector2) p).x == x && ((Vector2) p).y == y;
     }
 
 
-    Point add(Point other)
+    Vector2 add(Vector2 other)
     {
-        return new Point(x + other.x, y + other.y);
+        return new Vector2(x + other.x, y + other.y);
     }
 
-    Point sub(Point other)
+    Vector2 sub(Vector2 other)
     {
-        return new Point(x - other.x, y - other.y);
+        return new Vector2(x - other.x, y - other.y);
     }
 
 

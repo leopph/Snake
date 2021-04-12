@@ -1,5 +1,7 @@
 package hu.alkfejl.model;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.concurrent.ScheduledService;
 import javafx.util.Duration;
 
@@ -8,25 +10,29 @@ public abstract class GameManager
 {
     public enum GameState
     {
-        READY, INPROGRESS, WON, LOST
+        READY, INPROGRESS, ENDED
     }
 
-    private ScheduledService<Void> m_Loop;
-    private GameState m_State;
+
+    protected ScheduledService<Void> m_Loop;
+    protected ObjectProperty<GameState> m_State;
 
 
-    GameManager()
+    protected GameManager()
     {
         m_Loop = createLoop();
-        m_State = GameState.READY;
+        m_State = new SimpleObjectProperty<>();
+        m_State.setValue(GameState.READY);
     }
-
 
     protected abstract ScheduledService<Void> createLoop();
 
     public void startGame()
     {
-        m_State = GameState.INPROGRESS;
+        if (m_Loop.isRunning())
+            m_Loop.cancel();
+
+        m_State.setValue(GameState.INPROGRESS);
         m_Loop.start();
     }
 
@@ -34,9 +40,17 @@ public abstract class GameManager
     {
         m_Loop.setPeriod(new Duration((1.0 / ticksPerSec) * 1000));
     }
-
     public int getSpeed()
     {
         return (int) (1.0 / m_Loop.getPeriod().toSeconds());
+    }
+
+    public ObjectProperty<GameState> getStateProperty()
+    {
+        return m_State;
+    }
+    public GameState getState()
+    {
+        return m_State.get();
     }
 }

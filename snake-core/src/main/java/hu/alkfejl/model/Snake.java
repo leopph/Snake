@@ -12,7 +12,7 @@ public final class Snake
     }
 
 
-    private final List<Point> m_BodyParts;
+    private final List<Vector2> m_BodyParts;
     private Direction m_Direction;
 
 
@@ -20,13 +20,13 @@ public final class Snake
     {
         m_BodyParts = new ArrayList<>();
         for (int i = 2; i >= 0; i--)
-            m_BodyParts.add(new Point(i, 0));
+            m_BodyParts.add(new Vector2(i, 0));
 
         m_Direction = Direction.RIGHT;
     }
 
 
-    public boolean isOnPoint(Point p)
+    public boolean isOnPoint(Vector2 p)
     {
         for (var point : m_BodyParts)
             if (p.equals(point))
@@ -84,31 +84,30 @@ public final class Snake
     }
 
 
-    public Point nextHeadLocation()
+    public Vector2 nextHeadLocation()
     {
-        Point diff = null;
+        Vector2 diff = null;
 
         switch (m_Direction)
         {
             case UP:
-                diff = new Point(0,1);
+                diff = new Vector2(0,1);
                 break;
             case DOWN:
-                diff =  new Point(0, -1);
+                diff =  new Vector2(0, -1);
                 break;
             case LEFT:
-                diff =  new Point(-1 , 0);
+                diff =  new Vector2(-1 , 0);
                 break;
             case RIGHT:
-                diff = new Point(+1 , 0);
+                diff = new Vector2(+1 , 0);
         }
 
         return diff.add(m_BodyParts.get(0));
     }
 
-
-    public Point getHead()
+    public List<Vector2> getBodyCoords()
     {
-        return m_BodyParts.get(0);
+        return List.copyOf(m_BodyParts);
     }
 }

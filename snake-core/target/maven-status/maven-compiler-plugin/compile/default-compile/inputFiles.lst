@@ -1,6 +1,6 @@
 C:\Dev\Snake\snake-core\src\main\java\hu\alkfejl\model\Food.java
 C:\Dev\Snake\snake-core\src\main\java\hu\alkfejl\model\Map.java
 C:\Dev\Snake\snake-core\src\main\java\hu\alkfejl\model\GameManager.java
-C:\Dev\Snake\snake-core\src\main\java\hu\alkfejl\model\SingePlayerGameManager.java
+C:\Dev\Snake\snake-core\src\main\java\hu\alkfejl\model\Vector2.java
 C:\Dev\Snake\snake-core\src\main\java\hu\alkfejl\model\Snake.java
-C:\Dev\Snake\snake-core\src\main\java\hu\alkfejl\model\Point.java
+C:\Dev\Snake\snake-core\src\main\java\hu\alkfejl\model\SinglePlayerGameManager.java

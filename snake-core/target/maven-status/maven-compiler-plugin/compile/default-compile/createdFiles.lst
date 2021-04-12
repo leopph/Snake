@@ -1,11 +1,12 @@
 hu\alkfejl\model\Map$Wall.class
 hu\alkfejl\model\Food.class
-hu\alkfejl\model\Point.class
+hu\alkfejl\model\SinglePlayerGameManager$1$1.class
+hu\alkfejl\model\Vector2.class
+hu\alkfejl\model\GameManager$GameState.class
+hu\alkfejl\model\SinglePlayerGameManager.class
 hu\alkfejl\model\Snake$1.class
 hu\alkfejl\model\Snake.class
-hu\alkfejl\model\SingePlayerGameManager$1.class
 hu\alkfejl\model\Map.class
-hu\alkfejl\model\SingePlayerGameManager.class
 hu\alkfejl\model\GameManager.class
-hu\alkfejl\model\SingePlayerGameManager$1$1.class
 hu\alkfejl\model\Snake$Direction.class
+hu\alkfejl\model\SinglePlayerGameManager$1.class
