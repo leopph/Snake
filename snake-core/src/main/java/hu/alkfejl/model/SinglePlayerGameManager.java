@@ -90,7 +90,7 @@ public class SinglePlayerGameManager extends GameManager
                                     m_Snake.relocate(Snake.Direction.UP, m_Map.getSize().getY());
                             }
 
-                        if (!m_Snake.move(m_Map.getFoodOnPoint(nextPos) != null))
+                        if (!m_Snake.move(m_Map.getFoodOnPoint(m_Snake.nextHeadLocation()) != null))
                         {
                             System.out.println("Megette magát xd");
                             m_State.setValue(GameState.ENDED);
