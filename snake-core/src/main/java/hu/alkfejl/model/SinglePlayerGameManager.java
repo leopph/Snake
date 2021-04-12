@@ -7,51 +7,13 @@ import javafx.concurrent.Task;
 
 public class SinglePlayerGameManager extends GameManager
 {
-    private Snake m_Snake;
-    private Map m_Map;
-    private boolean m_WallsMatter;
-
-
     public SinglePlayerGameManager()
     {
     }
 
     public SinglePlayerGameManager(Snake snake, Map map, boolean dieIfWallIsHit)
     {
-        m_Snake = snake;
-        m_Map = map;
-        m_WallsMatter = dieIfWallIsHit;
-    }
-
-
-    public Snake getSnake()
-    {
-        return m_Snake;
-    }
-
-    public Map getMap()
-    {
-        return m_Map;
-    }
-
-    public boolean doWallsMatter()
-    {
-        return m_WallsMatter;
-    }
-
-    public void setSnake(Snake snake)
-    {
-        m_Snake = snake;
-    }
-
-    public void setMap(Map map)
-    {
-        m_Map = map;
-    }
-
-    public void setWallsMatter(boolean newValue)
-    {
-        m_WallsMatter = newValue;
+        super(snake, map, dieIfWallIsHit);
     }
 
 
@@ -90,9 +52,22 @@ public class SinglePlayerGameManager extends GameManager
                                     m_Snake.relocate(Snake.Direction.UP, m_Map.getSize().getY());
                             }
 
-                        if (!m_Snake.move(m_Map.getFoodOnPoint(m_Snake.nextHeadLocation()) != null))
+                            var willEatFood = m_Map.getFoodOnPoint(m_Snake.nextHeadLocation()) != null;
+
+                        if (!m_Snake.move(willEatFood))
                         {
                             System.out.println("Megette magát xd");
+                            m_State.setValue(GameState.ENDED);
+                            Platform.runLater(m_Loop::cancel);
+                            // TODO
+                        }
+
+                        if (willEatFood)
+                            placeFood(Food.Random(), m_Snake.getBodyCoords(), m_Map);
+
+                        if (m_Snake.getBodyCoords().size() >= m_Map.getSize().getX() * m_Map.getSize().getY())
+                        {
+                            System.out.println("Nyertél kek");
                             m_State.setValue(GameState.ENDED);
                             Platform.runLater(m_Loop::cancel);
                             // TODO
