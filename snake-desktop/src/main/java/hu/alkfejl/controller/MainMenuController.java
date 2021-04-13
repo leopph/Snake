@@ -23,9 +23,9 @@ public class MainMenuController implements Initializable
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
-        m_P1Snake = new SimpleObjectProperty<>();
-        m_P2Snake = new SimpleObjectProperty<>();
-        m_Map = new SimpleObjectProperty<>();
+        m_P1Snake = new SimpleObjectProperty<>(new Snake());
+        m_P2Snake = new SimpleObjectProperty<>(new Snake());
+        m_Map = new SimpleObjectProperty<>(new Map());
     }
 
 
@@ -36,6 +36,7 @@ public class MainMenuController implements Initializable
         var controller = loader.<SinglePlayerController>getController();
         controller.getSnakeProperty().bindBidirectional(m_P1Snake);
         controller.getMapProperty().bindBidirectional(m_Map);
+        controller.start();
     }
 
 
@@ -47,6 +48,7 @@ public class MainMenuController implements Initializable
         controller.getMapProperty().bindBidirectional(m_Map);
         controller.getSnakeProperty().bindBidirectional(m_P1Snake);
         controller.getP2SnakeProperty().bindBidirectional(m_P2Snake);
+        controller.start();
     }
 
 

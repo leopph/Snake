@@ -4,9 +4,12 @@ import hu.alkfejl.model.*;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-
-import java.net.URL;
-import java.util.ResourceBundle;
+import javafx.geometry.Insets;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 
 
 public class SinglePlayerController extends GameWindowController
@@ -14,13 +17,24 @@ public class SinglePlayerController extends GameWindowController
     private ObjectProperty<GameManager.GameState> gameStateObjectProperty;
 
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle)
+    public SinglePlayerController()
     {
-        super.initialize(url, resourceBundle);
-
-        m_GameManager = new SinglePlayerGameManager(new Snake(), new Map());
         gameStateObjectProperty = new SimpleObjectProperty<>();
+    }
+
+
+    @Override
+    public void start()
+    {
+        m_GameManager = new SinglePlayerGameManager(m_Snake.get(), m_Map.get());
+
+        for (int i = 0; i < m_Map.get().getSize().getX(); i++)
+            for (int j = 0; j < m_Map.get().getSize().getY(); j++)
+            {
+                var pane = new Pane();
+                m_Grid.add(pane, j, i);
+                pane.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+            }
 
         gameStateObjectProperty.bind(m_GameManager.getStateProperty());
         gameStateObjectProperty.addListener((event, oldValue, newValue) ->
@@ -30,7 +44,6 @@ public class SinglePlayerController extends GameWindowController
         });
 
         m_GameManager.setSpeed(1);
-        m_GameManager.getMap().setSize(new Vector2(15, 15));
         m_GameManager.startGame();
     }
 }

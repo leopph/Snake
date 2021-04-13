@@ -6,15 +6,11 @@ import hu.alkfejl.model.Snake;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 
-import java.net.URL;
-import java.util.ResourceBundle;
 
-
-public abstract class GameWindowController implements Initializable
+public abstract class GameWindowController
 {
     @FXML protected GridPane m_Grid;
 
@@ -23,12 +19,14 @@ public abstract class GameWindowController implements Initializable
     protected ObjectProperty<Map> m_Map;
 
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources)
+    public GameWindowController()
     {
         m_Snake = new SimpleObjectProperty<>();
         m_Map = new SimpleObjectProperty<>();
     }
+
+
+    public abstract void start();
 
 
     public ObjectProperty<Snake> getSnakeProperty()
