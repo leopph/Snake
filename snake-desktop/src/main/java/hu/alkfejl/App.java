@@ -23,6 +23,13 @@ public class App extends Application
     }
 
 
+    public static Stage getStage()
+    {
+        return m_Stage;
+    }
+
+
+
     public static FXMLLoader loadWindow(String fileName)
     {
         try
