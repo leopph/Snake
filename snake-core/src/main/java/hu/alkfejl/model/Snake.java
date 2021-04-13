@@ -1,6 +1,10 @@
 package hu.alkfejl.model;
 
-import java.util.List;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.util.ArrayList;
 
 
@@ -10,20 +14,19 @@ public final class Snake
     {
         UP, DOWN, LEFT, RIGHT
     }
-
     public enum Rotation
     {
         CLOCKWISE, COUNTERCLOCKWISE
     }
 
 
-    private final List<Vector2> m_BodyParts;
+    private final ListProperty<Vector2> m_BodyParts;
     private Direction m_Direction;
 
 
     public Snake()
     {
-        m_BodyParts = new ArrayList<>();
+        m_BodyParts = new SimpleListProperty<>(FXCollections.observableList(new ArrayList<>()));
         for (int i = 2; i >= 0; i--)
             m_BodyParts.add(new Vector2(i, 0));
 
@@ -31,15 +34,18 @@ public final class Snake
     }
 
 
-    public boolean isOnPoint(Vector2 p)
+    public Direction getDirection()
     {
-        for (var point : m_BodyParts)
-            if (p.equals(point))
-                return true;
-
-        return false;
+        return m_Direction;
     }
-
+    public ListProperty<Vector2> getBodyPartProperty()
+    {
+        return m_BodyParts;
+    }
+    public ObservableList<Vector2> getBodyCoords()
+    {
+        return m_BodyParts.get();
+    }
 
     public void changeDirection(Direction d)
     {
@@ -47,38 +53,7 @@ public final class Snake
     }
 
 
-    public boolean move(boolean shouldGrow)
-    {
-        if (shouldGrow)
-            m_BodyParts.add(0, nextHeadLocation());
-        else
-        {
-            for (int i = m_BodyParts.size() - 1; i >= 1; i--)
-                m_BodyParts.set(i, m_BodyParts.get(i - 1));
-
-            m_BodyParts.set(0, nextHeadLocation());
-        }
-
-        return !isSelfEating();
-    }
-
-
-    public void relocate(Direction d, int coord)
-    {
-        switch (d)
-        {
-            case UP:
-            case DOWN:
-                m_BodyParts.get(0).setY(coord);
-                break;
-            case LEFT:
-            case RIGHT:
-                m_BodyParts.get(0).setX(coord);
-        }
-    }
-
-
-    private boolean isSelfEating()
+    public boolean isSelfEating()
     {
         for (int i = 0; i < m_BodyParts.size(); i++)
             for (int j = 0; j < m_BodyParts.size(); j++)
@@ -89,31 +64,47 @@ public final class Snake
     }
 
 
-    public Vector2 nextHeadLocation()
+    public Vector2 nextHeadPosition()
     {
-        Vector2 diff = null;
-
         switch (m_Direction)
         {
-            case UP:
-                diff = new Vector2(0,1);
-                break;
-            case DOWN:
-                diff =  new Vector2(0, -1);
-                break;
-            case LEFT:
-                diff =  new Vector2(-1 , 0);
-                break;
-            case RIGHT:
-                diff = new Vector2(+1 , 0);
+            case UP: return m_BodyParts.get(0).add(new Vector2(0,-1));
+            case DOWN: return m_BodyParts.get(0).add(new Vector2(0, 1));
+            case LEFT: return m_BodyParts.get(0).add(new Vector2(-1 , 0));
+            default: return m_BodyParts.get(0).add(new Vector2(+1 , 0));
         }
-
-        return diff.add(m_BodyParts.get(0));
     }
 
-    public List<Vector2> getBodyCoords()
+    public Vector2 nextHeadPosition(int mod)
     {
-        return List.copyOf(m_BodyParts);
+        var pos = nextHeadPosition();
+        pos.setX(Math.floorMod(pos.getX(), mod));
+        pos.setY(Math.floorMod(pos.getY(), mod));
+        return pos;
+    }
+
+
+    public void move(boolean shouldGrow)
+    {
+        if (shouldGrow)
+            m_BodyParts.add(0, nextHeadPosition());
+        else
+        {
+            for (int i = m_BodyParts.size() - 1; i >= 1; i--)
+                m_BodyParts.set(i, m_BodyParts.get(i - 1));
+
+            m_BodyParts.set(0, nextHeadPosition());
+        }
+    }
+
+    public void move(boolean shouldGrow, int mod)
+    {
+        move(shouldGrow);
+        for (var pos : m_BodyParts)
+        {
+            pos.setX(Math.floorMod(pos.getX(), mod));
+            pos.setY(Math.floorMod(pos.getY(), mod));
+        }
     }
 
 

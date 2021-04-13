@@ -3,6 +3,7 @@ package hu.alkfejl.controller;
 import hu.alkfejl.App;
 import hu.alkfejl.model.Map;
 import hu.alkfejl.model.Snake;
+import hu.alkfejl.model.Vector2;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -36,6 +37,7 @@ public class MainMenuController implements Initializable
         var controller = loader.<SinglePlayerController>getController();
         controller.getSnakeProperty().bindBidirectional(m_P1Snake);
         controller.getMapProperty().bindBidirectional(m_Map);
+        m_Map.get().setSize(new Vector2(15, 15)); // DEBUG
         controller.start();
     }
 
