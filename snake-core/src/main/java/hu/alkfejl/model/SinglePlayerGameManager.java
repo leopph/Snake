@@ -40,8 +40,8 @@ public class SinglePlayerGameManager extends GameManager
                                 /* IF SNAKE HIT A WALL, DIE */
                                 if ((nextPos.getX() >= m_Map.getSize().getX() && (Map.Wall.RIGHT.get() & m_Map.getWalls()) == Map.Wall.RIGHT.get()) ||
                                         (nextPos.getX() < 0 && (Map.Wall.LEFT.get() & m_Map.getWalls()) == Map.Wall.LEFT.get()) ||
-                                        (nextPos.getY() >= m_Map.getSize().getY() && (Map.Wall.UP.get() & m_Map.getWalls()) == Map.Wall.UP.get()) ||
-                                        (nextPos.getY() < 0 && (Map.Wall.DOWN.get() & m_Map.getWalls()) == Map.Wall.DOWN.get()))
+                                        (nextPos.getY() >= m_Map.getSize().getY() && (Map.Wall.DOWN.get() & m_Map.getWalls()) == Map.Wall.DOWN.get()) ||
+                                        (nextPos.getY() < 0 && (Map.Wall.UP.get() & m_Map.getWalls()) == Map.Wall.UP.get()))
                                 {
                                     System.out.println("SNAKE HIT A WALL"); // DEBUG
                                     m_State.setValue(GameState.ENDED);

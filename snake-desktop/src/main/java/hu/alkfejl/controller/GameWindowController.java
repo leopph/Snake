@@ -48,6 +48,7 @@ public abstract class GameWindowController
         System.out.println("Key pressed: " + event.getText() + "."); // DEBUG
         switch (event.getCode())
         {
+            /* TODO IMPLEMENT DIRECTION QUEUE IN SNAKE */
             case W:
                 if (m_Snake.get().getDirection() != Snake.Direction.DOWN)
                     m_GameManager.getSnake().changeDirection(Snake.Direction.UP);
