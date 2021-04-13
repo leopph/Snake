@@ -32,38 +32,41 @@ public class SinglePlayerGameManager extends GameManager
                     {
                         try
                         {
+                            /* INITIAL ASSUMED NEW VALUES */
                             var nextPos = m_Snake.nextHeadPosition();
                             boolean willEat;
                             if (nextPos.getX() >= m_Map.getSize().getX() || nextPos.getX() < 0 || nextPos.getY() >= m_Map.getSize().getY() || nextPos.getY() < 0)
                             {
-                                /* IF ITS HIT A WALL, DIE */
+                                /* IF SNAKE HIT A WALL, DIE */
                                 if ((nextPos.getX() >= m_Map.getSize().getX() && (Map.Wall.RIGHT.get() & m_Map.getWalls()) == Map.Wall.RIGHT.get()) ||
                                         (nextPos.getX() < 0 && (Map.Wall.LEFT.get() & m_Map.getWalls()) == Map.Wall.LEFT.get()) ||
                                         (nextPos.getY() >= m_Map.getSize().getY() && (Map.Wall.UP.get() & m_Map.getWalls()) == Map.Wall.UP.get()) ||
                                         (nextPos.getY() < 0 && (Map.Wall.DOWN.get() & m_Map.getWalls()) == Map.Wall.DOWN.get()))
                                 {
-                                    System.out.println("HIT WALL"); // DEBUG
+                                    System.out.println("SNAKE HIT A WALL"); // DEBUG
                                     m_State.setValue(GameState.ENDED);
                                     Platform.runLater(m_Loop::cancel);
                                     return null;
                                     // TODO
                                 }
+                                /* IF SNAKE NEEDS TO RELOCATE, CALCULATE GROWTH AND NEW POSITIONS ACCORDINGLY */
                                 else
                                 {
                                     if (nextPos.getX() > m_Map.getSize().getX() || nextPos.getX() < 0)
                                     {
                                         willEat = m_Map.getFoodOnPoint(m_Snake.nextHeadPosition(m_Map.getSize().getX())) != null;
-                                        System.out.println("SNAKE SHOULD RELOCATE, NEW POSITION IS " + m_Snake.nextHeadPosition(m_Map.getSize().getX()) + "!");
+                                        System.out.println("SNAKE SHOULD RELOCATE, NEW POSITION IS " + m_Snake.nextHeadPosition(m_Map.getSize().getX()) + "!"); // DEBUG
                                         m_Snake.move(willEat, m_Map.getSize().getX());
                                     }
                                     else
                                     {
                                         willEat = m_Map.getFoodOnPoint(m_Snake.nextHeadPosition(m_Map.getSize().getY())) != null;
-                                        System.out.println("SNAKE SHOULD RELOCATE, NEW POSITION IS " + m_Snake.nextHeadPosition(m_Map.getSize().getY()) + "!");
+                                        System.out.println("SNAKE SHOULD RELOCATE, NEW POSITION IS " + m_Snake.nextHeadPosition(m_Map.getSize().getY()) + "!"); // DEBUG
                                         m_Snake.move(willEat, m_Map.getSize().getY());
                                     }
                                 }
                             }
+                            /* NORMAL GROWTH AND MOVEMENT */
                             else
                             {
                                 willEat = m_Map.getFoodOnPoint(nextPos) != null;
@@ -73,7 +76,7 @@ public class SinglePlayerGameManager extends GameManager
                             /* CHECK IF SNAKE IS EATING ITSELF AT THE NEW LOCATION */
                             if (m_Snake.isSelfEating())
                             {
-                                System.out.println("Megette magát xd");
+                                System.out.println("SNAKE ATE ITSELF"); // DEBUG
                                 m_State.setValue(GameState.ENDED);
                                 Platform.runLater(m_Loop::cancel);
                                 return null;
@@ -88,13 +91,13 @@ public class SinglePlayerGameManager extends GameManager
                             /* SNAKE HAS FILLED THE MAP, GG */
                             if (m_Snake.getBodyCoords().size() >= m_Map.getSize().getX() * m_Map.getSize().getY())
                             {
-                                System.out.println("Nyertél kek");
+                                System.out.println("YOU WON"); // DEBUG
                                 m_State.setValue(GameState.ENDED);
                                 Platform.runLater(m_Loop::cancel);
                                 // TODO
                             }
 
-                            System.out.println("Snake is now at: " + m_Snake.getBodyCoords().get(0) + ".");
+                            System.out.println("Snake is now at: " + m_Snake.getBodyCoords().get(0) + "."); // DEBUG
 
                             return null;
                         }

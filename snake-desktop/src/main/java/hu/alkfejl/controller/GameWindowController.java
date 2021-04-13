@@ -45,20 +45,24 @@ public abstract class GameWindowController
     @FXML
     private void keyCallback(KeyEvent event)
     {
-        System.out.println(event.getText());
+        System.out.println("Key pressed: " + event.getText() + "."); // DEBUG
         switch (event.getCode())
         {
             case W:
-                m_GameManager.getSnake().changeDirection(Snake.Direction.UP);
+                if (m_Snake.get().getDirection() != Snake.Direction.DOWN)
+                    m_GameManager.getSnake().changeDirection(Snake.Direction.UP);
                 return;
             case S:
-                m_GameManager.getSnake().changeDirection(Snake.Direction.DOWN);
+                if (m_Snake.get().getDirection() != Snake.Direction.UP)
+                    m_GameManager.getSnake().changeDirection(Snake.Direction.DOWN);
                 return;
             case A:
-                m_GameManager.getSnake().changeDirection(Snake.Direction.LEFT);
+                if (m_Snake.get().getDirection() != Snake.Direction.RIGHT)
+                    m_GameManager.getSnake().changeDirection(Snake.Direction.LEFT);
                 return;
             case D:
-                m_GameManager.getSnake().changeDirection(Snake.Direction.RIGHT);
+                if (m_Snake.get().getDirection() != Snake.Direction.LEFT)
+                    m_GameManager.getSnake().changeDirection(Snake.Direction.RIGHT);
         }
     }
 }

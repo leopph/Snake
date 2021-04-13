@@ -71,7 +71,7 @@ public final class Snake
             case UP: return m_BodyParts.get(0).add(new Vector2(0,-1));
             case DOWN: return m_BodyParts.get(0).add(new Vector2(0, 1));
             case LEFT: return m_BodyParts.get(0).add(new Vector2(-1 , 0));
-            default: return m_BodyParts.get(0).add(new Vector2(+1 , 0));
+            default: return m_BodyParts.get(0).add(new Vector2(1 , 0));
         }
     }
 
@@ -100,11 +100,7 @@ public final class Snake
     public void move(boolean shouldGrow, int mod)
     {
         move(shouldGrow);
-        for (var pos : m_BodyParts)
-        {
-            pos.setX(Math.floorMod(pos.getX(), mod));
-            pos.setY(Math.floorMod(pos.getY(), mod));
-        }
+        m_BodyParts.set(0, new Vector2(Math.floorMod(m_BodyParts.get(0).getX(), mod), Math.floorMod(m_BodyParts.get(0).getY(), mod)));
     }
 
 

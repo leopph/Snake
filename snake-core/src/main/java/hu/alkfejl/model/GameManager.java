@@ -71,13 +71,13 @@ public abstract class GameManager
     }
 
 
-    public void setSpeed(int ticksPerSec)
+    public void setSpeed(float ticksPerSec)
     {
         m_Loop.setPeriod(new Duration((1.0 / ticksPerSec) * 1000));
     }
-    public int getSpeed()
+    public float getSpeed()
     {
-        return (int) (1.0 / m_Loop.getPeriod().toSeconds());
+        return 1.0f / (float) m_Loop.getPeriod().toSeconds();
     }
 
     public ObjectProperty<GameState> getStateProperty()

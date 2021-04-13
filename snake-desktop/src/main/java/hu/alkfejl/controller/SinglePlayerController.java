@@ -2,7 +2,6 @@ package hu.alkfejl.controller;
 
 import hu.alkfejl.model.*;
 
-import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener;
@@ -29,6 +28,7 @@ public class SinglePlayerController extends GameWindowController
     {
         m_GameManager = new SinglePlayerGameManager(m_Snake.get(), m_Map.get());
 
+        /* CREATE INITIAL GRID */
         for (int i = 0; i < m_Map.get().getSize().getX(); i++)
             for (int j = 0; j < m_Map.get().getSize().getY(); j++)
             {
@@ -38,16 +38,23 @@ public class SinglePlayerController extends GameWindowController
                 m_Grid.add(pane, j, i);
                 pane.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
             }
+
+
+        /* RENDER CYCLE */
         m_Snake.get().getBodyCoords().addListener((ListChangeListener<Vector2>) listener ->
         {
-            listener.next();
+            /* DEBUG */
+            System.out.println("---SNAKE BODY COORDS---");
+            for (var pos : m_Snake.get().getBodyCoords())
+                System.out.println(pos);
+            System.out.println("---END SNAKE COORDS---");
+            /* NDEBUG */
+
+
             for (var child : m_Grid.getChildren())
             {
                 if (GridPane.getColumnIndex(child) == null)
-                {
-                    Platform.runLater(() -> m_Grid.getChildren().remove(child));
                     return;
-                }
 
                 var pos = new Vector2(GridPane.getColumnIndex(child), GridPane.getRowIndex(child));
                 if (m_Snake.get().getBodyCoords().contains(pos))
@@ -59,14 +66,15 @@ public class SinglePlayerController extends GameWindowController
             }
         });
 
-        System.out.println(m_Grid.getChildren().size());
 
+        /* GET NOTIFIED WHEN GAME ENDS */
         gameStateObjectProperty.bind(m_GameManager.getStateProperty());
         gameStateObjectProperty.addListener((event, oldValue, newValue) ->
         {
             if (newValue == GameManager.GameState.ENDED)
                 System.out.println("well its over bois");
         });
+
 
         m_GameManager.setSpeed(2);
         m_Grid.gridLinesVisibleProperty().setValue(true);
