@@ -11,9 +11,9 @@ public class SinglePlayerGameManager extends GameManager
     {
     }
 
-    public SinglePlayerGameManager(Snake snake, Map map, boolean dieIfWallIsHit)
+    public SinglePlayerGameManager(Snake snake, Map map)
     {
-        super(snake, map, dieIfWallIsHit);
+        super(snake, map);
     }
 
 
@@ -33,12 +33,15 @@ public class SinglePlayerGameManager extends GameManager
                         var nextPos = m_Snake.nextHeadLocation();
 
                         if (nextPos.getX() >= m_Map.getSize().getX() || nextPos.getX() < 0 || nextPos.getY() >= m_Map.getSize().getY() || nextPos.getY() < 0)
-                            if (m_WallsMatter)
+                            if ((nextPos.getX() >= m_Map.getSize().getX() && (Map.Wall.RIGHT.get() & m_Map.getWalls()) == Map.Wall.RIGHT.get()) ||
+                                    (nextPos.getX() < 0 && (Map.Wall.LEFT.get() & m_Map.getWalls()) == Map.Wall.LEFT.get()) ||
+                                    (nextPos.getY() >= m_Map.getSize().getY() && (Map.Wall.UP.get() & m_Map.getWalls()) == Map.Wall.UP.get()) ||
+                                    (nextPos.getY() < 0 && (Map.Wall.DOWN.get() & m_Map.getWalls()) == Map.Wall.DOWN.get()))
                             {
                                 m_State.setValue(GameState.ENDED);
                                 Platform.runLater(m_Loop::cancel);
-                                // TODO
                                 return null;
+                                // TODO
                             }
                             else
                             {

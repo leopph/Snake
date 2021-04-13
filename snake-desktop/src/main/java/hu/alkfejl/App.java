@@ -17,7 +17,8 @@ public class App extends Application
     @Override
     public void start(Stage stage)
     {
-        var game = new SinglePlayerGameManager(new Snake(), new Map(10, 10), false);
+        var game = new SinglePlayerGameManager(new Snake(), new Map(10, 10));
+        game.getMap().addWalls(Map.Wall.RIGHT);
         gameStateObjectProperty.bind(game.getStateProperty());
         gameStateObjectProperty.addListener((event, oldValue, newValue) ->
         {

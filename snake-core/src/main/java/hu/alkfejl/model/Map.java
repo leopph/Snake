@@ -15,7 +15,7 @@ public class Map
             m_Value = i;
         }
 
-        private byte get()
+        public byte get()
         {
             return m_Value;
         }

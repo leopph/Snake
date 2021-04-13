@@ -23,7 +23,6 @@ public abstract class GameManager
     protected ObjectProperty<GameState> m_State;
     protected Snake m_Snake;
     protected Map m_Map;
-    protected boolean m_WallsMatter;
 
 
     protected GameManager()
@@ -32,12 +31,11 @@ public abstract class GameManager
         m_State = new SimpleObjectProperty<>();
         m_State.setValue(GameState.READY);
     }
-    protected GameManager(Snake snake, Map map, boolean dieIfWallIsHit)
+    protected GameManager(Snake snake, Map map)
     {
         this();
         m_Snake = snake;
         m_Map = map;
-        m_WallsMatter = dieIfWallIsHit;
     }
 
     public Snake getSnake()
@@ -48,10 +46,6 @@ public abstract class GameManager
     {
         return m_Map;
     }
-    public boolean doWallsMatter()
-    {
-        return m_WallsMatter;
-    }
 
     public void setSnake(Snake snake)
     {
@@ -60,10 +54,6 @@ public abstract class GameManager
     public void setMap(Map map)
     {
         m_Map = map;
-    }
-    public void setWallsMatter(boolean newValue)
-    {
-        m_WallsMatter = newValue;
     }
 
 
