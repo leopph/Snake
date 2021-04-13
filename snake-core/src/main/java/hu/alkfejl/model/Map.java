@@ -1,5 +1,7 @@
 package hu.alkfejl.model;
 
+import javafx.util.Pair;
+
 
 public class Map
 {
@@ -22,25 +24,26 @@ public class Map
 
     public static final int MIN_SIZE = 3;
 
-    private Food[][] m_Foods;
+    private Pair<Vector2, Food> m_Food;
+    private Vector2 m_Size;
     private byte m_Walls = 0;
 
 
     public Map()
     {
-        m_Foods = new Food[3][3];
+        m_Size = new Vector2(3, 3);
     }
     public Map(int width, int height)
     {
-        m_Foods = new Food[width][height];
+        m_Size = new Vector2(width, height);
     }
 
 
     public Vector2 getSize()
     {
-        return new Vector2(m_Foods.length, m_Foods[0].length);
+        return new Vector2(m_Size);
     }
-    public void setSize(Vector2 v) { m_Foods = new Food[v.getX()][v.getY()]; }
+    public void setSize(Vector2 v) { m_Size = v; }
 
 
     public void addWalls(Wall... walls)
@@ -65,17 +68,17 @@ public class Map
 
     public Food getFoodOnPoint(Vector2 v)
     {
-        if (v.getX() >= m_Foods.length || v.getY() >= m_Foods[0].length)
+        if (v.getX() >= m_Size.getX() || v.getY() >= m_Size.getY())
             throw new IndexOutOfBoundsException("No such tile.");
 
-        return m_Foods[v.getX()][v.getY()];
+        return v.equals(m_Food.getKey()) ? m_Food.getValue() : null;
     }
 
     public void setFoodOnPoint(Vector2 v, Food f)
     {
-        if (v.getX() >= m_Foods.length || v.getY() >= m_Foods[0].length)
+        if (v.getX() >= m_Size.getX() || v.getY() >= m_Size.getY())
             throw new IndexOutOfBoundsException("No such tile.");
 
-        m_Foods[v.getX()][v.getY()] = f;
+        m_Food = new Pair<>(v, f);
     }
 }

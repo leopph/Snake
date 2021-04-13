@@ -18,6 +18,12 @@ public final class Vector2
         y = py;
     }
 
+    public Vector2(Vector2 other)
+    {
+        x = other.x;
+        y = other.y;
+    }
+
 
     public int getX()
     {
