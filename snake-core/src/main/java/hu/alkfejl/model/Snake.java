@@ -11,6 +11,11 @@ public final class Snake
         UP, DOWN, LEFT, RIGHT
     }
 
+    public enum Rotation
+    {
+        CLOCKWISE, COUNTERCLOCKWISE
+    }
+
 
     private final List<Vector2> m_BodyParts;
     private Direction m_Direction;
@@ -109,5 +114,47 @@ public final class Snake
     public List<Vector2> getBodyCoords()
     {
         return List.copyOf(m_BodyParts);
+    }
+
+
+    public void translate(Vector2 v)
+    {
+        for (int i = 0; i < m_BodyParts.size(); i++)
+            m_BodyParts.set(i, m_BodyParts.get(i).add(v));
+    }
+
+
+    public void flip()
+    {
+        for (int i = 0, j = m_BodyParts.size() - 1; i < j; i++, j--)
+        {
+            var tmp = m_BodyParts.get(i);
+            m_BodyParts.set(i, m_BodyParts.get(j));
+            m_BodyParts.set(j, tmp);
+        }
+    }
+
+
+    public void rotate90Deg(Rotation r)
+    {
+        for (int i = 1; i < m_BodyParts.size(); i++)
+            m_BodyParts.set(i, new Vector2((r == Rotation.CLOCKWISE ? -1 : 1) * (m_BodyParts.get(i).getY() - m_BodyParts.get(0).getY()), (r == Rotation.CLOCKWISE ? -1 : 1) * m_BodyParts.get(i).getX() - m_BodyParts.get(0).getX()));
+
+        if (r == Rotation.CLOCKWISE)
+            switch (m_Direction)
+            {
+                case UP: changeDirection(Direction.RIGHT); return;
+                case RIGHT: changeDirection(Direction.DOWN); return;
+                case DOWN: changeDirection(Direction.LEFT); return;
+                case LEFT: changeDirection(Direction.UP);
+            }
+        else
+            switch (m_Direction)
+            {
+                case UP: changeDirection(Direction.LEFT); return;
+                case LEFT: changeDirection(Direction.DOWN); return;
+                case DOWN: changeDirection(Direction.RIGHT); return;
+                case RIGHT: changeDirection(Direction.UP);
+            }
     }
 }
