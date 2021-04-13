@@ -7,12 +7,9 @@ import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 
-import java.io.IOException;
 import java.net.URL;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 
@@ -35,6 +32,34 @@ public class MainMenuController implements Initializable
     @FXML
     private void startSinglePlayer()
     {
-        App.loadWindow("single_player_map.fxml");
+        var loader = App.loadWindow("single_player_map.fxml");
+        var controller = loader.<SinglePlayerController>getController();
+        controller.getSnakeProperty().bindBidirectional(m_P1Snake);
+        controller.getMapProperty().bindBidirectional(m_Map);
+    }
+
+
+    @FXML
+    private void startMultiPlayer()
+    {
+        var loader = App.loadWindow("multi_player_map.fxml");
+        var controller = loader.<MultiPlayerController>getController();
+        controller.getMapProperty().bindBidirectional(m_Map);
+        controller.getSnakeProperty().bindBidirectional(m_P1Snake);
+        controller.getP2SnakeProperty().bindBidirectional(m_P2Snake);
+    }
+
+
+    @FXML
+    private void openSettings()
+    {
+        // TODO
+    }
+
+
+    @FXML
+    private void exitApp()
+    {
+        Platform.exit();
     }
 }

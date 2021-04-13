@@ -24,19 +24,24 @@ public class App extends Application
     }
 
 
-    public static void loadWindow(String fileName)
+    public static FXMLLoader loadWindow(String fileName)
     {
         try
         {
-            var root = FXMLLoader.load(Objects.requireNonNull(App.class.getResource("/fxml/" + fileName)));
+            var loader = new FXMLLoader(Objects.requireNonNull(App.class.getResource("/fxml/" + fileName)));
+            var root = loader.load();
             var scene = new Scene((Parent) root);
+
             m_Stage.setScene(scene);
             m_Stage.show();
+
+            return loader;
         }
-        catch (IOException e)
+        catch (Exception e)
         {
             e.printStackTrace();
             Platform.exit();
+            return null;
         }
     }
 }
