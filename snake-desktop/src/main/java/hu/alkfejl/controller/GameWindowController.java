@@ -48,21 +48,20 @@ public abstract class GameWindowController
         System.out.println("Key pressed: " + event.getText() + "."); // DEBUG
         switch (event.getCode())
         {
-            /* TODO IMPLEMENT DIRECTION QUEUE IN SNAKE */
             case W:
-                if (m_Snake.get().getDirection() != Snake.Direction.DOWN)
+                if (m_Snake.get().getDirection() != Snake.Direction.DOWN && m_Snake.get().getNextDirection() != Snake.Direction.DOWN)
                     m_GameManager.getSnake().changeDirection(Snake.Direction.UP);
                 return;
             case S:
-                if (m_Snake.get().getDirection() != Snake.Direction.UP)
+                if (m_Snake.get().getDirection() != Snake.Direction.UP && m_Snake.get().getNextDirection() != Snake.Direction.UP)
                     m_GameManager.getSnake().changeDirection(Snake.Direction.DOWN);
                 return;
             case A:
-                if (m_Snake.get().getDirection() != Snake.Direction.RIGHT)
+                if (m_Snake.get().getDirection() != Snake.Direction.RIGHT && m_Snake.get().getNextDirection() != Snake.Direction.RIGHT)
                     m_GameManager.getSnake().changeDirection(Snake.Direction.LEFT);
                 return;
             case D:
-                if (m_Snake.get().getDirection() != Snake.Direction.LEFT)
+                if (m_Snake.get().getDirection() != Snake.Direction.LEFT && m_Snake.get().getNextDirection() != Snake.Direction.LEFT)
                     m_GameManager.getSnake().changeDirection(Snake.Direction.RIGHT);
         }
     }

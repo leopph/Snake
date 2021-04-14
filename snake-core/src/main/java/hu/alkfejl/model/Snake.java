@@ -22,6 +22,7 @@ public final class Snake
 
     private final ListProperty<Vector2> m_BodyParts;
     private Direction m_Direction;
+    private Direction m_NexDirection;
 
 
     public Snake()
@@ -31,6 +32,7 @@ public final class Snake
             m_BodyParts.add(new Vector2(i, 0));
 
         m_Direction = Direction.RIGHT;
+        m_NexDirection = Direction.RIGHT;
     }
 
 
@@ -38,6 +40,7 @@ public final class Snake
     {
         return m_Direction;
     }
+    public Direction getNextDirection() { return m_NexDirection; }
     public ListProperty<Vector2> getBodyPartProperty()
     {
         return m_BodyParts;
@@ -49,7 +52,7 @@ public final class Snake
 
     public void changeDirection(Direction d)
     {
-        m_Direction = d;
+        m_NexDirection = d;
     }
 
 
@@ -66,7 +69,7 @@ public final class Snake
 
     public Vector2 nextHeadPosition()
     {
-        switch (m_Direction)
+        switch (m_NexDirection)
         {
             case UP: return m_BodyParts.get(0).add(new Vector2(0,-1));
             case DOWN: return m_BodyParts.get(0).add(new Vector2(0, 1));
@@ -95,6 +98,8 @@ public final class Snake
 
             m_BodyParts.set(0, nextHeadPosition());
         }
+
+        m_Direction = m_NexDirection;
     }
 
     public void move(boolean shouldGrow, int mod)
