@@ -65,17 +65,43 @@ public class SettingsMenuController implements Initializable
     @FXML
     private void onCancel()
     {
-        var loader = App.loadWindow("main_menu.fxml");
-        var controller = loader.<MainMenuController>getController();
-        controller.mapProperty().bindBidirectional(m_Map);
-        controller.p1SnakeProperty().bindBidirectional(m_P1Snake);
-        controller.p2SnakeProperty().bindBidirectional(m_P2Snake);
+        returnToMainMenu();
     }
 
 
     @FXML
     private void onSave()
     {
-        // TODO
+        if (m_UpWallCheck.isSelected())
+            m_Map.get().addWalls(Map.Wall.UP);
+        else
+            m_Map.get().removeWalls(Map.Wall.UP);
+
+        if (m_DownWallCheck.isSelected())
+            m_Map.get().addWalls(Map.Wall.DOWN);
+        else
+            m_Map.get().removeWalls(Map.Wall.DOWN);
+
+        if (m_LeftWallCheck.isSelected())
+            m_Map.get().addWalls(Map.Wall.LEFT);
+        else
+            m_Map.get().removeWalls(Map.Wall.LEFT);
+
+        if (m_RightWallCheck.isSelected())
+            m_Map.get().addWalls(Map.Wall.RIGHT);
+        else
+            m_Map.get().removeWalls(Map.Wall.RIGHT);
+
+        returnToMainMenu();
+    }
+
+
+    private void returnToMainMenu()
+    {
+        var loader = App.loadWindow("main_menu.fxml");
+        var controller = loader.<MainMenuController>getController();
+        controller.mapProperty().bindBidirectional(m_Map);
+        controller.p1SnakeProperty().bindBidirectional(m_P1Snake);
+        controller.p2SnakeProperty().bindBidirectional(m_P2Snake);
     }
 }
