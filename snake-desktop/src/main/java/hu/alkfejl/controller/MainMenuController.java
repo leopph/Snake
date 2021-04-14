@@ -31,6 +31,11 @@ public class MainMenuController implements Initializable
     }
 
 
+    public ObjectProperty<Map> mapProperty() { return m_Map; }
+    public ObjectProperty<Snake> p1SnakeProperty() { return m_P1Snake; }
+    public ObjectProperty<Snake> p2SnakeProperty() { return m_P2Snake; }
+
+
     @FXML
     private void startSinglePlayer()
     {
@@ -59,7 +64,12 @@ public class MainMenuController implements Initializable
     @FXML
     private void openSettings()
     {
-        // TODO
+        var loader = App.loadWindow("settings_menu.fxml");
+        var controller = loader.<SettingsMenuController>getController();
+        controller.mapProperty().bindBidirectional(m_Map);
+        controller.p1SnakeProperty().bindBidirectional(m_P1Snake);
+        controller.p2SnakeProperty().bindBidirectional(m_P2Snake);
+        controller.start();
     }
 
 
