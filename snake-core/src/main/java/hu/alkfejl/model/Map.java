@@ -7,6 +7,7 @@ import javafx.util.Pair;
 
 public class Map
 {
+    /* BITMASK TO REPRESENT SET WALLS */
     public enum Wall
     {
         LEFT((byte) 0x1), RIGHT((byte) 0x2), UP((byte) 0x4), DOWN((byte) 0x8);
@@ -26,36 +27,43 @@ public class Map
 
     public static final int MIN_SIZE = 3;
 
+    /* PROPERTIES */
     private ObjectProperty<Pair<Vector2, Food>> m_Food;
-    private Vector2 m_Size;
-    private byte m_Walls = 0;
+    private ObjectProperty<Vector2> m_Size;
+    private byte m_Walls;
 
 
+    /* CONSTRUCTORS */
     public Map()
     {
-        m_Size = new Vector2(3, 3);
+        m_Size = new SimpleObjectProperty<>(new Vector2(MIN_SIZE, MIN_SIZE));
         m_Food = new SimpleObjectProperty<>();
+        m_Walls = 0;
     }
     public Map(int width, int height)
     {
-        m_Size = new Vector2(width, height);
+        m_Size = new SimpleObjectProperty<>(new Vector2(width, height));
         m_Food = new SimpleObjectProperty<>();
+        m_Walls = 0;
     }
 
 
-    public ObjectProperty<Pair<Vector2, Food>> getFoodProperty()
+    /* PROPERTY GETTERS, GETTERS, SETTERS */
+    public ObjectProperty<Pair<Vector2, Food>> foodProperty()
     {
         return m_Food;
     }
-    public Pair<Vector2, Food> getFood()
-    {
-        return m_Food.get();
-    }
+    public ObjectProperty<Vector2> sizeProperty() { return m_Size; }
+
+    public Pair<Vector2, Food> getFood() { return m_Food.get(); }
     public Vector2 getSize()
     {
-        return new Vector2(m_Size);
+        return new Vector2(m_Size.get());
     }
-    public void setSize(Vector2 v) { m_Size = v; }
+    public byte getWalls() { return m_Walls; }
+
+    public void setFood(Pair<Vector2, Food> newValue) { m_Food.setValue(newValue); }
+    public void setSize(Vector2 v) { m_Size.setValue(v); }
 
 
     public void addWalls(Wall... walls)
@@ -63,34 +71,9 @@ public class Map
         for (var wall : walls)
             m_Walls |= wall.get();
     }
-
-
     public void removeWalls(Wall... walls)
     {
         for (var wall : walls)
             m_Walls &= ~wall.get();
-    }
-
-
-    public byte getWalls()
-    {
-        return m_Walls;
-    }
-
-
-    public Food getFoodOnPoint(Vector2 v)
-    {
-        if (v.getX() >= m_Size.getX() || v.getY() >= m_Size.getY())
-            throw new IndexOutOfBoundsException("No such tile.");
-
-        return v.equals(m_Food.get().getKey()) ? m_Food.get().getValue() : null;
-    }
-
-    public void setFoodOnPoint(Vector2 v, Food f)
-    {
-        if (v.getX() >= m_Size.getX() || v.getY() >= m_Size.getY())
-            throw new IndexOutOfBoundsException("No such tile.");
-
-        m_Food.setValue(new Pair<>(v, f));
     }
 }

@@ -12,15 +12,16 @@ import javafx.scene.layout.GridPane;
 
 public abstract class GameWindowController
 {
-    @FXML protected GridPane m_Grid;
+    protected GridPane m_Grid;
 
     protected GameManager m_GameManager;
     protected ObjectProperty<Snake> m_Snake;
     protected ObjectProperty<Map> m_Map;
 
 
-    public GameWindowController()
+    public GameWindowController(GridPane root)
     {
+        m_Grid = root;
         m_Snake = new SimpleObjectProperty<>();
         m_Map = new SimpleObjectProperty<>();
     }
@@ -29,11 +30,11 @@ public abstract class GameWindowController
     public abstract void start();
 
 
-    public ObjectProperty<Snake> getSnakeProperty()
+    public ObjectProperty<Snake> snakeProperty()
     {
         return m_Snake;
     }
-    public ObjectProperty<Map> getMapProperty()
+    public ObjectProperty<Map> mapProperty()
     {
         return m_Map;
     }
@@ -49,20 +50,20 @@ public abstract class GameWindowController
         switch (event.getCode())
         {
             case W:
-                if (m_Snake.get().getDirection() != Snake.Direction.DOWN && m_Snake.get().getNextDirection() != Snake.Direction.DOWN)
-                    m_GameManager.getSnake().changeDirection(Snake.Direction.UP);
+                if (m_Snake.get().getCurrentDirection() != Snake.Direction.DOWN && m_Snake.get().getNextDirection() != Snake.Direction.DOWN)
+                    m_GameManager.getSnake().setNextDirection(Snake.Direction.UP);
                 return;
             case S:
-                if (m_Snake.get().getDirection() != Snake.Direction.UP && m_Snake.get().getNextDirection() != Snake.Direction.UP)
-                    m_GameManager.getSnake().changeDirection(Snake.Direction.DOWN);
+                if (m_Snake.get().getCurrentDirection() != Snake.Direction.UP && m_Snake.get().getNextDirection() != Snake.Direction.UP)
+                    m_GameManager.getSnake().setNextDirection(Snake.Direction.DOWN);
                 return;
             case A:
-                if (m_Snake.get().getDirection() != Snake.Direction.RIGHT && m_Snake.get().getNextDirection() != Snake.Direction.RIGHT)
-                    m_GameManager.getSnake().changeDirection(Snake.Direction.LEFT);
+                if (m_Snake.get().getCurrentDirection() != Snake.Direction.RIGHT && m_Snake.get().getNextDirection() != Snake.Direction.RIGHT)
+                    m_GameManager.getSnake().setNextDirection(Snake.Direction.LEFT);
                 return;
             case D:
-                if (m_Snake.get().getDirection() != Snake.Direction.LEFT && m_Snake.get().getNextDirection() != Snake.Direction.LEFT)
-                    m_GameManager.getSnake().changeDirection(Snake.Direction.RIGHT);
+                if (m_Snake.get().getCurrentDirection() != Snake.Direction.LEFT && m_Snake.get().getNextDirection() != Snake.Direction.LEFT)
+                    m_GameManager.getSnake().setNextDirection(Snake.Direction.RIGHT);
         }
     }
 }

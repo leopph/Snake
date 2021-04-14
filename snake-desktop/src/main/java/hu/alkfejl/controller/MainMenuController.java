@@ -4,6 +4,7 @@ import hu.alkfejl.App;
 import hu.alkfejl.model.Map;
 import hu.alkfejl.model.Snake;
 import hu.alkfejl.model.Vector2;
+import hu.alkfejl.view.SinglePlayerView;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -33,10 +34,10 @@ public class MainMenuController implements Initializable
     @FXML
     private void startSinglePlayer()
     {
-        var loader = App.loadWindow("single_player_map.fxml");
-        var controller = loader.<SinglePlayerController>getController();
-        controller.getSnakeProperty().bindBidirectional(m_P1Snake);
-        controller.getMapProperty().bindBidirectional(m_Map);
+        var view = new SinglePlayerView(App.getStage());
+        var controller = view.getController();
+        controller.snakeProperty().bindBidirectional(m_P1Snake);
+        controller.mapProperty().bindBidirectional(m_Map);
         m_Map.get().setSize(new Vector2(15, 15)); // DEBUG
         controller.start();
     }
@@ -45,12 +46,13 @@ public class MainMenuController implements Initializable
     @FXML
     private void startMultiPlayer()
     {
-        var loader = App.loadWindow("multi_player_map.fxml");
+        /*var loader = App.loadWindow("multi_player_map.fxml");
         var controller = loader.<MultiPlayerController>getController();
         controller.getMapProperty().bindBidirectional(m_Map);
         controller.getSnakeProperty().bindBidirectional(m_P1Snake);
         controller.getP2SnakeProperty().bindBidirectional(m_P2Snake);
-        controller.start();
+        controller.start();*/
+        // TODO
     }
 
 

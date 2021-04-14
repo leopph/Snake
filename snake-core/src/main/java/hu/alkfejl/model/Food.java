@@ -76,18 +76,19 @@ public class Food
     }
 
 
-    public ReadOnlyIntegerProperty getPointProperty()
+    public ReadOnlyIntegerProperty pointProperty()
     {
         return m_Point.getReadOnlyProperty();
     }
-    public ReadOnlyStringProperty getSpriteProperty()
+    public ReadOnlyStringProperty spriteProperty()
     {
         return m_Sprite.getReadOnlyProperty();
     }
-    public ReadOnlyStringProperty getNameProperty()
+    public ReadOnlyStringProperty nameProperty()
     {
         return m_Name.getReadOnlyProperty();
     }
+    
     public int getPoint()
     {
         return m_Point.get();

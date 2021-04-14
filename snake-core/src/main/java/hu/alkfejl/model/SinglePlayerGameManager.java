@@ -52,24 +52,22 @@ public class SinglePlayerGameManager extends GameManager
                                 /* IF SNAKE NEEDS TO RELOCATE, CALCULATE GROWTH AND NEW POSITIONS ACCORDINGLY */
                                 else
                                 {
+                                    int mod;
+
                                     if (nextPos.getX() > m_Map.getSize().getX() || nextPos.getX() < 0)
-                                    {
-                                        willEat = m_Map.getFoodOnPoint(m_Snake.nextHeadPosition(m_Map.getSize().getX())) != null;
-                                        System.out.println("SNAKE SHOULD RELOCATE, NEW POSITION IS " + m_Snake.nextHeadPosition(m_Map.getSize().getX()) + "!"); // DEBUG
-                                        m_Snake.move(willEat, m_Map.getSize().getX());
-                                    }
+                                        mod = m_Map.getSize().getX();
                                     else
-                                    {
-                                        willEat = m_Map.getFoodOnPoint(m_Snake.nextHeadPosition(m_Map.getSize().getY())) != null;
-                                        System.out.println("SNAKE SHOULD RELOCATE, NEW POSITION IS " + m_Snake.nextHeadPosition(m_Map.getSize().getY()) + "!"); // DEBUG
-                                        m_Snake.move(willEat, m_Map.getSize().getY());
-                                    }
+                                        mod = m_Map.getSize().getY();
+
+                                    System.out.println("SNAKE SHOULD RELOCATE, NEW POSITION IS " + m_Snake.nextHeadPosition(mod) + "!"); // DEBUG
+                                    willEat = m_Map.getFood() != null && m_Map.getFood().getKey().equals(m_Snake.nextHeadPosition(mod));
+                                    m_Snake.move(willEat, mod);
                                 }
                             }
                             /* NORMAL GROWTH AND MOVEMENT */
                             else
                             {
-                                willEat = m_Map.getFoodOnPoint(nextPos) != null;
+                                willEat = m_Map.getFood() != null && m_Map.getFood().getKey().equals(nextPos);
                                 m_Snake.move(willEat);
                             }
 

@@ -4,6 +4,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.concurrent.ScheduledService;
 import javafx.util.Duration;
+import javafx.util.Pair;
 
 import java.util.Collection;
 import java.util.List;
@@ -80,7 +81,7 @@ public abstract class GameManager
         return 1.0f / (float) m_Loop.getPeriod().toSeconds();
     }
 
-    public ObjectProperty<GameState> getStateProperty()
+    public ObjectProperty<GameState> stateProperty()
     {
         return m_State;
     }
@@ -97,7 +98,7 @@ public abstract class GameManager
             var p = new Vector2(s_Random.nextInt(map.getSize().getX()), s_Random.nextInt(map.getSize().getY()));
             if (!excludedPoints.contains(p))
             {
-                map.setFoodOnPoint(p, f);
+                map.setFood(new Pair<>(p, f));
                 return;
             }
         }

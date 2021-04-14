@@ -1,16 +1,14 @@
 package hu.alkfejl.controller;
 
-import hu.alkfejl.App;
 import hu.alkfejl.model.*;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.collections.ListChangeListener;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.util.Pair;
 
 
 public class SinglePlayerController extends GameWindowController
@@ -18,8 +16,9 @@ public class SinglePlayerController extends GameWindowController
     private ObjectProperty<GameManager.GameState> gameStateObjectProperty;
 
 
-    public SinglePlayerController()
+    public SinglePlayerController(GridPane root)
     {
+        super(root);
         gameStateObjectProperty = new SimpleObjectProperty<>();
     }
 
@@ -29,17 +28,20 @@ public class SinglePlayerController extends GameWindowController
     {
         m_GameManager = new SinglePlayerGameManager(m_Snake.get(), m_Map.get());
 
+        var sizeBinding = Bindings.min(m_Grid.widthProperty().divide(m_Map.get().getSize().getX()),
+                                                    m_Grid.heightProperty().divide(m_Map.get().getSize().getY()));
+
         /* CREATE INITIAL GRID */
         for (int i = 0; i < m_Map.get().getSize().getX(); i++)
             for (int j = 0; j < m_Map.get().getSize().getY(); j++)
             {
                 var rect = new Rectangle();
-                rect.setWidth(App.getStage().getWidth() > App.getStage().getHeight() ? App.getStage().getHeight() / m_Map.get().getSize().getY() : App.getStage().getWidth() / m_Map.get().getSize().getX());
-                rect.setHeight(rect.getWidth());
+                rect.widthProperty().bind(sizeBinding);
+                rect.widthProperty().bind(sizeBinding);
                 rect.setFill(Color.BLACK);
-                rect.setStroke(Color.BLACK);
-                rect.setStrokeWidth(0);
                 m_Grid.add(rect, j, i);
+                /*rect.setStroke(Color.BLACK);
+                rect.setStrokeWidth(0);*/
             }
 
 
@@ -62,7 +64,7 @@ public class SinglePlayerController extends GameWindowController
                 var pos = new Vector2(GridPane.getColumnIndex(child), GridPane.getRowIndex(child));
                 if (m_Snake.get().getBodyCoords().contains(pos))
                     ((Rectangle) child).setFill(Color.WHITE);
-                else if (m_Map.get().getFoodOnPoint(pos) != null)
+                else if (m_Map.get().getFood() != null && m_Map.get().getFood().getKey().equals(pos))
                     ((Rectangle) child).setFill(Color.RED);
                 else
                     ((Rectangle) child).setFill(Color.BLACK);
@@ -70,7 +72,7 @@ public class SinglePlayerController extends GameWindowController
         });
 
 
-        m_Map.get().getFoodProperty().addListener((observable, oldValue, newValue) ->
+        m_Map.get().foodProperty().addListener((observable, oldValue, newValue) ->
         {
             for (var child : m_Grid.getChildren())
             {
@@ -84,7 +86,7 @@ public class SinglePlayerController extends GameWindowController
 
 
         /* GET NOTIFIED WHEN GAME ENDS */
-        gameStateObjectProperty.bind(m_GameManager.getStateProperty());
+        gameStateObjectProperty.bind(m_GameManager.stateProperty());
         gameStateObjectProperty.addListener((event, oldValue, newValue) ->
         {
             if (newValue == GameManager.GameState.ENDED)

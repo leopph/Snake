@@ -1,7 +1,6 @@
 package hu.alkfejl.model;
 
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -20,47 +19,51 @@ public final class Snake
     }
 
 
-    private final ListProperty<Vector2> m_BodyParts;
-    private Direction m_Direction;
-    private Direction m_NexDirection;
+    /* PROPERTIES */
+    private final ReadOnlyListWrapper<Vector2> m_BodyCoords;
+    private final ReadOnlyObjectWrapper<Direction> m_CurrentDirection;
+    private final ObjectProperty<Direction> m_NexDirection;
 
 
+    /* CONSTRUCTOR */
     public Snake()
     {
-        m_BodyParts = new SimpleListProperty<>(FXCollections.observableList(new ArrayList<>()));
+        m_BodyCoords = new ReadOnlyListWrapper<>(FXCollections.observableList(new ArrayList<>()));
         for (int i = 2; i >= 0; i--)
-            m_BodyParts.add(new Vector2(i, 0));
+            m_BodyCoords.add(new Vector2(i, 0));
 
-        m_Direction = Direction.RIGHT;
-        m_NexDirection = Direction.RIGHT;
+        m_CurrentDirection = new ReadOnlyObjectWrapper<>(Direction.RIGHT);
+        m_NexDirection = new SimpleObjectProperty<>(Direction.RIGHT);
     }
 
 
-    public Direction getDirection()
+    /* PROPERTY GETTERS, GETTERS, SETTERS */
+    public ReadOnlyObjectProperty<Direction> currentDirectionProperty() { return m_CurrentDirection; }
+    public ObjectProperty<Direction> nextDirectionProperty() { return m_NexDirection; }
+    public ListProperty<Vector2> bodyCoordsProperty() { return m_BodyCoords; }
+
+    public Direction getCurrentDirection()
     {
-        return m_Direction;
+        return m_CurrentDirection.get();
     }
-    public Direction getNextDirection() { return m_NexDirection; }
-    public ListProperty<Vector2> getBodyPartProperty()
-    {
-        return m_BodyParts;
-    }
+    public Direction getNextDirection() { return m_NexDirection.get(); }
     public ObservableList<Vector2> getBodyCoords()
     {
-        return m_BodyParts.get();
+        return m_BodyCoords.get();
     }
 
-    public void changeDirection(Direction d)
+    public void setNextDirection(Direction d)
     {
-        m_NexDirection = d;
+        m_NexDirection.setValue(d);
     }
 
 
+    /* BEHAVIOR FUNCTIONS */
     public boolean isSelfEating()
     {
-        for (int i = 0; i < m_BodyParts.size(); i++)
-            for (int j = 0; j < m_BodyParts.size(); j++)
-                if (i != j && m_BodyParts.get(i).equals(m_BodyParts.get(j)))
+        for (int i = 0; i < m_BodyCoords.size(); i++)
+            for (int j = 0; j < m_BodyCoords.size(); j++)
+                if (i != j && m_BodyCoords.get(i).equals(m_BodyCoords.get(j)))
                     return true;
 
         return false;
@@ -69,15 +72,14 @@ public final class Snake
 
     public Vector2 nextHeadPosition()
     {
-        switch (m_NexDirection)
+        switch (m_NexDirection.get())
         {
-            case UP: return m_BodyParts.get(0).add(new Vector2(0,-1));
-            case DOWN: return m_BodyParts.get(0).add(new Vector2(0, 1));
-            case LEFT: return m_BodyParts.get(0).add(new Vector2(-1 , 0));
-            default: return m_BodyParts.get(0).add(new Vector2(1 , 0));
+            case UP: return m_BodyCoords.get(0).add(new Vector2(0,-1));
+            case DOWN: return m_BodyCoords.get(0).add(new Vector2(0, 1));
+            case LEFT: return m_BodyCoords.get(0).add(new Vector2(-1 , 0));
+            default: return m_BodyCoords.get(0).add(new Vector2(1 , 0));
         }
     }
-
     public Vector2 nextHeadPosition(int mod)
     {
         var pos = nextHeadPosition();
@@ -90,63 +92,60 @@ public final class Snake
     public void move(boolean shouldGrow)
     {
         if (shouldGrow)
-            m_BodyParts.add(0, nextHeadPosition());
+            m_BodyCoords.add(0, nextHeadPosition());
         else
         {
-            for (int i = m_BodyParts.size() - 1; i >= 1; i--)
-                m_BodyParts.set(i, m_BodyParts.get(i - 1));
+            for (int i = m_BodyCoords.size() - 1; i >= 1; i--)
+                m_BodyCoords.set(i, m_BodyCoords.get(i - 1));
 
-            m_BodyParts.set(0, nextHeadPosition());
+            m_BodyCoords.set(0, nextHeadPosition());
         }
 
-        m_Direction = m_NexDirection;
+        m_CurrentDirection.setValue(m_NexDirection.get());
     }
-
     public void move(boolean shouldGrow, int mod)
     {
         move(shouldGrow);
-        m_BodyParts.set(0, new Vector2(Math.floorMod(m_BodyParts.get(0).getX(), mod), Math.floorMod(m_BodyParts.get(0).getY(), mod)));
+        m_BodyCoords.set(0, new Vector2(Math.floorMod(m_BodyCoords.get(0).getX(), mod), Math.floorMod(m_BodyCoords.get(0).getY(), mod)));
     }
 
 
     public void translate(Vector2 v)
     {
-        for (int i = 0; i < m_BodyParts.size(); i++)
-            m_BodyParts.set(i, m_BodyParts.get(i).add(v));
+        for (int i = 0; i < m_BodyCoords.size(); i++)
+            m_BodyCoords.set(i, m_BodyCoords.get(i).add(v));
     }
-
 
     public void flip()
     {
-        for (int i = 0, j = m_BodyParts.size() - 1; i < j; i++, j--)
+        for (int i = 0, j = m_BodyCoords.size() - 1; i < j; i++, j--)
         {
-            var tmp = m_BodyParts.get(i);
-            m_BodyParts.set(i, m_BodyParts.get(j));
-            m_BodyParts.set(j, tmp);
+            var tmp = m_BodyCoords.get(i);
+            m_BodyCoords.set(i, m_BodyCoords.get(j));
+            m_BodyCoords.set(j, tmp);
         }
     }
 
-
     public void rotate90Deg(Rotation r)
     {
-        for (int i = 1; i < m_BodyParts.size(); i++)
-            m_BodyParts.set(i, new Vector2((r == Rotation.CLOCKWISE ? -1 : 1) * (m_BodyParts.get(i).getY() - m_BodyParts.get(0).getY()), (r == Rotation.CLOCKWISE ? -1 : 1) * m_BodyParts.get(i).getX() - m_BodyParts.get(0).getX()));
+        for (int i = 1; i < m_BodyCoords.size(); i++)
+            m_BodyCoords.set(i, new Vector2((r == Rotation.CLOCKWISE ? -1 : 1) * (m_BodyCoords.get(i).getY() - m_BodyCoords.get(0).getY()), (r == Rotation.CLOCKWISE ? -1 : 1) * m_BodyCoords.get(i).getX() - m_BodyCoords.get(0).getX()));
 
         if (r == Rotation.CLOCKWISE)
-            switch (m_Direction)
+            switch (m_CurrentDirection.get())
             {
-                case UP: changeDirection(Direction.RIGHT); return;
-                case RIGHT: changeDirection(Direction.DOWN); return;
-                case DOWN: changeDirection(Direction.LEFT); return;
-                case LEFT: changeDirection(Direction.UP);
+                case UP: setNextDirection(Direction.RIGHT); return;
+                case RIGHT: setNextDirection(Direction.DOWN); return;
+                case DOWN: setNextDirection(Direction.LEFT); return;
+                case LEFT: setNextDirection(Direction.UP);
             }
         else
-            switch (m_Direction)
+            switch (m_CurrentDirection.get())
             {
-                case UP: changeDirection(Direction.LEFT); return;
-                case LEFT: changeDirection(Direction.DOWN); return;
-                case DOWN: changeDirection(Direction.RIGHT); return;
-                case RIGHT: changeDirection(Direction.UP);
+                case UP: setNextDirection(Direction.LEFT); return;
+                case LEFT: setNextDirection(Direction.DOWN); return;
+                case DOWN: setNextDirection(Direction.RIGHT); return;
+                case RIGHT: setNextDirection(Direction.UP);
             }
     }
 }
