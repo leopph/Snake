@@ -6,6 +6,7 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener;
+import javafx.geometry.Pos;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -28,6 +29,9 @@ public class SinglePlayerController extends GameWindowController
     {
         m_GameManager = new SinglePlayerGameManager(m_Snake.get(), m_Map.get());
 
+        m_Grid.setAlignment(Pos.CENTER);
+        m_Grid.getScene().setOnKeyPressed(this::keyCallback);
+
         var sizeBinding = Bindings.min(m_Grid.widthProperty().divide(m_Map.get().getSize().getX()),
                                                     m_Grid.heightProperty().divide(m_Map.get().getSize().getY()));
 
@@ -37,15 +41,13 @@ public class SinglePlayerController extends GameWindowController
             {
                 var rect = new Rectangle();
                 rect.widthProperty().bind(sizeBinding);
-                rect.widthProperty().bind(sizeBinding);
+                rect.heightProperty().bind(sizeBinding);
                 rect.setFill(Color.BLACK);
                 m_Grid.add(rect, j, i);
-                /*rect.setStroke(Color.BLACK);
-                rect.setStrokeWidth(0);*/
             }
 
 
-        /* RENDER CYCLE */
+        /* RENDER CYCLE FOR SNAKE */
         m_Snake.get().getBodyCoords().addListener((ListChangeListener<Vector2>) listener ->
         {
             /* DEBUG */
@@ -72,6 +74,7 @@ public class SinglePlayerController extends GameWindowController
         });
 
 
+        /* RENDER CYCLE FOR FOODS */
         m_Map.get().foodProperty().addListener((observable, oldValue, newValue) ->
         {
             for (var child : m_Grid.getChildren())

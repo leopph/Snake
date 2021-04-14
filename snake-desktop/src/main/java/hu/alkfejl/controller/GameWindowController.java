@@ -43,8 +43,7 @@ public abstract class GameWindowController
     public Map getMap() { return m_Map.get(); }
 
 
-    @FXML
-    private void keyCallback(KeyEvent event)
+    protected void keyCallback(KeyEvent event)
     {
         System.out.println("Key pressed: " + event.getText() + "."); // DEBUG
         switch (event.getCode())

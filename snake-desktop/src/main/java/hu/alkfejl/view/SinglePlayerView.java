@@ -3,10 +3,14 @@ package hu.alkfejl.view;
 import hu.alkfejl.controller.SinglePlayerController;
 import hu.alkfejl.model.Map;
 import hu.alkfejl.model.Snake;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 
