@@ -5,10 +5,12 @@ import hu.alkfejl.model.*;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.ListChangeListener;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Pair;
 
 
 public class SinglePlayerController extends GameWindowController
@@ -35,6 +37,8 @@ public class SinglePlayerController extends GameWindowController
                 rect.setWidth(App.getStage().getWidth() > App.getStage().getHeight() ? App.getStage().getHeight() / m_Map.get().getSize().getY() : App.getStage().getWidth() / m_Map.get().getSize().getX());
                 rect.setHeight(rect.getWidth());
                 rect.setFill(Color.BLACK);
+                rect.setStroke(Color.BLACK);
+                rect.setStrokeWidth(0);
                 m_Grid.add(rect, j, i);
             }
 
@@ -66,6 +70,19 @@ public class SinglePlayerController extends GameWindowController
         });
 
 
+        m_Map.get().getFoodProperty().addListener((observable, oldValue, newValue) ->
+        {
+            for (var child : m_Grid.getChildren())
+            {
+                var x = GridPane.getColumnIndex(child);
+                var y = GridPane.getRowIndex(child);
+
+                if (x != null && y != null && newValue.getKey().getX() == x && newValue.getKey().getY() == y)
+                    ((Rectangle) child).setFill(Color.RED);
+            }
+        });
+
+
         /* GET NOTIFIED WHEN GAME ENDS */
         gameStateObjectProperty.bind(m_GameManager.getStateProperty());
         gameStateObjectProperty.addListener((event, oldValue, newValue) ->
@@ -74,6 +91,7 @@ public class SinglePlayerController extends GameWindowController
                 System.out.println("well its over bois");
         });
 
+        m_Grid.setGridLinesVisible(true); // DEBUG
 
         m_GameManager.setSpeed(2);
         m_GameManager.startGame();

@@ -1,5 +1,7 @@
 package hu.alkfejl.model;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.util.Pair;
 
 
@@ -24,7 +26,7 @@ public class Map
 
     public static final int MIN_SIZE = 3;
 
-    private Pair<Vector2, Food> m_Food;
+    private ObjectProperty<Pair<Vector2, Food>> m_Food;
     private Vector2 m_Size;
     private byte m_Walls = 0;
 
@@ -32,13 +34,23 @@ public class Map
     public Map()
     {
         m_Size = new Vector2(3, 3);
+        m_Food = new SimpleObjectProperty<>();
     }
     public Map(int width, int height)
     {
         m_Size = new Vector2(width, height);
+        m_Food = new SimpleObjectProperty<>();
     }
 
 
+    public ObjectProperty<Pair<Vector2, Food>> getFoodProperty()
+    {
+        return m_Food;
+    }
+    public Pair<Vector2, Food> getFood()
+    {
+        return m_Food.get();
+    }
     public Vector2 getSize()
     {
         return new Vector2(m_Size);
@@ -71,7 +83,7 @@ public class Map
         if (v.getX() >= m_Size.getX() || v.getY() >= m_Size.getY())
             throw new IndexOutOfBoundsException("No such tile.");
 
-        return v.equals(m_Food.getKey()) ? m_Food.getValue() : null;
+        return v.equals(m_Food.get().getKey()) ? m_Food.get().getValue() : null;
     }
 
     public void setFoodOnPoint(Vector2 v, Food f)
@@ -79,6 +91,6 @@ public class Map
         if (v.getX() >= m_Size.getX() || v.getY() >= m_Size.getY())
             throw new IndexOutOfBoundsException("No such tile.");
 
-        m_Food = new Pair<>(v, f);
+        m_Food.setValue(new Pair<>(v, f));
     }
 }
