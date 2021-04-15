@@ -1,10 +1,7 @@
 package hu.alkfejl.controller;
 
 import hu.alkfejl.App;
-import hu.alkfejl.model.Map;
-import hu.alkfejl.model.SinglePlayerGameManager;
-import hu.alkfejl.model.Snake;
-import hu.alkfejl.model.Vector2;
+import hu.alkfejl.model.*;
 import hu.alkfejl.view.SinglePlayerView;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
@@ -18,7 +15,7 @@ import java.util.ResourceBundle;
 
 public class MainMenuController implements Initializable
 {
-    private ObjectProperty<SinglePlayerGameManager> m_SinglePlayerGameManager;
+    private ObjectProperty<GameManager> m_SinglePlayerGameManager;
 
 
     @Override
@@ -35,7 +32,7 @@ public class MainMenuController implements Initializable
     }
 
 
-    public ObjectProperty<SinglePlayerGameManager> singlePlayerGameManagerProperty() { return m_SinglePlayerGameManager; }
+    public ObjectProperty<GameManager> singlePlayerGameManagerProperty() { return m_SinglePlayerGameManager; }
 
 
     @FXML

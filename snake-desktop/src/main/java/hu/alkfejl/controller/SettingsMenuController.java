@@ -1,7 +1,7 @@
 package hu.alkfejl.controller;
 
 import hu.alkfejl.App;
-import hu.alkfejl.model.SinglePlayerGameManager;
+import hu.alkfejl.model.GameManager;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -20,7 +20,7 @@ public class SettingsMenuController
     @FXML private CheckBox m_RightWallCheck;
     @FXML private TextField m_GameSpeedInput;
     
-    private final ObjectProperty<SinglePlayerGameManager> m_SinglePlayerGameManager;
+    private final ObjectProperty<GameManager> m_SinglePlayerGameManager;
 
 
     /* CONSTRUCTORS */
@@ -64,7 +64,7 @@ public class SettingsMenuController
 
 
     /* PROPERTY GETTERS */
-    public ObjectProperty<SinglePlayerGameManager> singlePlayerControllerProperty() { return m_SinglePlayerGameManager; }
+    public ObjectProperty<GameManager> singlePlayerControllerProperty() { return m_SinglePlayerGameManager; }
 
 
     @FXML
