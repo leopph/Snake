@@ -10,12 +10,11 @@ import javafx.geometry.Pos;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.util.Duration;
 
 
 public class SinglePlayerController extends GameWindowController
 {
-    private ObjectProperty<GameManager.GameState> gameStateObjectProperty;
+    private final ObjectProperty<GameManager.GameState> gameStateObjectProperty;
 
 
     public SinglePlayerController(GridPane root)
@@ -28,17 +27,15 @@ public class SinglePlayerController extends GameWindowController
     @Override
     public void start()
     {
-        m_GameManager = new SinglePlayerGameManager(m_Snake.get(), m_Map.get());
-
         m_Grid.setAlignment(Pos.CENTER);
         m_Grid.getScene().setOnKeyPressed(this::keyCallback);
 
-        var sizeBinding = Bindings.min(m_Grid.widthProperty().divide(m_Map.get().getSize().getX()),
-                                                    m_Grid.heightProperty().divide(m_Map.get().getSize().getY()));
+        var sizeBinding = Bindings.min(m_Grid.widthProperty().divide(m_GameManager.get().getMap().getSize().getX()),
+                                                    m_Grid.heightProperty().divide(m_GameManager.get().getMap().getSize().getY()));
 
         /* CREATE INITIAL GRID */
-        for (int i = 0; i < m_Map.get().getSize().getX(); i++)
-            for (int j = 0; j < m_Map.get().getSize().getY(); j++)
+        for (int i = 0; i < m_GameManager.get().getMap().getSize().getX(); i++)
+            for (int j = 0; j < m_GameManager.get().getMap().getSize().getY(); j++)
             {
                 var rect = new Rectangle();
                 rect.widthProperty().bind(sizeBinding);
@@ -49,11 +46,11 @@ public class SinglePlayerController extends GameWindowController
 
 
         /* RENDER CYCLE FOR SNAKE */
-        m_Snake.get().getBodyCoords().addListener((ListChangeListener<Vector2>) listener ->
+        m_GameManager.get().getSnake().getBodyCoords().addListener((ListChangeListener<Vector2>) listener ->
         {
             /* DEBUG */
             System.out.println("---SNAKE BODY COORDS---");
-            for (var pos : m_Snake.get().getBodyCoords())
+            for (var pos : m_GameManager.get().getSnake().getBodyCoords())
                 System.out.println(pos);
             System.out.println("---END SNAKE COORDS---");
             /* NDEBUG */
@@ -65,9 +62,9 @@ public class SinglePlayerController extends GameWindowController
                     return;
 
                 var pos = new Vector2(GridPane.getColumnIndex(child), GridPane.getRowIndex(child));
-                if (m_Snake.get().getBodyCoords().contains(pos))
+                if (m_GameManager.get().getSnake().getBodyCoords().contains(pos))
                     ((Rectangle) child).setFill(Color.WHITE);
-                else if (m_Map.get().getFood() != null && m_Map.get().getFood().getKey().equals(pos))
+                else if (m_GameManager.get().getMap().getFood() != null && m_GameManager.get().getMap().getFood().getKey().equals(pos))
                     ((Rectangle) child).setFill(Color.RED);
                 else
                     ((Rectangle) child).setFill(Color.BLACK);
@@ -76,7 +73,7 @@ public class SinglePlayerController extends GameWindowController
 
 
         /* RENDER CYCLE FOR FOODS */
-        m_Map.get().foodProperty().addListener((observable, oldValue, newValue) ->
+        m_GameManager.get().getMap().foodProperty().addListener((observable, oldValue, newValue) ->
         {
             for (var child : m_Grid.getChildren())
             {
@@ -90,7 +87,7 @@ public class SinglePlayerController extends GameWindowController
 
 
         /* GET NOTIFIED WHEN GAME ENDS */
-        gameStateObjectProperty.bind(m_GameManager.gameStateProperty());
+        gameStateObjectProperty.bind(m_GameManager.get().gameStateProperty());
         gameStateObjectProperty.addListener((event, oldValue, newValue) ->
         {
             if (newValue == GameManager.GameState.ENDED)
@@ -99,7 +96,6 @@ public class SinglePlayerController extends GameWindowController
 
         m_Grid.setGridLinesVisible(true); // DEBUG
 
-        m_GameManager.setTickRate(2.0);
-        m_GameManager.startGame();
+        m_GameManager.get().startGame();
     }
 }

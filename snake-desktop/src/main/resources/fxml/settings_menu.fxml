@@ -5,10 +5,11 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<ScrollPane fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.alkfejl.controller.SettingsMenuController">
+<ScrollPane fitToWidth="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.alkfejl.controller.SettingsMenuController">
    <content>
       <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
          <children>
@@ -20,10 +21,15 @@
                   <CheckBox fx:id="m_LeftWallCheck" mnemonicParsing="false" text="Left Wall" />
                   <CheckBox fx:id="m_RightWallCheck" mnemonicParsing="false" text="Right Wall" />
                </children></HBox>
+            <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="Game Tick Speed" />
+                  <TextField fx:id="m_GameSpeedInput" />
+               </children>
+            </HBox>
             <ButtonBar prefHeight="40.0" prefWidth="200.0">
               <buttons>
-                <Button fx:id="m_CancelButton" mnemonicParsing="false" onAction="#onCancel" text="Cancel" />
-                  <Button fx:id="m_SaveButton" mnemonicParsing="false" onAction="#onSave" text="Save" />
+                  <Button mnemonicParsing="false" onAction="#onBack" text="Back" />
               </buttons>
             </ButtonBar>
          </children>

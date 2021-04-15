@@ -29,8 +29,8 @@ public abstract class GameManager
     protected ScheduledService<Void> m_Loop;
     protected ObjectProperty<GameState> m_State;
     protected DoubleProperty m_TickRate;
-    protected Snake m_Snake;
-    protected Map m_Map;
+    protected ObjectProperty<Snake> m_Snake;
+    protected ObjectProperty<Map> m_Map;
 
 
     /* CONSTRUCTORS */
@@ -43,43 +43,39 @@ public abstract class GameManager
 
         m_TickRate = new SimpleDoubleProperty(1);
 
-        m_Snake = new Snake();
-        m_Map = new Map();
+        m_Snake = new SimpleObjectProperty<>(new Snake());
+        m_Map = new SimpleObjectProperty<>(new Map());
 
         m_Loop.periodProperty().bind(Bindings.createObjectBinding(() -> new Duration((1.0 / m_TickRate.get()) * 1000), m_TickRate));
-    }
-    protected GameManager(Snake snake, Map map)
-    {
-        this();
-        m_Snake = snake;
-        m_Map = map;
     }
 
 
     /* PROPERTY GETTERS, GETTERS, SETTERS */
     public ObjectProperty<GameState> gameStateProperty() { return m_State; }
     public DoubleProperty tickRateProperty() { return m_TickRate; }
+    public ObjectProperty<Snake> snakeProperty() { return m_Snake; }
+    public ObjectProperty<Map> mapProperty() { return m_Map; }
 
     public GameState getGameState() { return m_State.get(); }
     public Double getTickRate() { return m_TickRate.get(); }
     public Snake getSnake()
     {
-        return m_Snake;
+        return m_Snake.get();
     }
     public Map getMap()
     {
-        return m_Map;
+        return m_Map.get();
     }
 
     public void setGameState(GameState newValue) { m_State.setValue(newValue); }
     public void setTickRate(Double newValue) { m_TickRate.setValue(newValue);}
     public void setSnake(Snake snake)
     {
-        m_Snake = snake;
+        m_Snake.setValue(snake);
     }
     public void setMap(Map map)
     {
-        m_Map = map;
+        m_Map.setValue(map);
     }
 
 
@@ -91,7 +87,7 @@ public abstract class GameManager
         if (m_Loop.isRunning())
             m_Loop.cancel();
 
-        placeFood(Food.Random(), List.of(), m_Map);
+        placeFood(Food.Random(), List.of(), m_Map.get());
         m_State.setValue(GameState.INPROGRESS);
         m_Loop.start();
     }

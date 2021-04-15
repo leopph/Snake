@@ -2,6 +2,7 @@ package hu.alkfejl.controller;
 
 import hu.alkfejl.App;
 import hu.alkfejl.model.Map;
+import hu.alkfejl.model.SinglePlayerGameManager;
 import hu.alkfejl.model.Snake;
 import hu.alkfejl.model.Vector2;
 import hu.alkfejl.view.SinglePlayerView;
@@ -17,23 +18,24 @@ import java.util.ResourceBundle;
 
 public class MainMenuController implements Initializable
 {
-    private ObjectProperty<Snake> m_P1Snake;
-    private ObjectProperty<Snake> m_P2Snake;
-    private ObjectProperty<Map> m_Map;
+    private ObjectProperty<SinglePlayerGameManager> m_SinglePlayerGameManager;
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
-        m_P1Snake = new SimpleObjectProperty<>(new Snake());
-        m_P2Snake = new SimpleObjectProperty<>(new Snake());
-        m_Map = new SimpleObjectProperty<>(new Map());
+        // SHARE MAP AND SNAKES ACROSS GAME TYPES
+        Snake p1Snake = new Snake();
+        Map map = new Map();
+
+        // GAMES MANAGERS STORE THESE
+        m_SinglePlayerGameManager = new SimpleObjectProperty<>(new SinglePlayerGameManager());
+        m_SinglePlayerGameManager.get().setSnake(p1Snake);
+        m_SinglePlayerGameManager.get().setMap(map);
     }
 
 
-    public ObjectProperty<Map> mapProperty() { return m_Map; }
-    public ObjectProperty<Snake> p1SnakeProperty() { return m_P1Snake; }
-    public ObjectProperty<Snake> p2SnakeProperty() { return m_P2Snake; }
+    public ObjectProperty<SinglePlayerGameManager> singlePlayerGameManagerProperty() { return m_SinglePlayerGameManager; }
 
 
     @FXML
@@ -41,9 +43,9 @@ public class MainMenuController implements Initializable
     {
         var view = new SinglePlayerView(App.getStage());
         var controller = view.getController();
-        controller.snakeProperty().bindBidirectional(m_P1Snake);
-        controller.mapProperty().bindBidirectional(m_Map);
-        m_Map.get().setSize(new Vector2(15, 15)); // DEBUG
+        controller.gameManagerProperty().bind(m_SinglePlayerGameManager);
+        m_SinglePlayerGameManager.get().getMap().setSize(new Vector2(15, 15)); // DEBUG
+        view.createBindings();
         controller.start();
     }
 
@@ -51,12 +53,6 @@ public class MainMenuController implements Initializable
     @FXML
     private void startMultiPlayer()
     {
-        /*var loader = App.loadWindow("multi_player_map.fxml");
-        var controller = loader.<MultiPlayerController>getController();
-        controller.getMapProperty().bindBidirectional(m_Map);
-        controller.getSnakeProperty().bindBidirectional(m_P1Snake);
-        controller.getP2SnakeProperty().bindBidirectional(m_P2Snake);
-        controller.start();*/
         // TODO
     }
 
@@ -66,9 +62,7 @@ public class MainMenuController implements Initializable
     {
         var loader = App.loadWindow("settings_menu.fxml");
         var controller = loader.<SettingsMenuController>getController();
-        controller.mapProperty().bindBidirectional(m_Map);
-        controller.p1SnakeProperty().bindBidirectional(m_P1Snake);
-        controller.p2SnakeProperty().bindBidirectional(m_P2Snake);
+        controller.singlePlayerControllerProperty().bindBidirectional(m_SinglePlayerGameManager);
         controller.start();
     }
 

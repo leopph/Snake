@@ -3,14 +3,10 @@ package hu.alkfejl.view;
 import hu.alkfejl.controller.SinglePlayerController;
 import hu.alkfejl.model.Map;
 import hu.alkfejl.model.Snake;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 
@@ -32,7 +28,6 @@ public class SinglePlayerView
         createLayout(stage);
         createController();
         createProperties();
-        bindToController();
     }
 
 
@@ -58,14 +53,6 @@ public class SinglePlayerView
     }
 
 
-    /* BIND CONTROLLER AND VIEW PROPERTIES */
-    private void bindToController()
-    {
-        m_Snake.bind(m_Controller.snakeProperty());
-        m_Map.bind(m_Controller.mapProperty());
-    }
-
-
     /* SET UP GUI ELEMENTS */
     private void createLayout(Stage stage)
     {
@@ -75,5 +62,13 @@ public class SinglePlayerView
             stage.setScene(new Scene(m_Root));
         else
             stage.getScene().setRoot(m_Root);
+    }
+
+
+    /* BIND CONTROLLER AND VIEW PROPERTIES */
+    public void createBindings()
+    {
+        m_Snake.bind(m_Controller.getGameManager().snakeProperty());
+        m_Map.bind(m_Controller.getGameManager().mapProperty());
     }
 }
