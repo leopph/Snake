@@ -1,6 +1,7 @@
 package hu.alkfejl.model;
 
 import javafx.beans.property.*;
+import javafx.scene.paint.Color;
 
 import java.util.Random;
 
@@ -10,15 +11,15 @@ public class Food
     private static final Random s_Random = new Random();
 
     private ReadOnlyIntegerWrapper m_Point;
-    private ReadOnlyStringWrapper m_Sprite;
+    private ReadOnlyObjectWrapper<Color> m_Color;
     private ReadOnlyStringWrapper m_Name;
 
 
     private Food()
     {
-        m_Point = new ReadOnlyIntegerWrapper();
-        m_Sprite = new ReadOnlyStringWrapper();
-        m_Name = new ReadOnlyStringWrapper();
+        m_Point = new ReadOnlyIntegerWrapper(0);
+        m_Color = new ReadOnlyObjectWrapper<>(Color.PAPAYAWHIP);
+        m_Name = new ReadOnlyStringWrapper("UNNAMED FOOD");
     }
 
 
@@ -26,18 +27,18 @@ public class Food
     {
         var ret = new Food();
         ret.m_Point.set(100);
-        ret.m_Sprite.set("apple.png");
+        ret.m_Color.set(Color.RED);
         ret.m_Name.set("Apple");
         return ret;
     }
 
 
-    public static Food Pear()
+    public static Food Cucumber()
     {
         var ret = new Food();
         ret.m_Point.set(150);
-        ret.m_Sprite.set("pear.png");
-        ret.m_Name.set("Pear");
+        ret.m_Color.set(Color.GREEN);
+        ret.m_Name.set("Cucumber");
         return ret;
     }
 
@@ -46,7 +47,7 @@ public class Food
     {
         var ret = new Food();
         ret.m_Point.set(200);
-        ret.m_Sprite.set("peach.png");
+        ret.m_Color.set(Color.PEACHPUFF);
         ret.m_Name.set("Peach");
         return ret;
     }
@@ -56,7 +57,7 @@ public class Food
     {
         var ret = new Food();
         ret.m_Point.set(250);
-        ret.m_Sprite.set("banana.png");
+        ret.m_Color.set(Color.YELLOW);
         ret.m_Name.set("Banana");
         return ret;
     }
@@ -67,7 +68,7 @@ public class Food
         switch (s_Random.nextInt(4))
         {
             case 0: return Apple();
-            case 1: return Pear();
+            case 1: return Cucumber();
             case 2: return Peach();
             case 3: return Banana();
         }
@@ -80,9 +81,9 @@ public class Food
     {
         return m_Point.getReadOnlyProperty();
     }
-    public ReadOnlyStringProperty spriteProperty()
+    public ReadOnlyObjectProperty<Color> colorProperty()
     {
-        return m_Sprite.getReadOnlyProperty();
+        return m_Color.getReadOnlyProperty();
     }
     public ReadOnlyStringProperty nameProperty()
     {
@@ -93,9 +94,9 @@ public class Food
     {
         return m_Point.get();
     }
-    public String getSprite()
+    public Color getColor()
     {
-        return m_Sprite.get();
+        return m_Color.get();
     }
     public String getName()
     {

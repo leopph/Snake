@@ -1,10 +1,9 @@
 package hu.alkfejl.controller;
 
+import hu.alkfejl.App;
 import hu.alkfejl.model.*;
 
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Pos;
 import javafx.scene.layout.*;
@@ -14,13 +13,9 @@ import javafx.scene.shape.Rectangle;
 
 public class SinglePlayerController extends GameWindowController
 {
-    private final ObjectProperty<GameManager.GameState> gameStateObjectProperty;
-
-
     public SinglePlayerController(GridPane root)
     {
         super(root);
-        gameStateObjectProperty = new SimpleObjectProperty<>();
     }
 
 
@@ -46,7 +41,7 @@ public class SinglePlayerController extends GameWindowController
 
 
         /* RENDER CYCLE FOR SNAKE */
-        m_GameManager.get().getSnake().getBodyCoords().addListener((ListChangeListener<Vector2>) listener ->
+        ListChangeListener<Vector2> listener = event ->
         {
             /* DEBUG */
             System.out.println("---SNAKE BODY COORDS---");
@@ -63,15 +58,18 @@ public class SinglePlayerController extends GameWindowController
 
                 var pos = new Vector2(GridPane.getColumnIndex(child), GridPane.getRowIndex(child));
                 if (m_GameManager.get().getSnake().getBodyCoords().get(0).equals(pos))
-                    ((Rectangle) child).setFill(Color.YELLOW);
+                    ((Rectangle) child).setFill(m_GameManager.get().getSnake().getHeadColor());
                 else if (m_GameManager.get().getSnake().getBodyCoords().contains(pos))
-                    ((Rectangle) child).setFill(Color.WHITE);
+                    ((Rectangle) child).setFill(m_GameManager.get().getSnake().getBodyColor());
                 else if (m_GameManager.get().getMap().getFood() != null && m_GameManager.get().getMap().getFood().getKey().equals(pos))
-                    ((Rectangle) child).setFill(Color.RED);
+                    ((Rectangle) child).setFill(m_GameManager.get().getMap().getFood().getValue().getColor());
                 else
                     ((Rectangle) child).setFill(Color.BLACK);
             }
-        });
+        };
+
+        m_GameManager.get().getSnake().getBodyCoords().addListener(listener);
+        m_GameManager.get().snakeProperty().addListener(event -> m_GameManager.get().getSnake().getBodyCoords().addListener(listener));
 
 
         /* RENDER CYCLE FOR FOODS */
@@ -83,17 +81,28 @@ public class SinglePlayerController extends GameWindowController
                 var y = GridPane.getRowIndex(child);
 
                 if (x != null && y != null && newValue.getKey().getX() == x && newValue.getKey().getY() == y)
-                    ((Rectangle) child).setFill(Color.RED);
+                    ((Rectangle) child).setFill(m_GameManager.get().getMap().getFood().getValue().getColor());
             }
         });
 
 
         /* GET NOTIFIED WHEN GAME ENDS */
-        gameStateObjectProperty.bind(m_GameManager.get().gameStateProperty());
-        gameStateObjectProperty.addListener((event, oldValue, newValue) ->
+        m_GameManager.get().gameStateProperty().addListener((event, oldValue, newValue) ->
         {
-            if (newValue == GameManager.GameState.ENDED)
-                System.out.println("well its over bois");
+            switch (newValue)
+            {
+                case P1_WON:
+                    System.out.println("Good, good. You won.");
+                    App.loadWindow("main_menu.fxml").<MainMenuController>getController().singlePlayerGameManagerProperty().bind(m_GameManager);
+                    break;
+                case WALL_HIT:
+                    System.out.println("Well, you hit a wall.");
+                    App.loadWindow("main_menu.fxml").<MainMenuController>getController().singlePlayerGameManagerProperty().bind(m_GameManager);
+                    break;
+                case SELF_ATE:
+                    System.out.println("Well, you ate yourself. Congrats.");
+                    App.loadWindow("main_menu.fxml").<MainMenuController>getController().singlePlayerGameManagerProperty().bind(m_GameManager);
+            }
         });
 
         m_Grid.setGridLinesVisible(true); // DEBUG

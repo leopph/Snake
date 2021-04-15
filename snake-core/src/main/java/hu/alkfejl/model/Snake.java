@@ -3,6 +3,7 @@ package hu.alkfejl.model;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 
@@ -23,6 +24,8 @@ public final class Snake
     private final ReadOnlyListWrapper<Vector2> m_BodyCoords;
     private final ReadOnlyObjectWrapper<Direction> m_CurrentDirection;
     private final ObjectProperty<Direction> m_NextDirection;
+    private final ObjectProperty<Color> m_HeadColor;
+    private final ObjectProperty<Color> m_BodyColor;
 
 
     /* CONSTRUCTOR */
@@ -34,6 +37,9 @@ public final class Snake
 
         m_CurrentDirection = new ReadOnlyObjectWrapper<>(Direction.RIGHT);
         m_NextDirection = new SimpleObjectProperty<>(Direction.RIGHT);
+
+        m_HeadColor = new SimpleObjectProperty<>(Color.DEEPPINK);
+        m_BodyColor = new SimpleObjectProperty<>(Color.WHITE);
     }
 
 
@@ -41,6 +47,8 @@ public final class Snake
     public ReadOnlyObjectProperty<Direction> currentDirectionProperty() { return m_CurrentDirection; }
     public ObjectProperty<Direction> nextDirectionProperty() { return m_NextDirection; }
     public ListProperty<Vector2> bodyCoordsProperty() { return m_BodyCoords; }
+    public ObjectProperty<Color> headColor() { return m_HeadColor; }
+    public ObjectProperty<Color> bodyColor() { return m_BodyColor; }
 
     public Direction getCurrentDirection()
     {
@@ -51,6 +59,8 @@ public final class Snake
     {
         return m_BodyCoords.get();
     }
+    public Color getHeadColor() { return m_HeadColor.get(); }
+    public Color getBodyColor() { return m_BodyColor.get(); }
 
     public void setNextDirection(Direction d)
     {

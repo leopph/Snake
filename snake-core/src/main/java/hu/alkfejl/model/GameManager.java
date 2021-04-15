@@ -18,13 +18,15 @@ public abstract class GameManager
 {
     public enum GameState
     {
-        READY, INPROGRESS, ENDED
+        READY, IN_PROGRESS, SELF_ATE, WALL_HIT, P1_WON, P2_WON
     }
 
 
     /* PROPERTIES */
     public static final int DEFAULT_TICK_RATE = 1;
     protected static Random s_Random = new Random();
+
+    protected GameState m_InternalFinalStage;
 
     protected ScheduledService<Void> m_Loop;
     protected ObjectProperty<GameState> m_State;
@@ -38,6 +40,8 @@ public abstract class GameManager
     {
         m_Loop = createLoop();
 
+        m_InternalFinalStage = null;
+
         m_State = new SimpleObjectProperty<>();
         m_State.setValue(GameState.READY);
 
@@ -47,6 +51,8 @@ public abstract class GameManager
         m_Map = new SimpleObjectProperty<>(new Map());
 
         m_Loop.periodProperty().bind(Bindings.createObjectBinding(() -> new Duration((1.0 / m_TickRate.get()) * 1000), m_TickRate));
+
+        m_Loop.setOnCancelled(event -> m_State.setValue(m_InternalFinalStage));
     }
 
 
@@ -68,7 +74,7 @@ public abstract class GameManager
     }
 
     public void setGameState(GameState newValue) { m_State.setValue(newValue); }
-    public void setTickRate(Double newValue) { m_TickRate.setValue(newValue);}
+    public void setTickRate(Double newValue) { m_TickRate.setValue(newValue); }
     public void setSnake(Snake snake)
     {
         m_Snake.setValue(snake);
@@ -87,8 +93,11 @@ public abstract class GameManager
         if (m_Loop.isRunning())
             m_Loop.cancel();
 
+        m_Loop.reset();
+        m_Snake.set(new Snake()); // DEBUG
+
         placeFood(Food.Random(), List.of(), m_Map.get());
-        m_State.setValue(GameState.INPROGRESS);
+        m_State.setValue(GameState.IN_PROGRESS);
         m_Loop.start();
     }
 

@@ -32,10 +32,9 @@ public class SinglePlayerGameManager extends GameManager
                                     (nextPos.getY() < 0 && m_Map.get().hasUpWall()))
                             {
                                 System.out.println("SNAKE HIT A WALL"); // DEBUG
-                                m_State.setValue(GameState.ENDED);
+                                m_InternalFinalStage = GameState.WALL_HIT;
                                 Platform.runLater(m_Loop::cancel);
                                 return null;
-                                // TODO
                             }
 
                             /* CALCULATE NEW POSITION, NOW TAKING RELOCATION INTO ACCOUNT */
@@ -51,11 +50,9 @@ public class SinglePlayerGameManager extends GameManager
                             if (m_Snake.get().isSelfEating())
                             {
                                 System.out.println("SNAKE ATE ITSELF"); // DEBUG
-                                m_State.setValue(GameState.ENDED);
+                                m_InternalFinalStage = GameState.SELF_ATE;
                                 Platform.runLater(m_Loop::cancel);
                                 return null;
-                                // TODO
-
                             }
 
                             /* IF ITS ALIVE AND ATE FOOD SPAWN NEW ONE */
@@ -66,9 +63,8 @@ public class SinglePlayerGameManager extends GameManager
                             if (m_Snake.get().getBodyCoords().size() >= m_Map.get().getSizeX() * m_Map.get().getSizeY())
                             {
                                 System.out.println("YOU WON"); // DEBUG
-                                m_State.setValue(GameState.ENDED);
+                                m_InternalFinalStage = GameState.P1_WON;
                                 Platform.runLater(m_Loop::cancel);
-                                // TODO
                             }
 
                             System.out.println("Snake is now at: " + m_Snake.get().getBodyCoords().get(0) + "."); // DEBUG
