@@ -22,7 +22,7 @@ public final class Snake
     /* PROPERTIES */
     private final ReadOnlyListWrapper<Vector2> m_BodyCoords;
     private final ReadOnlyObjectWrapper<Direction> m_CurrentDirection;
-    private final ObjectProperty<Direction> m_NexDirection;
+    private final ObjectProperty<Direction> m_NextDirection;
 
 
     /* CONSTRUCTOR */
@@ -33,20 +33,20 @@ public final class Snake
             m_BodyCoords.add(new Vector2(i, 0));
 
         m_CurrentDirection = new ReadOnlyObjectWrapper<>(Direction.RIGHT);
-        m_NexDirection = new SimpleObjectProperty<>(Direction.RIGHT);
+        m_NextDirection = new SimpleObjectProperty<>(Direction.RIGHT);
     }
 
 
     /* PROPERTY GETTERS, GETTERS, SETTERS */
     public ReadOnlyObjectProperty<Direction> currentDirectionProperty() { return m_CurrentDirection; }
-    public ObjectProperty<Direction> nextDirectionProperty() { return m_NexDirection; }
+    public ObjectProperty<Direction> nextDirectionProperty() { return m_NextDirection; }
     public ListProperty<Vector2> bodyCoordsProperty() { return m_BodyCoords; }
 
     public Direction getCurrentDirection()
     {
         return m_CurrentDirection.get();
     }
-    public Direction getNextDirection() { return m_NexDirection.get(); }
+    public Direction getNextDirection() { return m_NextDirection.get(); }
     public ObservableList<Vector2> getBodyCoords()
     {
         return m_BodyCoords.get();
@@ -54,7 +54,7 @@ public final class Snake
 
     public void setNextDirection(Direction d)
     {
-        m_NexDirection.setValue(d);
+        m_NextDirection.setValue(d);
     }
 
 
@@ -72,7 +72,7 @@ public final class Snake
 
     public Vector2 nextHeadPosition()
     {
-        switch (m_NexDirection.get())
+        switch (m_NextDirection.get())
         {
             case UP: return m_BodyCoords.get(0).add(new Vector2(0,-1));
             case DOWN: return m_BodyCoords.get(0).add(new Vector2(0, 1));
@@ -89,7 +89,7 @@ public final class Snake
     }
 
 
-    public void move(boolean shouldGrow)
+    public void move(boolean shouldGrow, int modX, int modY)
     {
         if (shouldGrow)
             m_BodyCoords.add(0, nextHeadPosition());
@@ -101,11 +101,7 @@ public final class Snake
             m_BodyCoords.set(0, nextHeadPosition());
         }
 
-        m_CurrentDirection.setValue(m_NexDirection.get());
-    }
-    public void move(boolean shouldGrow, int modX, int modY)
-    {
-        move(shouldGrow);
+        m_CurrentDirection.setValue(m_NextDirection.get());
         m_BodyCoords.set(0, new Vector2(Math.floorMod(m_BodyCoords.get(0).getX(), modX), Math.floorMod(m_BodyCoords.get(0).getY(), modY)));
     }
 
