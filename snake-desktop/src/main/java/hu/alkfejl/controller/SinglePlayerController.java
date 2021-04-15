@@ -30,12 +30,12 @@ public class SinglePlayerController extends GameWindowController
         m_Grid.setAlignment(Pos.CENTER);
         m_Grid.getScene().setOnKeyPressed(this::keyCallback);
 
-        var sizeBinding = Bindings.min(m_Grid.widthProperty().divide(m_GameManager.get().getMap().getSize().getX()),
-                                                    m_Grid.heightProperty().divide(m_GameManager.get().getMap().getSize().getY()));
+        var sizeBinding = Bindings.min(m_Grid.widthProperty().divide(m_GameManager.get().getMap().getSizeX()),
+                                                    m_Grid.heightProperty().divide(m_GameManager.get().getMap().getSizeY()));
 
         /* CREATE INITIAL GRID */
-        for (int i = 0; i < m_GameManager.get().getMap().getSize().getX(); i++)
-            for (int j = 0; j < m_GameManager.get().getMap().getSize().getY(); j++)
+        for (int i = 0; i < m_GameManager.get().getMap().getSizeX(); i++)
+            for (int j = 0; j < m_GameManager.get().getMap().getSizeY(); j++)
             {
                 var rect = new Rectangle();
                 rect.widthProperty().bind(sizeBinding);
@@ -62,7 +62,9 @@ public class SinglePlayerController extends GameWindowController
                     return;
 
                 var pos = new Vector2(GridPane.getColumnIndex(child), GridPane.getRowIndex(child));
-                if (m_GameManager.get().getSnake().getBodyCoords().contains(pos))
+                if (m_GameManager.get().getSnake().getBodyCoords().get(0).equals(pos))
+                    ((Rectangle) child).setFill(Color.YELLOW);
+                else if (m_GameManager.get().getSnake().getBodyCoords().contains(pos))
                     ((Rectangle) child).setFill(Color.WHITE);
                 else if (m_GameManager.get().getMap().getFood() != null && m_GameManager.get().getMap().getFood().getKey().equals(pos))
                     ((Rectangle) child).setFill(Color.RED);

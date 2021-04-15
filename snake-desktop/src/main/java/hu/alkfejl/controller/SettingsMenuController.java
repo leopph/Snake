@@ -2,6 +2,7 @@ package hu.alkfejl.controller;
 
 import hu.alkfejl.App;
 import hu.alkfejl.model.GameManager;
+import hu.alkfejl.model.Map;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -19,6 +20,8 @@ public class SettingsMenuController
     @FXML private CheckBox m_LeftWallCheck;
     @FXML private CheckBox m_RightWallCheck;
     @FXML private TextField m_GameSpeedInput;
+    @FXML private TextField m_MapRowInput;
+    @FXML private TextField m_MapColumnInput;
     
     private final ObjectProperty<GameManager> m_SinglePlayerGameManager;
 
@@ -52,14 +55,36 @@ public class SettingsMenuController
                     {
                         try
                         {
-                            return Double.parseDouble(string);
+                            var ret = Double.parseDouble(string);
+                            if (ret <= 0)
+                                return GameManager.DEFAULT_TICK_RATE;
+                            return ret;
                         }
-                        catch (Exception e)
-                        {
-                            return 1;
-                        }
+                        catch (Exception e) { return GameManager.DEFAULT_TICK_RATE; }
                     }
                 });
+
+        var mapSizeConverter = new StringConverter<Number>()
+        {
+            @Override
+            public String toString(Number object) { return object.toString(); }
+
+            @Override
+            public Number fromString(String string)
+            {
+                try { return Math.max(Integer.parseInt(string), Map.MIN_SIZE); }
+                catch (Exception e) { return Map.MIN_SIZE; }
+            }
+        };
+
+        Bindings.bindBidirectional(m_MapRowInput.textProperty(),
+                m_SinglePlayerGameManager.get().mapProperty().get().sizeXProperty(),
+                mapSizeConverter);
+
+
+        Bindings.bindBidirectional(m_MapColumnInput.textProperty(),
+                m_SinglePlayerGameManager.get().mapProperty().get().sizeYProperty(),
+                mapSizeConverter);
     }
 
 

@@ -1,7 +1,6 @@
 package hu.alkfejl.model;
 
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -24,6 +23,7 @@ public abstract class GameManager
 
 
     /* PROPERTIES */
+    public static final int DEFAULT_TICK_RATE = 1;
     protected static Random s_Random = new Random();
 
     protected ScheduledService<Void> m_Loop;
@@ -41,7 +41,7 @@ public abstract class GameManager
         m_State = new SimpleObjectProperty<>();
         m_State.setValue(GameState.READY);
 
-        m_TickRate = new SimpleDoubleProperty(1);
+        m_TickRate = new SimpleDoubleProperty(DEFAULT_TICK_RATE);
 
         m_Snake = new SimpleObjectProperty<>(new Snake());
         m_Map = new SimpleObjectProperty<>(new Map());
@@ -97,7 +97,7 @@ public abstract class GameManager
     {
         while (true)
         {
-            var p = new Vector2(s_Random.nextInt(map.getSize().getX()), s_Random.nextInt(map.getSize().getY()));
+            var p = new Vector2(s_Random.nextInt(map.getSizeX()), s_Random.nextInt(map.getSizeY()));
             if (!excludedPoints.contains(p))
             {
                 map.setFood(new Pair<>(p, f));

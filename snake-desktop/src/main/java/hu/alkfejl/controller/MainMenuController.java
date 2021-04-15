@@ -41,7 +41,6 @@ public class MainMenuController implements Initializable
         var view = new SinglePlayerView(App.getStage());
         var controller = view.getController();
         controller.gameManagerProperty().bind(m_SinglePlayerGameManager);
-        m_SinglePlayerGameManager.get().getMap().setSize(new Vector2(15, 15)); // DEBUG
         view.createBindings();
         controller.start();
     }
