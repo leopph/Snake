@@ -77,6 +77,34 @@
                   </VBox>
                </children>
             </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Label text="Apple Color" />
+                        <ColorPicker fx:id="m_AppleColor" />
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Label text="Cucumber Color" />
+                        <ColorPicker fx:id="m_CucumberColor" />
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Label text="Peach Color" />
+                        <ColorPicker fx:id="m_PeachColor" />
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Label text="Banana Color" />
+                        <ColorPicker fx:id="m_BananaColor" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
             <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onBack" text="Back">
                <opaqueInsets>
                   <Insets />

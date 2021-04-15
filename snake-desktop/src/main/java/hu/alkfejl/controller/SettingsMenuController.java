@@ -1,6 +1,7 @@
 package hu.alkfejl.controller;
 
 import hu.alkfejl.App;
+import hu.alkfejl.model.Food;
 import hu.alkfejl.model.GameManager;
 import hu.alkfejl.model.Map;
 import javafx.beans.binding.Bindings;
@@ -27,6 +28,10 @@ public class SettingsMenuController
     @FXML private ColorPicker m_P1BodyColor;
     @FXML private ColorPicker m_P2HeadColor;
     @FXML private ColorPicker m_P2BodyColor;
+    @FXML private ColorPicker m_AppleColor;
+    @FXML private ColorPicker m_CucumberColor;
+    @FXML private ColorPicker m_PeachColor;
+    @FXML private ColorPicker m_BananaColor;
 
     private final ObjectProperty<GameManager> m_SinglePlayerGameManager;
 
@@ -95,6 +100,11 @@ public class SettingsMenuController
         m_P1BodyColor.valueProperty().bindBidirectional(m_SinglePlayerGameManager.get().getSnake().bodyColorProperty());
         //m_P2HeadColor.valueProperty().bindBidirectional(m_MultiPlayerGameManager.get().getOtherSnake().headColorProperty());
         //m_P2BodyColor.valueProperty().bindBidirectional(m_SinglePlayerGameManager.get().getOtherSnake().bodyColorProperty());
+
+        m_AppleColor.valueProperty().bindBidirectional(Food.appleColorProperty());
+        m_CucumberColor.valueProperty().bindBidirectional(Food.cucumberColorProperty());
+        m_PeachColor.valueProperty().bindBidirectional(Food.peachColorProperty());
+        m_BananaColor.valueProperty().bindBidirectional(Food.bananaColorProperty());
     }
 
 
