@@ -6,7 +6,7 @@ import javafx.util.Pair;
 
 public class Map
 {
-    public static final int MIN_SIZE = 5;
+    public static final int MIN_SIZE = 10;
 
     /* PROPERTIES */
     private final ObjectProperty<Pair<Vector2, Food>> m_Food;
