@@ -42,16 +42,18 @@ public class SinglePlayerGameManager extends GameManager
                                 /* IF SNAKE NEEDS TO RELOCATE, CALCULATE GROWTH AND NEW POSITIONS ACCORDINGLY */
                                 else
                                 {
-                                    int mod;
+                                    int modX = m_Map.get().getSizeX();
+                                    int modY = m_Map.get().getSizeY();
+                                    /*int mod;
 
-                                    if (nextPos.getX() > m_Map.get().getSizeX() || nextPos.getX() < 0)
+                                    if (nextPos.getX() >= m_Map.get().getSizeX() || nextPos.getX() < 0)
                                         mod = m_Map.get().getSizeX();
                                     else
-                                        mod = m_Map.get().getSizeY();
+                                        mod = m_Map.get().getSizeY();*/
 
-                                    System.out.println("SNAKE SHOULD RELOCATE, NEW POSITION IS " + m_Snake.get().nextHeadPosition(mod) + "!"); // DEBUG
-                                    willEat = m_Map.get().getFood() != null && m_Map.get().getFood().getKey().equals(m_Snake.get().nextHeadPosition(mod));
-                                    m_Snake.get().move(willEat, mod);
+                                    System.out.println("SNAKE SHOULD RELOCATE, NEW POSITION IS " + m_Snake.get().nextHeadPosition(modX, modY) + "!"); // DEBUG
+                                    willEat = m_Map.get().getFood() != null && m_Map.get().getFood().getKey().equals(m_Snake.get().nextHeadPosition(modX, modY));
+                                    m_Snake.get().move(willEat, modX, modY);
                                 }
                             }
                             /* NORMAL GROWTH AND MOVEMENT */

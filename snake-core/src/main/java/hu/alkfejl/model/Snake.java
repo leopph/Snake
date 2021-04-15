@@ -80,11 +80,11 @@ public final class Snake
             default: return m_BodyCoords.get(0).add(new Vector2(1 , 0));
         }
     }
-    public Vector2 nextHeadPosition(int mod)
+    public Vector2 nextHeadPosition(int modX, int modY)
     {
         var pos = nextHeadPosition();
-        pos.setX(Math.floorMod(pos.getX(), mod));
-        pos.setY(Math.floorMod(pos.getY(), mod));
+        pos.setX(Math.floorMod(pos.getX(), modX));
+        pos.setY(Math.floorMod(pos.getY(), modY));
         return pos;
     }
 
@@ -103,10 +103,10 @@ public final class Snake
 
         m_CurrentDirection.setValue(m_NexDirection.get());
     }
-    public void move(boolean shouldGrow, int mod)
+    public void move(boolean shouldGrow, int modX, int modY)
     {
         move(shouldGrow);
-        m_BodyCoords.set(0, new Vector2(Math.floorMod(m_BodyCoords.get(0).getX(), mod), Math.floorMod(m_BodyCoords.get(0).getY(), mod)));
+        m_BodyCoords.set(0, new Vector2(Math.floorMod(m_BodyCoords.get(0).getX(), modX), Math.floorMod(m_BodyCoords.get(0).getY(), modY)));
     }
 
 

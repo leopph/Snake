@@ -78,12 +78,12 @@ public class SettingsMenuController
         };
 
         Bindings.bindBidirectional(m_MapRowInput.textProperty(),
-                m_SinglePlayerGameManager.get().mapProperty().get().sizeXProperty(),
+                m_SinglePlayerGameManager.get().mapProperty().get().sizeYProperty(),
                 mapSizeConverter);
 
 
         Bindings.bindBidirectional(m_MapColumnInput.textProperty(),
-                m_SinglePlayerGameManager.get().mapProperty().get().sizeYProperty(),
+                m_SinglePlayerGameManager.get().mapProperty().get().sizeXProperty(),
                 mapSizeConverter);
     }
 

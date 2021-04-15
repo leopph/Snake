@@ -41,7 +41,7 @@ public class SinglePlayerController extends GameWindowController
                 rect.widthProperty().bind(sizeBinding);
                 rect.heightProperty().bind(sizeBinding);
                 rect.setFill(Color.BLACK);
-                m_Grid.add(rect, j, i);
+                m_Grid.add(rect, i, j);
             }
 
 
