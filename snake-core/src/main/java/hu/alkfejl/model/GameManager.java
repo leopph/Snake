@@ -1,6 +1,10 @@
 package hu.alkfejl.model;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleBinding;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.concurrent.ScheduledService;
 import javafx.util.Duration;
@@ -18,19 +22,31 @@ public abstract class GameManager
         READY, INPROGRESS, ENDED
     }
 
+
+    /* PROPERTIES */
     protected static Random s_Random = new Random();
 
     protected ScheduledService<Void> m_Loop;
     protected ObjectProperty<GameState> m_State;
+    protected DoubleProperty m_TickRate;
     protected Snake m_Snake;
     protected Map m_Map;
 
 
+    /* CONSTRUCTORS */
     protected GameManager()
     {
         m_Loop = createLoop();
+
         m_State = new SimpleObjectProperty<>();
         m_State.setValue(GameState.READY);
+
+        m_TickRate = new SimpleDoubleProperty(1);
+
+        m_Snake = new Snake();
+        m_Map = new Map();
+
+        m_Loop.periodProperty().bind(Bindings.createObjectBinding(() -> new Duration((1.0 / m_TickRate.get()) * 1000), m_TickRate));
     }
     protected GameManager(Snake snake, Map map)
     {
@@ -39,6 +55,13 @@ public abstract class GameManager
         m_Map = map;
     }
 
+
+    /* PROPERTY GETTERS, GETTERS, SETTERS */
+    public ObjectProperty<GameState> gameStateProperty() { return m_State; }
+    public DoubleProperty tickRateProperty() { return m_TickRate; }
+
+    public GameState getGameState() { return m_State.get(); }
+    public Double getTickRate() { return m_TickRate.get(); }
     public Snake getSnake()
     {
         return m_Snake;
@@ -48,6 +71,8 @@ public abstract class GameManager
         return m_Map;
     }
 
+    public void setGameState(GameState newValue) { m_State.setValue(newValue); }
+    public void setTickRate(Double newValue) { m_TickRate.setValue(newValue);}
     public void setSnake(Snake snake)
     {
         m_Snake = snake;
@@ -69,25 +94,6 @@ public abstract class GameManager
         placeFood(Food.Random(), List.of(), m_Map);
         m_State.setValue(GameState.INPROGRESS);
         m_Loop.start();
-    }
-
-
-    public void setSpeed(float ticksPerSec)
-    {
-        m_Loop.setPeriod(new Duration((1.0 / ticksPerSec) * 1000));
-    }
-    public float getSpeed()
-    {
-        return 1.0f / (float) m_Loop.getPeriod().toSeconds();
-    }
-
-    public ObjectProperty<GameState> stateProperty()
-    {
-        return m_State;
-    }
-    public GameState getState()
-    {
-        return m_State.get();
     }
 
 

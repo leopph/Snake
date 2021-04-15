@@ -10,6 +10,7 @@ import javafx.geometry.Pos;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 
 public class SinglePlayerController extends GameWindowController
@@ -89,7 +90,7 @@ public class SinglePlayerController extends GameWindowController
 
 
         /* GET NOTIFIED WHEN GAME ENDS */
-        gameStateObjectProperty.bind(m_GameManager.stateProperty());
+        gameStateObjectProperty.bind(m_GameManager.gameStateProperty());
         gameStateObjectProperty.addListener((event, oldValue, newValue) ->
         {
             if (newValue == GameManager.GameState.ENDED)
@@ -98,7 +99,7 @@ public class SinglePlayerController extends GameWindowController
 
         m_Grid.setGridLinesVisible(true); // DEBUG
 
-        m_GameManager.setSpeed(2);
+        m_GameManager.setTickRate(2.0);
         m_GameManager.startGame();
     }
 }
