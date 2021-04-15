@@ -94,7 +94,12 @@ public abstract class GameManager
             m_Loop.cancel();
 
         m_Loop.reset();
-        m_Snake.set(new Snake()); // DEBUG
+
+        /* I PROBABLY SHOULD DO THIS SOME OTHER WAY */
+        var newSnake = new Snake();
+        newSnake.setHeadColor(m_Snake.get().getHeadColor());
+        newSnake.setBodyColor(m_Snake.get().getBodyColor());
+        m_Snake.set(newSnake);
 
         placeFood(Food.Random(), List.of(), m_Map.get());
         m_State.setValue(GameState.IN_PROGRESS);

@@ -68,6 +68,7 @@ public class SinglePlayerController extends GameWindowController
             }
         };
 
+        /* IF ITS STUPID BUT IT WORKS ITS NOT STUPID */
         m_GameManager.get().getSnake().getBodyCoords().addListener(listener);
         m_GameManager.get().snakeProperty().addListener(event -> m_GameManager.get().getSnake().getBodyCoords().addListener(listener));
 

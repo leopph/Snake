@@ -8,6 +8,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 import javafx.util.StringConverter;
 
@@ -22,7 +23,11 @@ public class SettingsMenuController
     @FXML private TextField m_GameSpeedInput;
     @FXML private TextField m_MapRowInput;
     @FXML private TextField m_MapColumnInput;
-    
+    @FXML private ColorPicker m_P1HeadColor;
+    @FXML private ColorPicker m_P1BodyColor;
+    @FXML private ColorPicker m_P2HeadColor;
+    @FXML private ColorPicker m_P2BodyColor;
+
     private final ObjectProperty<GameManager> m_SinglePlayerGameManager;
 
 
@@ -85,6 +90,11 @@ public class SettingsMenuController
         Bindings.bindBidirectional(m_MapColumnInput.textProperty(),
                 m_SinglePlayerGameManager.get().mapProperty().get().sizeXProperty(),
                 mapSizeConverter);
+
+        m_P1HeadColor.valueProperty().bindBidirectional(m_SinglePlayerGameManager.get().getSnake().headColorProperty());
+        m_P1BodyColor.valueProperty().bindBidirectional(m_SinglePlayerGameManager.get().getSnake().bodyColorProperty());
+        //m_P2HeadColor.valueProperty().bindBidirectional(m_MultiPlayerGameManager.get().getOtherSnake().headColorProperty());
+        //m_P2BodyColor.valueProperty().bindBidirectional(m_SinglePlayerGameManager.get().getOtherSnake().bodyColorProperty());
     }
 
 

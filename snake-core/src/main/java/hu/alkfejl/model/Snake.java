@@ -47,8 +47,8 @@ public final class Snake
     public ReadOnlyObjectProperty<Direction> currentDirectionProperty() { return m_CurrentDirection; }
     public ObjectProperty<Direction> nextDirectionProperty() { return m_NextDirection; }
     public ListProperty<Vector2> bodyCoordsProperty() { return m_BodyCoords; }
-    public ObjectProperty<Color> headColor() { return m_HeadColor; }
-    public ObjectProperty<Color> bodyColor() { return m_BodyColor; }
+    public ObjectProperty<Color> headColorProperty() { return m_HeadColor; }
+    public ObjectProperty<Color> bodyColorProperty() { return m_BodyColor; }
 
     public Direction getCurrentDirection()
     {
@@ -66,6 +66,8 @@ public final class Snake
     {
         m_NextDirection.setValue(d);
     }
+    public void setHeadColor(Color c) { m_HeadColor.setValue(c); }
+    public void setBodyColor(Color c) { m_BodyColor.setValue(c); }
 
 
     /* BEHAVIOR FUNCTIONS */
