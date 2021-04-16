@@ -1,10 +1,7 @@
 package hu.alkfejl.model;
 
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.concurrent.ScheduledService;
 import javafx.util.Duration;
 import javafx.util.Pair;
@@ -34,6 +31,7 @@ public abstract class GameManager
     protected ObjectProperty<Snake> m_Snake;
     protected ObjectProperty<Map> m_Map;
     protected ObjectProperty<Skill> m_HungerSkill;
+    protected StringProperty m_PlayerName;
 
 
     /* CONSTRUCTORS */
@@ -50,6 +48,7 @@ public abstract class GameManager
 
         m_Snake = new SimpleObjectProperty<>(new Snake());
         m_Map = new SimpleObjectProperty<>(new Map());
+        m_PlayerName = new SimpleStringProperty();
 
         m_HungerSkill = new SimpleObjectProperty<>(new Skill());
         m_HungerSkill.get().setCooldown(java.time.Duration.ofSeconds(10));
@@ -66,30 +65,21 @@ public abstract class GameManager
     public ObjectProperty<Snake> snakeProperty() { return m_Snake; }
     public ObjectProperty<Map> mapProperty() { return m_Map; }
     public ObjectProperty<Skill> hungerSkillProperty() { return m_HungerSkill; }
+    public StringProperty playerNameProperty() { return m_PlayerName; }
 
     public GameState getGameState() { return m_State.get(); }
     public Double getTickRate() { return m_TickRate.get(); }
-    public Snake getSnake()
-    {
-        return m_Snake.get();
-    }
-    public Map getMap()
-    {
-        return m_Map.get();
-    }
-    public Skill hungerSkill() { return m_HungerSkill.get(); }
+    public Snake getSnake() { return m_Snake.get(); }
+    public Map getMap() { return m_Map.get(); }
+    public Skill getHungerSkill() { return m_HungerSkill.get(); }
+    public String getPlayerName() { return m_PlayerName.get(); }
 
     public void setGameState(GameState newValue) { m_State.setValue(newValue); }
     public void setTickRate(Double newValue) { m_TickRate.setValue(newValue); }
-    public void setSnake(Snake snake)
-    {
-        m_Snake.setValue(snake);
-    }
-    public void setMap(Map map)
-    {
-        m_Map.setValue(map);
-    }
+    public void setSnake(Snake snake) { m_Snake.setValue(snake); }
+    public void setMap(Map map) { m_Map.setValue(map); }
     public void setHungerSkill(Skill newValue) { m_HungerSkill.set(newValue); }
+    public void setPlayerName(String newValue) { m_PlayerName.set(newValue); }
 
 
     protected abstract ScheduledService<Void> createLoop();

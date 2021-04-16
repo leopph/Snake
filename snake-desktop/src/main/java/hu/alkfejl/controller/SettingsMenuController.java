@@ -32,6 +32,8 @@ public class SettingsMenuController
     @FXML private ColorPicker m_CucumberColor;
     @FXML private ColorPicker m_PeachColor;
     @FXML private ColorPicker m_BananaColor;
+    @FXML private TextField m_P1NameInput;
+    @FXML private TextField m_P2NameInput;
 
     private final ObjectProperty<GameManager> m_SinglePlayerGameManager;
 
@@ -105,6 +107,9 @@ public class SettingsMenuController
         m_CucumberColor.valueProperty().bindBidirectional(Food.cucumberColorProperty());
         m_PeachColor.valueProperty().bindBidirectional(Food.peachColorProperty());
         m_BananaColor.valueProperty().bindBidirectional(Food.bananaColorProperty());
+
+        m_P1NameInput.textProperty().bindBidirectional(m_SinglePlayerGameManager.get().playerNameProperty());
+        //m_P2NameInput.textProperty().bindBidirectional(m_SinglePlayerGameManager.get().playerNameProperty());
     }
 
 

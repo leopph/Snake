@@ -52,8 +52,8 @@ public abstract class GameWindowController
                     m_GameManager.get().getSnake().setNextDirection(Snake.Direction.RIGHT);
                 return;
             case E:
-                if (!m_GameManager.get().hungerSkill().isOnCooldown())
-                    m_GameManager.get().hungerSkill().setLastUsed(Instant.now());
+                if (!m_GameManager.get().getHungerSkill().isOnCooldown())
+                    m_GameManager.get().getHungerSkill().setLastUsed(Instant.now());
         }
     }
 }
