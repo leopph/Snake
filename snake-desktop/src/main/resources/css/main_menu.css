@@ -1,0 +1,25 @@
+#anchorPane
+{
+    -fx-min-width: 960;
+    -fx-min-height: 540;
+    -fx-pref-width: 1280;
+    -fx-pref-height: 720;
+    -fx-max-width: infinity;
+    -fx-max-height: infinity;
+
+    -fx-background-color: radial-gradient(center 50% 50%, radius 100%, purple, pink);
+}
+
+.label
+{
+    -fx-font-family: Consolas;
+    -fx-font-size: 48;
+    -fx-alignment: center;
+    -fx-text-fill: linear-gradient(from 50% 100% to 50% 0%, black, green);
+}
+
+.button
+{
+    /*-fx-graphic: url('../graphics/button.png');*/
+    -fx-content-display: center;
+}
