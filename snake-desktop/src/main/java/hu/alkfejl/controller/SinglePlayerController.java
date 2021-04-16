@@ -6,6 +6,9 @@ import hu.alkfejl.model.*;
 import javafx.beans.binding.Bindings;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -82,20 +85,33 @@ public class SinglePlayerController extends GameWindowController
         /* GET NOTIFIED WHEN GAME ENDS */
         m_GameManager.get().gameStateProperty().addListener((event, oldValue, newValue) ->
         {
+            if (newValue != GameManager.GameState.P1_WON && newValue != GameManager.GameState.WALL_HIT && newValue != GameManager.GameState.SELF_ATE)
+                return;
+
+            var alert = new Alert(Alert.AlertType.INFORMATION);
+
             switch (newValue)
             {
                 case P1_WON:
-                    System.out.println("Good, good. You won.");
-                    App.loadWindow("main_menu.fxml").<MainMenuController>getController().singlePlayerGameManagerProperty().bind(m_GameManager);
+                    alert.setTitle("You won");
+                    alert.setHeaderText("You achieved victory.");
+                    alert.setContentText("Nobody has ever seen a snake of such magnitude...");
                     break;
+
                 case WALL_HIT:
-                    System.out.println("Well, you hit a wall.");
-                    App.loadWindow("main_menu.fxml").<MainMenuController>getController().singlePlayerGameManagerProperty().bind(m_GameManager);
+                    alert.setTitle("You died");
+                    alert.setHeaderText("You ate hit a wall.");
+                    alert.setContentText("You might wanna work on those wall-dodging skills...");
                     break;
+
                 case SELF_ATE:
-                    System.out.println("Well, you ate yourself. Congrats.");
-                    App.loadWindow("main_menu.fxml").<MainMenuController>getController().singlePlayerGameManagerProperty().bind(m_GameManager);
+                    alert.setTitle("You died");
+                    alert.setHeaderText("You ate yourself.");
+                    alert.setContentText("Snake's gotta eat, am I right?");
             }
+
+            alert.showAndWait();
+            App.loadWindow("main_menu.fxml").<MainMenuController>getController().singlePlayerGameManagerProperty().bind(m_GameManager);
         });
 
         m_GameManager.get().startGame();
