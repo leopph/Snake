@@ -24,12 +24,9 @@
             </Label>
             <HBox alignment="CENTER" fillHeight="false" styleClass="wallHbox">
                <children>
-                  <CheckBox fx:id="m_UpWallCheck" mnemonicParsing="false" text="Up Wall">
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
+                  <CheckBox fx:id="m_UpWallCheck" mnemonicParsing="false" text="Upper Wall">
                   </CheckBox>
-                  <CheckBox fx:id="m_DownWallCheck" mnemonicParsing="false" text="Down Wall" />
+                  <CheckBox fx:id="m_DownWallCheck" mnemonicParsing="false" text="Bottom Wall" />
                   <CheckBox fx:id="m_LeftWallCheck" mnemonicParsing="false" text="Left Wall" />
                   <CheckBox fx:id="m_RightWallCheck" mnemonicParsing="false" text="Right Wall" />
                </children>
@@ -112,7 +109,7 @@
             <VBox alignment="CENTER">
                <children>
                   <Label text="Player 2 Name" />
-                  <TextField fx:id="m_P1NameInput" />
+                  <TextField fx:id="m_P2NameInput" />
                </children>
             </VBox>
          </children>
