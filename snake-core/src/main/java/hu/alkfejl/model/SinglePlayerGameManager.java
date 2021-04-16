@@ -1,6 +1,8 @@
 package hu.alkfejl.model;
 
 import javafx.application.Platform;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
+import javafx.collections.FXCollections;
 import javafx.concurrent.ScheduledService;
 import javafx.concurrent.Task;
 
@@ -22,6 +24,9 @@ public class SinglePlayerGameManager extends GameManager
                     {
                         try
                         {
+                            /* RECALCULATE HUNGER USAGE AND COOLDOWN VALUES */
+                            m_HungerSkill.get().setTicks(m_HungerSkill.get().getTicks() + 1);
+
                             /* POSITION WITHOUT WALLS TAKEN INTO ACCOUNT */
                             var nextPos = m_Snake.get().nextHeadPosition();
 
@@ -49,10 +54,15 @@ public class SinglePlayerGameManager extends GameManager
                             /* IF SNAKE IS NOW EATING ITSELF, DIE */
                             if (m_Snake.get().isSelfEating())
                             {
-                                System.out.println("SNAKE ATE ITSELF"); // DEBUG
-                                m_InternalFinalStage = GameState.SELF_ATE;
-                                Platform.runLater(m_Loop::cancel);
-                                return null;
+                                if (m_HungerSkill.get().isInUse())
+                                    m_Snake.get().getBodyCoords().remove(m_Snake.get().getBodyCoords().lastIndexOf(m_Snake.get().getBodyCoords().get(0)), m_Snake.get().getBodyCoords().size());
+                                else
+                                {
+                                    System.out.println("SNAKE ATE ITSELF"); // DEBUG
+                                    m_InternalFinalStage = GameState.SELF_ATE;
+                                    Platform.runLater(m_Loop::cancel);
+                                    return null;
+                                }
                             }
 
                             /* IF ITS ALIVE AND ATE FOOD SPAWN NEW ONE */
@@ -67,7 +77,6 @@ public class SinglePlayerGameManager extends GameManager
                                 Platform.runLater(m_Loop::cancel);
                             }
 
-                            System.out.println("Snake is now at: " + m_Snake.get().getBodyCoords().get(0) + "."); // DEBUG
                             return null;
                         }
                     catch(Exception e)

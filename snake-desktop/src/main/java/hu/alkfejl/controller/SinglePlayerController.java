@@ -43,14 +43,6 @@ public class SinglePlayerController extends GameWindowController
         /* RENDER CYCLE FOR SNAKE */
         ListChangeListener<Vector2> listener = event ->
         {
-            /* DEBUG */
-            System.out.println("---SNAKE BODY COORDS---");
-            for (var pos : m_GameManager.get().getSnake().getBodyCoords())
-                System.out.println(pos);
-            System.out.println("---END SNAKE COORDS---");
-            /* NDEBUG */
-
-
             for (var child : m_Grid.getChildren())
             {
                 if (GridPane.getColumnIndex(child) == null)
@@ -105,8 +97,6 @@ public class SinglePlayerController extends GameWindowController
                     App.loadWindow("main_menu.fxml").<MainMenuController>getController().singlePlayerGameManagerProperty().bind(m_GameManager);
             }
         });
-
-        m_Grid.setGridLinesVisible(true); // DEBUG
 
         m_GameManager.get().startGame();
     }

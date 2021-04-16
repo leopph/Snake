@@ -73,12 +73,7 @@ public final class Snake
     /* BEHAVIOR FUNCTIONS */
     public boolean isSelfEating()
     {
-        for (int i = 0; i < m_BodyCoords.size(); i++)
-            for (int j = 0; j < m_BodyCoords.size(); j++)
-                if (i != j && m_BodyCoords.get(i).equals(m_BodyCoords.get(j)))
-                    return true;
-
-        return false;
+        return m_BodyCoords.lastIndexOf(m_BodyCoords.get(0)) != 0;
     }
 
 

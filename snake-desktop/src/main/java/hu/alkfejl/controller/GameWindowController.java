@@ -7,6 +7,8 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 
+import java.time.Instant;
+
 
 public abstract class GameWindowController
 {
@@ -31,7 +33,6 @@ public abstract class GameWindowController
     
     protected void keyCallback(KeyEvent event)
     {
-        System.out.println("Key pressed: " + event.getText() + "."); // DEBUG
         switch (event.getCode())
         {
             case W:
@@ -49,6 +50,10 @@ public abstract class GameWindowController
             case D:
                 if (m_GameManager.get().getSnake().getCurrentDirection() != Snake.Direction.LEFT && m_GameManager.get().getSnake().getNextDirection() != Snake.Direction.LEFT)
                     m_GameManager.get().getSnake().setNextDirection(Snake.Direction.RIGHT);
+                return;
+            case E:
+                if (!m_GameManager.get().hungerSkill().isOnCooldown())
+                    m_GameManager.get().hungerSkill().setLastUsed(Instant.now());
         }
     }
 }

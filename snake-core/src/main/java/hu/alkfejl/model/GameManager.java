@@ -33,6 +33,7 @@ public abstract class GameManager
     protected DoubleProperty m_TickRate;
     protected ObjectProperty<Snake> m_Snake;
     protected ObjectProperty<Map> m_Map;
+    protected ObjectProperty<Skill> m_HungerSkill;
 
 
     /* CONSTRUCTORS */
@@ -50,8 +51,11 @@ public abstract class GameManager
         m_Snake = new SimpleObjectProperty<>(new Snake());
         m_Map = new SimpleObjectProperty<>(new Map());
 
-        m_Loop.periodProperty().bind(Bindings.createObjectBinding(() -> new Duration((1.0 / m_TickRate.get()) * 1000), m_TickRate));
+        m_HungerSkill = new SimpleObjectProperty<>(new Skill());
+        m_HungerSkill.get().setCooldown(java.time.Duration.ofSeconds(10));
+        m_HungerSkill.get().setDuration(java.time.Duration.ofSeconds(3));
 
+        m_Loop.periodProperty().bind(Bindings.createObjectBinding(() -> new Duration((1.0 / m_TickRate.get()) * 1000), m_TickRate));
         m_Loop.setOnCancelled(event -> m_State.setValue(m_InternalFinalStage));
     }
 
@@ -61,6 +65,7 @@ public abstract class GameManager
     public DoubleProperty tickRateProperty() { return m_TickRate; }
     public ObjectProperty<Snake> snakeProperty() { return m_Snake; }
     public ObjectProperty<Map> mapProperty() { return m_Map; }
+    public ObjectProperty<Skill> hungerSkillProperty() { return m_HungerSkill; }
 
     public GameState getGameState() { return m_State.get(); }
     public Double getTickRate() { return m_TickRate.get(); }
@@ -72,6 +77,7 @@ public abstract class GameManager
     {
         return m_Map.get();
     }
+    public Skill hungerSkill() { return m_HungerSkill.get(); }
 
     public void setGameState(GameState newValue) { m_State.setValue(newValue); }
     public void setTickRate(Double newValue) { m_TickRate.setValue(newValue); }
@@ -83,6 +89,7 @@ public abstract class GameManager
     {
         m_Map.setValue(map);
     }
+    public void setHungerSkill(Skill newValue) { m_HungerSkill.set(newValue); }
 
 
     protected abstract ScheduledService<Void> createLoop();
