@@ -6,6 +6,7 @@ import javafx.concurrent.ScheduledService;
 import javafx.util.Duration;
 import javafx.util.Pair;
 
+import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
@@ -32,6 +33,7 @@ public abstract class GameManager
     protected ObjectProperty<Map> m_Map;
     protected ObjectProperty<Skill> m_HungerSkill;
     protected StringProperty m_PlayerName;
+    protected IntegerProperty m_Points;
 
 
     /* CONSTRUCTORS */
@@ -49,6 +51,7 @@ public abstract class GameManager
         m_Snake = new SimpleObjectProperty<>(new Snake());
         m_Map = new SimpleObjectProperty<>(new Map());
         m_PlayerName = new SimpleStringProperty();
+        m_Points = new SimpleIntegerProperty(0);
 
         m_HungerSkill = new SimpleObjectProperty<>(new Skill());
         m_HungerSkill.get().setCooldown(java.time.Duration.ofSeconds(10));
@@ -66,6 +69,7 @@ public abstract class GameManager
     public ObjectProperty<Map> mapProperty() { return m_Map; }
     public ObjectProperty<Skill> hungerSkillProperty() { return m_HungerSkill; }
     public StringProperty playerNameProperty() { return m_PlayerName; }
+    public IntegerProperty pointsProperty() { return m_Points; }
 
     public GameState getGameState() { return m_State.get(); }
     public Double getTickRate() { return m_TickRate.get(); }
@@ -73,6 +77,7 @@ public abstract class GameManager
     public Map getMap() { return m_Map.get(); }
     public Skill getHungerSkill() { return m_HungerSkill.get(); }
     public String getPlayerName() { return m_PlayerName.get(); }
+    public Integer getPoints() { return m_Points.get(); }
 
     public void setGameState(GameState newValue) { m_State.setValue(newValue); }
     public void setTickRate(Double newValue) { m_TickRate.setValue(newValue); }
@@ -80,9 +85,7 @@ public abstract class GameManager
     public void setMap(Map map) { m_Map.setValue(map); }
     public void setHungerSkill(Skill newValue) { m_HungerSkill.set(newValue); }
     public void setPlayerName(String newValue) { m_PlayerName.set(newValue); }
-
-
-    protected abstract ScheduledService<Void> createLoop();
+    public void setPoints(Integer newValue) { m_Points.setValue(newValue); }
 
 
     public void startGame()
@@ -92,11 +95,14 @@ public abstract class GameManager
 
         m_Loop.reset();
 
-        /* I PROBABLY SHOULD DO THIS SOME OTHER WAY */
+        /* I SHOULD PROBABLY DO THIS SOME OTHER WAY */
         var newSnake = new Snake();
         newSnake.setHeadColor(m_Snake.get().getHeadColor());
         newSnake.setBodyColor(m_Snake.get().getBodyColor());
         m_Snake.set(newSnake);
+
+        m_Points.setValue(0);
+        m_HungerSkill.get().setLastUsed(Instant.MIN);
 
         placeFood(Food.Random(), List.of(), m_Map.get());
         m_State.setValue(GameState.IN_PROGRESS);
@@ -116,4 +122,8 @@ public abstract class GameManager
             }
         }
     }
+
+
+    /* SUBCLASSES IMPLEMENT THIS TO DEFINE THE GAME LOOP */
+    protected abstract ScheduledService<Void> createLoop();
 }

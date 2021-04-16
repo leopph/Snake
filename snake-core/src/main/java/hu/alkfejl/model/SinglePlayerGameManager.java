@@ -65,9 +65,13 @@ public class SinglePlayerGameManager extends GameManager
                                 }
                             }
 
-                            /* IF ITS ALIVE AND ATE FOOD SPAWN NEW ONE */
+                            /* IF ITS ALIVE AND ATE FOOD INCREASE POINT AND SPAWN NEW FOOD */
                             if (willEat)
+                            {
+                                var food = m_Map.get().getFood().getValue();
+                                m_Points.set(m_Points.get() + food.getPoint());
                                 placeFood(Food.Random(), m_Snake.get().getBodyCoords(), m_Map.get());
+                            }
 
                             /* SNAKE HAS FILLED THE MAP, GG */
                             if (m_Snake.get().getBodyCoords().size() >= m_Map.get().getSizeX() * m_Map.get().getSizeY())
