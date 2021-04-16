@@ -12,6 +12,7 @@ import javafx.scene.control.Dialog;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.StageStyle;
 
 
 public class SinglePlayerController extends GameWindowController
@@ -89,6 +90,7 @@ public class SinglePlayerController extends GameWindowController
                 return;
 
             var alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.initStyle(StageStyle.UNDECORATED);
 
             switch (newValue)
             {
