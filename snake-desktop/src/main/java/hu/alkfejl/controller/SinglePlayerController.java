@@ -101,7 +101,7 @@ public class SinglePlayerController extends GameWindowController
 
                 case WALL_HIT:
                     alert.setTitle("You died");
-                    alert.setHeaderText("You ate hit a wall.");
+                    alert.setHeaderText("You hit a wall.");
                     alert.setContentText("You might wanna work on those wall-dodging skills...");
                     break;
 
