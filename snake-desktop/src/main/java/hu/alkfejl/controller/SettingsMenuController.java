@@ -120,8 +120,9 @@ public class SettingsMenuController
     @FXML
     private void onBack()
     {
-        var loader = App.loadWindow("main_menu.fxml");
+        App.getWindowManager().showScene("MainMenu");
+        /*var loader = App.loadWindow("main_menu.fxml");
         var controller = loader.<MainMenuController>getController();
-        controller.singlePlayerGameManagerProperty().bind(m_SinglePlayerGameManager);
+        controller.singlePlayerGameManagerProperty().bind(m_SinglePlayerGameManager);*/
     }
 }

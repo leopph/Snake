@@ -1,53 +1,22 @@
 package hu.alkfejl;
 
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import java.util.Objects;
 
 
 public class App extends Application
 {
-    private static Stage m_Stage;
+    private static WindowManager s_WindowManager;
 
 
     @Override
     public void start(Stage stage)
     {
-        m_Stage = stage;
-        loadWindow("main_menu.fxml");
+        s_WindowManager = new WindowManager(stage);
+        s_WindowManager.createScene("MainMenu", "main_menu.fxml");
+        s_WindowManager.showScene("MainMenu");
     }
 
 
-    public static Stage getStage()
-    {
-        return m_Stage;
-    }
-
-
-
-    public static FXMLLoader loadWindow(String fileName)
-    {
-        try
-        {
-            var loader = new FXMLLoader(Objects.requireNonNull(App.class.getResource("/fxml/" + fileName)));
-            var root = loader.load();
-            var scene = new Scene((Parent) root);
-
-            m_Stage.setScene(scene);
-            m_Stage.show();
-
-            return loader;
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            Platform.exit();
-            return null;
-        }
-    }
+    public static WindowManager getWindowManager() { return s_WindowManager; }
 }

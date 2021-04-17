@@ -4,6 +4,7 @@ import hu.alkfejl.model.GameManager;
 import hu.alkfejl.model.Snake;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.fxml.FXML;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 
@@ -12,13 +13,12 @@ import java.time.Instant;
 
 public abstract class GameWindowController
 {
-    protected GridPane m_Grid;
+    @FXML protected GridPane m_Grid;
     protected ObjectProperty<GameManager> m_GameManager;
 
 
-    public GameWindowController(GridPane root)
+    public GameWindowController()
     {
-        m_Grid = root;
         m_GameManager = new SimpleObjectProperty<>();
     }
 

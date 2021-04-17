@@ -15,12 +15,6 @@ import javafx.stage.StageStyle;
 
 public class SinglePlayerController extends GameWindowController
 {
-    public SinglePlayerController(GridPane root)
-    {
-        super(root);
-    }
-
-
     @Override
     public void start()
     {
@@ -113,7 +107,8 @@ public class SinglePlayerController extends GameWindowController
 
             alert.setContentText(alert.getContentText() + "\nYour score was " + m_GameManager.get().getPoints() + "."); // DEBUG
             alert.showAndWait();
-            App.loadWindow("main_menu.fxml").<MainMenuController>getController().singlePlayerGameManagerProperty().bind(m_GameManager);
+            //App.loadWindow("main_menu.fxml").<MainMenuController>getController().singlePlayerGameManagerProperty().bind(m_GameManager);
+            App.getWindowManager().showScene("MainMenu");
         });
 
         m_GameManager.get().startGame();

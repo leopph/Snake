@@ -38,11 +38,20 @@ public class MainMenuController implements Initializable
     @FXML
     private void startSinglePlayer()
     {
-        var view = new SinglePlayerView(App.getStage());
+        if (!App.getWindowManager().showScene("SinglePlayer"))
+        {
+            var loader = App.getWindowManager().createScene("SinglePlayer", "single_player.fxml");
+            var controller = loader.<SinglePlayerController>getController();
+            System.out.println(controller);
+            controller.gameManagerProperty().bindBidirectional(m_SinglePlayerGameManager);
+            controller.start();
+            App.getWindowManager().showScene("SinglePlayer");
+        }
+        /*var view = new SinglePlayerView(App.getStage());
         var controller = view.getController();
         controller.gameManagerProperty().bind(m_SinglePlayerGameManager);
         view.createBindings();
-        controller.start();
+        controller.start();*/
     }
 
 
@@ -56,10 +65,15 @@ public class MainMenuController implements Initializable
     @FXML
     private void openSettings()
     {
-        var loader = App.loadWindow("settings_menu.fxml");
-        var controller = loader.<SettingsMenuController>getController();
-        controller.singlePlayerControllerProperty().bindBidirectional(m_SinglePlayerGameManager);
-        controller.start();
+        if (!App.getWindowManager().showScene("SettingsMenu"))
+        {
+            var loader = App.getWindowManager().createScene("SettingsMenu", "settings_menu.fxml");
+            var controller = loader.<SettingsMenuController>getController();
+            controller.singlePlayerControllerProperty().bindBidirectional(m_SinglePlayerGameManager);
+            controller.start();
+            App.getWindowManager().showScene("SettingsMenu");
+        }
+
     }
 
 
