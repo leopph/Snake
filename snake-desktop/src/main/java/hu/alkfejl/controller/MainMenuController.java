@@ -2,7 +2,6 @@ package hu.alkfejl.controller;
 
 import hu.alkfejl.App;
 import hu.alkfejl.model.*;
-import hu.alkfejl.view.SinglePlayerView;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
