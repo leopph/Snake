@@ -29,6 +29,7 @@ public abstract class GameWindowController
 
 
     public abstract void start();
+    public abstract void reset();
     
     
     protected void keyCallback(KeyEvent event)

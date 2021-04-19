@@ -15,6 +15,7 @@ import java.util.ResourceBundle;
 public class MainMenuController implements Initializable
 {
     private ObjectProperty<GameManager> m_SinglePlayerGameManager;
+    private SinglePlayerController m_SinglePlayerController;
 
 
     @Override
@@ -40,17 +41,13 @@ public class MainMenuController implements Initializable
         if (!App.getWindowManager().showScene("SinglePlayer"))
         {
             var loader = App.getWindowManager().createScene("SinglePlayer", "single_player.fxml");
-            var controller = loader.<SinglePlayerController>getController();
-            System.out.println(controller);
-            controller.gameManagerProperty().bindBidirectional(m_SinglePlayerGameManager);
-            controller.start();
+            m_SinglePlayerController = loader.<SinglePlayerController>getController();
+            m_SinglePlayerController.gameManagerProperty().bindBidirectional(m_SinglePlayerGameManager);
+            m_SinglePlayerController.start();
             App.getWindowManager().showScene("SinglePlayer");
         }
-        /*var view = new SinglePlayerView(App.getStage());
-        var controller = view.getController();
-        controller.gameManagerProperty().bind(m_SinglePlayerGameManager);
-        view.createBindings();
-        controller.start();*/
+        else
+            m_SinglePlayerController.reset();
     }
 
 

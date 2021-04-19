@@ -21,20 +21,6 @@ public class SinglePlayerController extends GameWindowController
         m_Grid.setAlignment(Pos.CENTER);
         m_Grid.getScene().setOnKeyPressed(this::keyCallback);
 
-        var sizeBinding = Bindings.min(m_Grid.widthProperty().divide(m_GameManager.get().getMap().getSizeX()),
-                                                    m_Grid.heightProperty().divide(m_GameManager.get().getMap().getSizeY()));
-
-        /* CREATE INITIAL GRID */
-        for (int i = 0; i < m_GameManager.get().getMap().getSizeX(); i++)
-            for (int j = 0; j < m_GameManager.get().getMap().getSizeY(); j++)
-            {
-                var rect = new Rectangle();
-                rect.widthProperty().bind(sizeBinding);
-                rect.heightProperty().bind(sizeBinding);
-                rect.setFill(Color.BLACK);
-                m_Grid.add(rect, i, j);
-            }
-
 
         /* RENDER CYCLE FOR SNAKE */
         ListChangeListener<Vector2> listener = event ->
@@ -110,6 +96,34 @@ public class SinglePlayerController extends GameWindowController
             //App.loadWindow("main_menu.fxml").<MainMenuController>getController().singlePlayerGameManagerProperty().bind(m_GameManager);
             App.getWindowManager().showScene("MainMenu");
         });
+
+        reset();
+    }
+
+
+    @Override
+    public void reset()
+    {
+        /* CLEAR THE GRID OUT */
+        m_Grid.getChildren().clear();
+        m_Grid.getRowConstraints().clear();
+        m_Grid.getColumnConstraints().clear();
+
+
+        /* CREATE NEW LAYOUT */
+        var sizeBinding = Bindings.min(m_Grid.widthProperty().divide(m_GameManager.get().getMap().getSizeX()),
+                m_Grid.heightProperty().divide(m_GameManager.get().getMap().getSizeY()));
+
+        /* CREATE INITIAL GRID */
+        for (int i = 0; i < m_GameManager.get().getMap().getSizeX(); i++)
+            for (int j = 0; j < m_GameManager.get().getMap().getSizeY(); j++)
+            {
+                var rect = new Rectangle();
+                rect.widthProperty().bind(sizeBinding);
+                rect.heightProperty().bind(sizeBinding);
+                rect.setFill(Color.BLACK);
+                m_Grid.add(rect, i, j);
+            }
 
         m_GameManager.get().startGame();
     }
