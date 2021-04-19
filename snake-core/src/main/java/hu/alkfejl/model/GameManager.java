@@ -16,7 +16,7 @@ public abstract class GameManager
 {
     public enum GameState
     {
-        READY, IN_PROGRESS, SELF_ATE, WALL_HIT, P1_WON, P2_WON
+        READY, IN_PROGRESS, SELF_ATE, WALL_HIT, P1_WON, P2_WON, CANCELLED
     }
 
 
@@ -107,6 +107,13 @@ public abstract class GameManager
         placeFood(Food.Random(), List.of(), m_Map.get());
         m_State.setValue(GameState.IN_PROGRESS);
         m_Loop.start();
+    }
+
+
+    public void stopGame()
+    {
+        m_InternalFinalStage = GameState.CANCELLED;
+        m_Loop.cancel();
     }
 
 

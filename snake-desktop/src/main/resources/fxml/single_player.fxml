@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.GridPane?>
 
 
-<GridPane xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:id="m_Grid" fx:controller="hu.alkfejl.controller.SinglePlayerController"/>
+<BorderPane stylesheets="@../css/single_player.css" id="BorderPane"
+            xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="hu.alkfejl.controller.SinglePlayerController">
+    <center>
+        <GridPane fx:id="m_Grid" BorderPane.alignment="CENTER"/>
+    </center>
+    <top>
+        <MenuBar BorderPane.alignment="CENTER">
+            <Menu mnemonicParsing="false" text="File">
+                <MenuItem mnemonicParsing="false" text="Back to main" onAction="#returnToMain"/>
+            </Menu>
+        </MenuBar>
+    </top>
+</BorderPane>

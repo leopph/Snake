@@ -1,5 +1,6 @@
 package hu.alkfejl.controller;
 
+import hu.alkfejl.App;
 import hu.alkfejl.model.GameManager;
 import hu.alkfejl.model.Snake;
 import javafx.beans.property.ObjectProperty;
@@ -56,5 +57,13 @@ public abstract class GameWindowController
                 if (!m_GameManager.get().getHungerSkill().isOnCooldown())
                     m_GameManager.get().getHungerSkill().setLastUsed(Instant.now());
         }
+    }
+
+
+    @FXML
+    protected void returnToMain()
+    {
+        m_GameManager.get().stopGame();
+        App.getWindowManager().showScene("MainMenu");
     }
 }
