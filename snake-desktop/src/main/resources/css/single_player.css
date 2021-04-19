@@ -7,3 +7,8 @@
     -fx-max-width: infinity;
     -fx-max-height: infinity;
 }
+
+.label
+{
+    -fx-wrap-text: true;
+}

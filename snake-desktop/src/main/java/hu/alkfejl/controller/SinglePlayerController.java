@@ -13,6 +13,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.StageStyle;
 
+import java.time.Duration;
+import java.time.Instant;
+
 
 public class SinglePlayerController extends GameWindowController
 {
@@ -34,8 +37,28 @@ public class SinglePlayerController extends GameWindowController
             if (oldValue == null)
                 return;
 
-            m_FoodPickUpLabel.setText("Picked up " + oldValue.getValue().getName() + " for " + oldValue.getValue().getPoint() + "points.");
+            m_FoodPickUpLabel.setText("Picked up " + oldValue.getValue().getName() + " for " + oldValue.getValue().getPoint() + " points.");
             m_FoodPickUpAnimation.play();
+        }));
+
+        /* DISPLAY CURRENT USED SKILL AND COOLDOWN */
+        m_GameManager.get().hungerSkillProperty().get().ticksProperty().addListener((event, oldValue, newValue) -> Platform.runLater(() ->
+        {
+            var skill = m_GameManager.get().getHungerSkill();
+
+            if (skill.isInUse())
+            {
+                var cooldown = Duration.between(Instant.now(), skill.getLastUsed().plus(skill.getCooldown()));
+                var durationLeft = Duration.between(Instant.now(), skill.getLastUsed().plus(skill.getDuration()));
+                m_SkillLabel.setText("Hunger is active!\nTime left: " + durationLeft.toSeconds() + "\nCooldown: " + cooldown.toSeconds() + ".");
+            }
+            else if (skill.isOnCooldown())
+            {
+                var cooldown = Duration.between(Instant.now(), skill.getLastUsed().plus(skill.getCooldown()));
+                m_SkillLabel.setText("Hunger is on cooldown. " + cooldown.toSeconds() + " seconds left.");
+            }
+            else
+                m_SkillLabel.setText("");
         }));
 
 
