@@ -69,7 +69,7 @@ public class SinglePlayerGameManager extends GameManager
                             if (willEat)
                             {
                                 var food = m_Map.get().getFood().getValue();
-                                m_Points.set(m_Points.get() + food.getPoint());
+                                Platform.runLater(() -> m_Points.set(m_Points.get() + food.getPoint()));
                                 placeFood(Food.Random(), m_Snake.get().getBodyCoords(), m_Map.get());
                             }
 

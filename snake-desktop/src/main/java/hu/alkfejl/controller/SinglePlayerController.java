@@ -1,8 +1,9 @@
 package hu.alkfejl.controller;
 
-import hu.alkfejl.App;
 import hu.alkfejl.model.*;
 
+import javafx.animation.Animation;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Pos;
@@ -21,10 +22,29 @@ public class SinglePlayerController extends GameWindowController
         m_Grid.setAlignment(Pos.CENTER);
         m_Grid.getScene().setOnKeyPressed(this::keyCallback);
 
+        /* DISPLAY CURRENT SCORE */
+        m_ScoreLabel.textProperty().bind(Bindings.createStringBinding(() -> "Score: " + m_GameManager.get().getPoints(), m_GameManager.get().pointsProperty()));
+
+        /* DISPLAY PICKED UP FOOD FOR A SHORT PERIOD */
+        m_GameManager.get().getMap().foodProperty().addListener((event, oldValue, newValue) -> Platform.runLater(() ->
+        {
+            if (m_FoodPickUpAnimation.getStatus() == Animation.Status.RUNNING)
+                m_FoodPickUpAnimation.stop();
+
+            if (oldValue == null)
+                return;
+
+            m_FoodPickUpLabel.setText("Picked up " + oldValue.getValue().getName() + " for " + oldValue.getValue().getPoint() + "points.");
+            m_FoodPickUpAnimation.play();
+        }));
+
 
         /* RENDER CYCLE FOR SNAKE */
         ListChangeListener<Vector2> listener = event ->
         {
+            if (event.getList().size() == 0)
+                return;
+
             for (var child : m_Grid.getChildren())
             {
                 if (GridPane.getColumnIndex(child) == null)
@@ -96,6 +116,8 @@ public class SinglePlayerController extends GameWindowController
             returnToMain();
         });
 
+
+        /* DO THE LAYOUT SETUP */
         reset();
     }
 
@@ -109,11 +131,10 @@ public class SinglePlayerController extends GameWindowController
         m_Grid.getColumnConstraints().clear();
 
 
-        /* CREATE NEW LAYOUT */
+        /* SET THHE GRID UP ACCORDING TO MAP */
         var sizeBinding = Bindings.min(m_Grid.widthProperty().divide(m_GameManager.get().getMap().getSizeX()),
                 m_Grid.heightProperty().divide(m_GameManager.get().getMap().getSizeY()));
 
-        /* CREATE INITIAL GRID */
         for (int i = 0; i < m_GameManager.get().getMap().getSizeX(); i++)
             for (int j = 0; j < m_GameManager.get().getMap().getSizeY(); j++)
             {
@@ -124,6 +145,7 @@ public class SinglePlayerController extends GameWindowController
                 m_Grid.add(rect, i, j);
             }
 
+        /* START THE GAME THREAD */
         m_GameManager.get().startGame();
     }
 }

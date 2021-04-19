@@ -1,23 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 
-
-<BorderPane stylesheets="@../css/single_player.css" id="BorderPane"
-            xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="hu.alkfejl.controller.SinglePlayerController">
+<BorderPane id="BorderPane" stylesheets="@../css/single_player.css" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.alkfejl.controller.SinglePlayerController">
     <center>
-        <GridPane fx:id="m_Grid" BorderPane.alignment="CENTER"/>
+        <GridPane fx:id="m_Grid" BorderPane.alignment="CENTER" />
     </center>
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <Menu mnemonicParsing="false" text="File">
-                <MenuItem mnemonicParsing="false" text="Back to main" onAction="#returnToMain"/>
+                <MenuItem mnemonicParsing="false" onAction="#returnToMain" text="Back to main" />
             </Menu>
         </MenuBar>
     </top>
+   <right>
+      <GridPane BorderPane.alignment="CENTER">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label fx:id="m_ScoreLabel" text="Score: 0" />
+            <Label fx:id="m_FoodPickUpLabel" GridPane.rowIndex="1" />
+            <Label fx:id="m_SkillLabel" GridPane.rowIndex="2" />
+         </children>
+      </GridPane>
+   </right>
 </BorderPane>

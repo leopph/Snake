@@ -3,24 +3,68 @@ package hu.alkfejl.controller;
 import hu.alkfejl.App;
 import hu.alkfejl.model.GameManager;
 import hu.alkfejl.model.Snake;
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
+import javafx.util.Duration;
 
+import java.net.URL;
 import java.time.Instant;
+import java.util.ResourceBundle;
 
 
-public abstract class GameWindowController
+public abstract class GameWindowController implements Initializable
 {
     @FXML protected GridPane m_Grid;
+    @FXML protected Label m_ScoreLabel;
+    @FXML protected Label m_FoodPickUpLabel;
+    @FXML protected Label m_SkillLabel;
     protected ObjectProperty<GameManager> m_GameManager;
+    protected Timeline m_FoodPickUpAnimation;
 
 
     public GameWindowController()
     {
         m_GameManager = new SimpleObjectProperty<>();
+    }
+
+
+    public void initialize(URL url, ResourceBundle bundle)
+    {
+        m_FoodPickUpAnimation = new Timeline(
+                new KeyFrame(
+                        Duration.seconds(0),
+                        new KeyValue(
+                                m_FoodPickUpLabel.opacityProperty(),
+                                1,
+                                Interpolator.DISCRETE
+                        )
+                ),
+                new KeyFrame(
+                        Duration.seconds(2),
+                        new KeyValue(
+                                m_FoodPickUpLabel.opacityProperty(),
+                                1,
+                                Interpolator.DISCRETE
+                        )
+                ),
+                new KeyFrame(
+                        Duration.seconds(3),
+                        new KeyValue(
+                                m_FoodPickUpLabel.opacityProperty(),
+                                0,
+                                Interpolator.DISCRETE
+                        )
+                )
+        );
     }
 
 

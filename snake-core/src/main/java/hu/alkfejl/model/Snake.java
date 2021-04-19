@@ -32,14 +32,26 @@ public final class Snake
     public Snake()
     {
         m_BodyCoords = new ReadOnlyListWrapper<>(FXCollections.observableList(new ArrayList<>()));
-        for (int i = 2; i >= 0; i--)
-            m_BodyCoords.add(new Vector2(i, 0));
 
-        m_CurrentDirection = new ReadOnlyObjectWrapper<>(Direction.RIGHT);
-        m_NextDirection = new SimpleObjectProperty<>(Direction.RIGHT);
+        m_CurrentDirection = new ReadOnlyObjectWrapper<>();
+        m_NextDirection = new SimpleObjectProperty<>();
 
         m_HeadColor = new SimpleObjectProperty<>(Color.DEEPPINK);
         m_BodyColor = new SimpleObjectProperty<>(Color.WHITE);
+
+        reset();
+    }
+
+
+    public void reset()
+    {
+        m_BodyCoords.clear();
+
+        for (int i = 2; i >= 0; i--)
+            m_BodyCoords.add(new Vector2(i, 0));
+
+        m_CurrentDirection.setValue(Direction.RIGHT);
+        m_NextDirection.setValue(Direction.RIGHT);
     }
 
 

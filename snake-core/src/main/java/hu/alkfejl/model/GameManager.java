@@ -95,11 +95,7 @@ public abstract class GameManager
 
         m_Loop.reset();
 
-        /* I SHOULD PROBABLY DO THIS SOME OTHER WAY */
-        var newSnake = new Snake();
-        newSnake.setHeadColor(m_Snake.get().getHeadColor());
-        newSnake.setBodyColor(m_Snake.get().getBodyColor());
-        m_Snake.set(newSnake);
+        m_Snake.get().reset();
 
         m_Points.setValue(0);
         m_HungerSkill.get().setLastUsed(Instant.MIN);
