@@ -36,8 +36,7 @@ public class SinglePlayerGameManager extends GameManager
                                     (nextPos.getY() >= m_Map.get().getSizeY() && m_Map.get().hasDownWall()) ||
                                     (nextPos.getY() < 0 && m_Map.get().hasUpWall()))
                             {
-                                System.out.println("SNAKE HIT A WALL"); // DEBUG
-                                m_InternalFinalStage = GameState.WALL_HIT;
+                                Platform.runLater(() -> m_State.setValue(GameState.WALL_HIT));
                                 Platform.runLater(m_Loop::cancel);
                                 return null;
                             }
@@ -58,8 +57,7 @@ public class SinglePlayerGameManager extends GameManager
                                     m_Snake.get().getBodyCoords().remove(m_Snake.get().getBodyCoords().lastIndexOf(m_Snake.get().getBodyCoords().get(0)), m_Snake.get().getBodyCoords().size());
                                 else
                                 {
-                                    System.out.println("SNAKE ATE ITSELF"); // DEBUG
-                                    m_InternalFinalStage = GameState.SELF_ATE;
+                                    Platform.runLater(() -> m_State.setValue(GameState.SELF_ATE));
                                     Platform.runLater(m_Loop::cancel);
                                     return null;
                                 }
@@ -76,8 +74,7 @@ public class SinglePlayerGameManager extends GameManager
                             /* SNAKE HAS FILLED THE MAP, GG */
                             if (m_Snake.get().getBodyCoords().size() >= m_Map.get().getSizeX() * m_Map.get().getSizeY())
                             {
-                                System.out.println("YOU WON"); // DEBUG
-                                m_InternalFinalStage = GameState.P1_WON;
+                                Platform.runLater(() -> m_State.setValue(GameState.P1_WON));
                                 Platform.runLater(m_Loop::cancel);
                             }
 

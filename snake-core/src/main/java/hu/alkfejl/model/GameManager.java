@@ -24,8 +24,6 @@ public abstract class GameManager
     public static final int DEFAULT_TICK_RATE = 1;
     protected static Random s_Random = new Random();
 
-    protected GameState m_InternalFinalStage;
-
     protected ScheduledService<Void> m_Loop;
     protected ObjectProperty<GameState> m_State;
     protected DoubleProperty m_TickRate;
@@ -40,8 +38,6 @@ public abstract class GameManager
     protected GameManager()
     {
         m_Loop = createLoop();
-
-        m_InternalFinalStage = null;
 
         m_State = new SimpleObjectProperty<>();
         m_State.setValue(GameState.READY);
@@ -58,7 +54,6 @@ public abstract class GameManager
         m_HungerSkill.get().setDuration(java.time.Duration.ofSeconds(3));
 
         m_Loop.periodProperty().bind(Bindings.createObjectBinding(() -> new Duration((1.0 / m_TickRate.get()) * 1000), m_TickRate));
-        m_Loop.setOnCancelled(event -> m_State.setValue(m_InternalFinalStage));
     }
 
 
@@ -108,7 +103,7 @@ public abstract class GameManager
 
     public void stopGame()
     {
-        m_InternalFinalStage = GameState.CANCELLED;
+        m_State.setValue(GameState.CANCELLED);
         m_Loop.cancel();
     }
 

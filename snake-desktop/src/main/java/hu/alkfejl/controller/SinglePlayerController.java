@@ -111,7 +111,7 @@ public class SinglePlayerController extends GameWindowController
                     alert.setContentText("Snake's gotta eat, am I right?");
             }
 
-            alert.setContentText(alert.getContentText() + "\nYour score was " + m_GameManager.get().getPoints() + "."); // DEBUG
+            alert.setContentText(alert.getContentText() + "\nYour score was " + m_GameManager.get().getPoints() + ".");
             alert.showAndWait();
             returnToMain();
         });
