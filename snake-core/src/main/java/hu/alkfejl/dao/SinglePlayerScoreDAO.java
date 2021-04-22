@@ -2,6 +2,7 @@ package hu.alkfejl.dao;
 
 import hu.alkfejl.config.Configuration;
 import hu.alkfejl.model.Result;
+import javafx.concurrent.Task;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -49,10 +50,9 @@ public class SinglePlayerScoreDAO
     {
         var ret = new ArrayList<Result>();
 
-        try (Connection connection = DriverManager.getConnection(Configuration.getValue("DATABASE_URL")))
+        try (var connection = DriverManager.getConnection(Configuration.getValue("DATABASE_URL"));
+            var results = connection.createStatement().executeQuery(SELECT_STATEMENT))
         {
-            var results = connection.createStatement().executeQuery(SELECT_STATEMENT);
-
             while (results.next())
             {
                 var result = new Result();
@@ -66,5 +66,32 @@ public class SinglePlayerScoreDAO
         catch (SQLException exception) { exception.printStackTrace(); }
 
         return ret;
+    }
+
+
+    /* CREATE A NEW THREAD THAT DELETES DATA THEN RETURN */
+    public void insert(Result r)
+    {
+        var insertTask = new Task<Void>()
+        {
+            @Override
+            protected Void call()
+            {
+                try (var connection = DriverManager.getConnection(Configuration.getValue("DATABASE_URL"));
+                    var statement = connection.prepareStatement(INSERT_STATEMENT))
+                {
+                    statement.setString(1, r.getPlayerName());
+                    statement.setInt(2, r.getScore());
+                    statement.setString(3, r.getGameMode().getValue());
+
+                    statement.execute();
+                }
+                catch (SQLException exception) { exception.printStackTrace(); }
+
+                return null;
+            }
+        };
+
+        new Thread(insertTask).start();
     }
 }

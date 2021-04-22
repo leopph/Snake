@@ -1,5 +1,6 @@
 package hu.alkfejl.controller;
 
+import hu.alkfejl.dao.SinglePlayerScoreDAO;
 import hu.alkfejl.model.*;
 
 import javafx.animation.Animation;
@@ -8,6 +9,7 @@ import javafx.beans.binding.Bindings;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -19,6 +21,15 @@ import java.time.Instant;
 
 public class SinglePlayerController extends GameWindowController
 {
+    private final SinglePlayerScoreDAO m_DAO;
+
+
+    public SinglePlayerController()
+    {
+        m_DAO = SinglePlayerScoreDAO.getInstance();
+    }
+
+
     @Override
     public void start()
     {
@@ -107,9 +118,11 @@ public class SinglePlayerController extends GameWindowController
         /* GET NOTIFIED WHEN GAME ENDS */
         m_GameManager.get().gameStateProperty().addListener((event, oldValue, newValue) ->
         {
+            /* PASS IF ITS NOT THE END */
             if (newValue != GameManager.GameState.P1_WON && newValue != GameManager.GameState.WALL_HIT && newValue != GameManager.GameState.SELF_ATE)
                 return;
 
+            /* CREATE A NICE ALERT ABOUT THE RESULT */
             var alert = new Alert(Alert.AlertType.INFORMATION);
             alert.initStyle(StageStyle.UNDECORATED);
             alert.setGraphic(null);
@@ -136,6 +149,36 @@ public class SinglePlayerController extends GameWindowController
 
             alert.setContentText(alert.getContentText() + "\nYour score was " + m_GameManager.get().getPoints() + ".");
             alert.showAndWait();
+
+            /* IF PLAYER FORGOT TO NAME THEMSELVES, HELP'EM */
+            if (m_GameManager.get().getPlayerName() == null || m_GameManager.get().getPlayerName().isEmpty())
+            {
+                var nameDialog = new TextInputDialog();
+                nameDialog.setGraphic(null);
+                nameDialog.setTitle("Missing name");
+                nameDialog.setHeaderText("Please enter your name to display on the leaderboard!");
+
+                /* shh, dont let them get away with nothing */
+                while (true)
+                {
+                    nameDialog.showAndWait();
+                    var result = nameDialog.getResult();
+                    if (result != null && !result.isEmpty())
+                    {
+                        m_GameManager.get().setPlayerName(result);
+                        break;
+                    }
+                }
+            }
+
+            /* STORE RESULT IN DB */
+            var result = new Result();
+            result.setPlayerName(m_GameManager.get().getPlayerName());
+            result.setScore(m_GameManager.get().getPoints());
+            result.setGameMode(Result.GameMode.SINGLE);
+            m_DAO.insert(result);
+
+            /* GO BACK */
             returnToMain();
         });
 
