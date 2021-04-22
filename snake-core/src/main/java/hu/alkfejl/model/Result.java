@@ -13,7 +13,7 @@ public class Result implements Serializable
         SINGLE("SINGLE"), MULTI("MULTI");
 
         private final String m_Value;
-        private GameMode(String str) { m_Value = str; }
+        GameMode(String str) { m_Value = str; }
         public String getValue() { return m_Value; }
     }
 

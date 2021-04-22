@@ -17,7 +17,7 @@ public abstract class GameManager implements Serializable
 {
     public enum GameState implements Serializable
     {
-        READY, IN_PROGRESS, SELF_ATE, WALL_HIT, P1_WON, P2_WON, CANCELLED
+        READY, IN_PROGRESS, SELF_ATE, WALL_HIT, P1_WON, P2_WON, CANCELLED, ALL_DEAD
     }
 
 
@@ -54,7 +54,8 @@ public abstract class GameManager implements Serializable
         m_HungerSkill.get().setCooldown(java.time.Duration.ofSeconds(10));
         m_HungerSkill.get().setDuration(java.time.Duration.ofSeconds(3));
 
-        m_Loop.periodProperty().bind(Bindings.createObjectBinding(() -> new Duration((1.0 / m_TickRate.get()) * 1000), m_TickRate));
+        if (!m_Loop.periodProperty().isBound())
+            m_Loop.periodProperty().bind(Bindings.createObjectBinding(() -> new Duration((1.0 / m_TickRate.get()) * 1000), m_TickRate));
     }
 
 
