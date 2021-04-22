@@ -3,10 +3,11 @@ package hu.alkfejl.model;
 import javafx.beans.property.*;
 import javafx.scene.paint.Color;
 
+import java.io.Serializable;
 import java.util.Random;
 
 
-public class Food
+public class Food implements Serializable
 {
     /* STATIC MEMBERS */
     private static final Random s_Random = new Random();

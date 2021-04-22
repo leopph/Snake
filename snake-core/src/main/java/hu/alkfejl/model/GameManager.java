@@ -6,15 +6,16 @@ import javafx.concurrent.ScheduledService;
 import javafx.util.Duration;
 import javafx.util.Pair;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
 
-public abstract class GameManager
+public abstract class GameManager implements Serializable
 {
-    public enum GameState
+    public enum GameState implements Serializable
     {
         READY, IN_PROGRESS, SELF_ATE, WALL_HIT, P1_WON, P2_WON, CANCELLED
     }

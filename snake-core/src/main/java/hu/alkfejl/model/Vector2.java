@@ -1,6 +1,9 @@
 package hu.alkfejl.model;
 
-public final class Vector2
+import java.io.Serializable;
+
+
+public final class Vector2 implements Serializable
 {
     private int x;
     private int y;

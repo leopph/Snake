@@ -3,11 +3,12 @@ package hu.alkfejl.model;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
 
+import java.io.Serializable;
 import java.time.Duration;
 import java.time.Instant;
 
 
-public class Skill
+public class Skill implements Serializable
 {
     /* PROPERTIES */
     private final ObjectProperty<Instant> m_LastUsed;

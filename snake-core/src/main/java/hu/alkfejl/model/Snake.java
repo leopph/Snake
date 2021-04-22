@@ -5,16 +5,17 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.paint.Color;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
-public final class Snake
+public final class Snake implements Serializable
 {
-    public enum Direction
+    public enum Direction implements Serializable
     {
         UP, DOWN, LEFT, RIGHT
     }
-    public enum Rotation
+    public enum Rotation implements Serializable
     {
         CLOCKWISE, COUNTERCLOCKWISE
     }

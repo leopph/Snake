@@ -3,8 +3,10 @@ package hu.alkfejl.model;
 import javafx.beans.property.*;
 import javafx.util.Pair;
 
+import java.io.Serializable;
 
-public class Map
+
+public class Map implements Serializable
 {
     public static final int MIN_SIZE = 10;
 

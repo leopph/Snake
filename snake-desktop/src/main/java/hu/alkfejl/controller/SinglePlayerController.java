@@ -154,7 +154,7 @@ public class SinglePlayerController extends GameWindowController
         m_Grid.getColumnConstraints().clear();
 
 
-        /* SET THHE GRID UP ACCORDING TO MAP */
+        /* SET THE GRID UP ACCORDING TO MAP */
         var sizeBinding = Bindings.min(m_Grid.widthProperty().divide(m_GameManager.get().getMap().getSizeX()),
                 m_Grid.heightProperty().divide(m_GameManager.get().getMap().getSizeY()));
 
