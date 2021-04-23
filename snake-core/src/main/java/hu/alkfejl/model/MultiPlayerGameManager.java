@@ -28,6 +28,8 @@ public class MultiPlayerGameManager extends GameManager
     private final ObjectProperty<Boost> m_Boost1;
     private final ObjectProperty<Boost> m_Boost2;
     private final LongProperty m_Ticks;
+    private final BooleanProperty m_Snake1Alive;
+    private final BooleanProperty m_Snake2Alive;
 
 
     /* CONSTRUCTOR */
@@ -40,6 +42,8 @@ public class MultiPlayerGameManager extends GameManager
         m_Boost1 = new SimpleObjectProperty<>(Boost.NONE);
         m_Boost2 = new SimpleObjectProperty<>(Boost.NONE);
         m_Ticks = new SimpleLongProperty(0L);
+        m_Snake1Alive = new SimpleBooleanProperty(true);
+        m_Snake2Alive = new SimpleBooleanProperty(true);
 
         m_HungerSkill2.get().setCooldown(m_HungerSkill.get().getCooldown());
         m_HungerSkill2.get().setDuration(m_HungerSkill.get().getDuration());
@@ -94,15 +98,13 @@ public class MultiPlayerGameManager extends GameManager
                             m_Ticks.setValue(m_Ticks.get() + 1);
                             m_HungerSkill.get().setTicks(m_HungerSkill.get().getTicks() + 1);
 
-                            var alive1 = true;
-                            var alive2 = true;
                             var foodWasEaten = false;
 
                             /* IF SNAKE1 SHOULD ACT */
-                            if (Math.floorMod(m_Ticks.get(), m_Boost1.get().getValue()) == 0)
+                            if (m_Snake1Alive.get() && Math.floorMod(m_Ticks.get(), m_Boost1.get().getValue()) == 0)
                             {
                                 if (hitWall(m_Snake.get()))
-                                    alive1 = false;
+                                    m_Snake1Alive.setValue(false);
 
                                 else
                                 {
@@ -116,16 +118,16 @@ public class MultiPlayerGameManager extends GameManager
                                         if (m_HungerSkill.get().isInUse())
                                             m_Snake.get().getBodyCoords().remove(m_Snake.get().getBodyCoords().lastIndexOf(m_Snake.get().getBodyCoords().get(0)), m_Snake.get().getBodyCoords().size());
                                         else
-                                            alive1 = false;
+                                            m_Snake1Alive.setValue(false);
                                     }
                                 }
                             }
 
                             /* IF SNAKE 2 SHOULD ACT */
-                            if (Math.floorMod(m_Ticks.get(), m_Boost2.get().getValue()) == 0)
+                            if (m_Snake2Alive.get() && Math.floorMod(m_Ticks.get(), m_Boost2.get().getValue()) == 0)
                             {
                                 if (hitWall(m_Snake2.get()))
-                                    alive2 = false;
+                                    m_Snake2Alive.setValue(false);
 
                                 var nextPos = m_Snake2.get().nextHeadPosition(m_Map.get().getSizeX(), m_Map.get().getSizeY());
                                 var willEat = m_Map.get().getFood() != null && m_Map.get().getFood().getKey().equals(nextPos);
@@ -137,18 +139,18 @@ public class MultiPlayerGameManager extends GameManager
                                     if (m_HungerSkill.get().isInUse())
                                         m_Snake2.get().getBodyCoords().remove(m_Snake2.get().getBodyCoords().lastIndexOf(m_Snake2.get().getBodyCoords().get(0)), m_Snake2.get().getBodyCoords().size());
                                     else
-                                        alive2 = false;
+                                        m_Snake2Alive.setValue(false);
                                 }
                             }
 
-                            if (!alive1 && !alive2)
+                            if (!m_Snake1Alive.get() && !m_Snake2Alive.get())
                             {
                                 Platform.runLater(() -> m_State.setValue(GameState.ALL_DEAD));
                                 Platform.runLater(m_Loop::cancel);
                                 return null;
                             }
 
-                            if (alive1)
+                            if (m_Snake1Alive.get())
                             {
 
                             }
@@ -172,6 +174,5 @@ public class MultiPlayerGameManager extends GameManager
                 (nextPos.getX() < 0 && m_Map.get().hasLeftWall()) ||
                 (nextPos.getY() >= m_Map.get().getSizeY() && m_Map.get().hasDownWall()) ||
                 (nextPos.getY() < 0 && m_Map.get().hasUpWall());
-
     }
 }
