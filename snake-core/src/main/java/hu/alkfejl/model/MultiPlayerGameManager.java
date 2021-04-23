@@ -114,13 +114,6 @@ public class MultiPlayerGameManager extends GameManager
         m_Snake2.get().setCurrentDirection(Snake.Direction.DOWN);
         m_Snake2.get().setNextDirection(Snake.Direction.DOWN);
 
-        System.out.println("SNAKE1:");
-        for (var elem : m_Snake.get().getBodyCoords())
-            System.out.println(elem);
-        System.out.println("SNAKE2:");
-        for (var elem : m_Snake2.get().getBodyCoords())
-            System.out.println(elem);
-
         m_Loop.start();
     }
 
