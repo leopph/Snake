@@ -145,8 +145,12 @@ public final class Snake implements Serializable
 
     public void rotate90Deg(Rotation r)
     {
+        var headX = m_BodyCoords.get(0).getX();
+        var headY = m_BodyCoords.get(0).getY();
         for (int i = 1; i < m_BodyCoords.size(); i++)
-            m_BodyCoords.set(i, new Vector2((r == Rotation.CLOCKWISE ? -1 : 1) * (m_BodyCoords.get(i).getY() - m_BodyCoords.get(0).getY()), (r == Rotation.CLOCKWISE ? -1 : 1) * m_BodyCoords.get(i).getX() - m_BodyCoords.get(0).getX()));
+            m_BodyCoords.set(i, new Vector2(
+                    headX + (r == Rotation.CLOCKWISE ? -1 : 1) * (m_BodyCoords.get(i).getY() - headY),
+                    headY + (r == Rotation.CLOCKWISE ? 1 : -1) * (m_BodyCoords.get(i).getX() - headX)));
 
         if (r == Rotation.CLOCKWISE)
             switch (m_CurrentDirection.get())

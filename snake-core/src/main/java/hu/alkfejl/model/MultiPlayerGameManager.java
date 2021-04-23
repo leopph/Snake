@@ -7,6 +7,9 @@ import javafx.concurrent.ScheduledService;
 import javafx.concurrent.Task;
 import javafx.util.Duration;
 
+import java.time.Instant;
+import java.util.List;
+
 
 public class MultiPlayerGameManager extends GameManager
 {
@@ -50,20 +53,6 @@ public class MultiPlayerGameManager extends GameManager
 
         /* TICK RATE IS HALF OF THE ACTUAL GAME SPEED TO HANDLE BOOSTING */
         m_Loop.periodProperty().bind(Bindings.createObjectBinding(() -> new Duration((1.0 / m_TickRate.get()) * 500), m_TickRate));
-
-
-        /* SET SNAKE BEGINNING POSITIONS */
-        m_Snake.get().flip();
-        m_Snake.get().rotate90Deg(Snake.Rotation.COUNTERCLOCKWISE);
-        m_Snake.get().translate(new Vector2(0, 2));
-        m_Snake.get().setCurrentDirection(Snake.Direction.DOWN);
-        m_Snake.get().setNextDirection(Snake.Direction.DOWN);
-
-        m_Snake2.get().translate(new Vector2(m_Map.get().getSizeX() - 3, 0));
-        m_Snake2.get().rotate90Deg(Snake.Rotation.CLOCKWISE);
-        m_Snake2.get().translate(new Vector2(0, 2));
-        m_Snake.get().setCurrentDirection(Snake.Direction.DOWN);
-        m_Snake.get().setNextDirection(Snake.Direction.DOWN);
     }
 
 
@@ -91,6 +80,49 @@ public class MultiPlayerGameManager extends GameManager
     public void setSnake1Boost(Boost value) { m_Boost1.setValue(value); }
     public void setSnake2Boost(Boost value) { m_Boost2.setValue(value); }
     public void setTicks(Long value) { m_Ticks.setValue(value); }
+
+
+    @Override
+    public void startGame()
+    {
+        if (m_Loop.isRunning())
+            m_Loop.cancel();
+
+        m_Loop.reset();
+
+        m_Snake.get().reset();
+        m_Snake2.get().reset();
+
+        m_Points.setValue(0);
+        m_Points2.setValue(0);
+
+        m_HungerSkill.get().setLastUsed(Instant.MIN);
+        m_HungerSkill2.get().setLastUsed(Instant.MIN);
+
+        placeFood(Food.Random(), List.of(), m_Map.get());
+        m_State.setValue(GameState.IN_PROGRESS);
+
+
+        /* SET SNAKE BEGINNING POSITIONS */
+        m_Snake.get().rotate90Deg(Snake.Rotation.CLOCKWISE);
+        m_Snake.get().translate(new Vector2(-2, 2));
+        m_Snake.get().setCurrentDirection(Snake.Direction.DOWN);
+        m_Snake.get().setNextDirection(Snake.Direction.DOWN);
+
+        m_Snake2.get().rotate90Deg(Snake.Rotation.CLOCKWISE);
+        m_Snake2.get().translate(new Vector2(m_Map.get().getSizeX()-3, 2));
+        m_Snake2.get().setCurrentDirection(Snake.Direction.DOWN);
+        m_Snake2.get().setNextDirection(Snake.Direction.DOWN);
+
+        System.out.println("SNAKE1:");
+        for (var elem : m_Snake.get().getBodyCoords())
+            System.out.println(elem);
+        System.out.println("SNAKE2:");
+        for (var elem : m_Snake2.get().getBodyCoords())
+            System.out.println(elem);
+
+        m_Loop.start();
+    }
 
 
     /* GAME RELATED FUNCTIONS */
