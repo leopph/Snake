@@ -186,32 +186,4 @@ public class SinglePlayerController extends GameWindowController
         /* DO THE LAYOUT SETUP */
         reset();
     }
-
-
-    @Override
-    public void reset()
-    {
-        /* CLEAR THE GRID OUT */
-        m_Grid.getChildren().clear();
-        m_Grid.getRowConstraints().clear();
-        m_Grid.getColumnConstraints().clear();
-
-
-        /* SET THE GRID UP ACCORDING TO MAP */
-        var sizeBinding = Bindings.min(m_Grid.widthProperty().divide(m_GameManager.get().getMap().getSizeX()),
-                m_Grid.heightProperty().divide(m_GameManager.get().getMap().getSizeY()));
-
-        for (int i = 0; i < m_GameManager.get().getMap().getSizeX(); i++)
-            for (int j = 0; j < m_GameManager.get().getMap().getSizeY(); j++)
-            {
-                var rect = new Rectangle();
-                rect.widthProperty().bind(sizeBinding);
-                rect.heightProperty().bind(sizeBinding);
-                rect.setFill(Color.BLACK);
-                m_Grid.add(rect, i, j);
-            }
-
-        /* START THE GAME THREAD */
-        m_GameManager.get().startGame();
-    }
 }

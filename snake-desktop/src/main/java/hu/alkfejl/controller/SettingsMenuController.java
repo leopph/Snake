@@ -4,6 +4,7 @@ import hu.alkfejl.App;
 import hu.alkfejl.model.Food;
 import hu.alkfejl.model.GameManager;
 import hu.alkfejl.model.Map;
+import hu.alkfejl.model.MultiPlayerGameManager;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -36,12 +37,14 @@ public class SettingsMenuController
     @FXML private TextField m_P2NameInput;
 
     private final ObjectProperty<GameManager> m_SinglePlayerGameManager;
+    private final ObjectProperty<GameManager> m_MultiPlayerGameManager;
 
 
     /* CONSTRUCTORS */
     public SettingsMenuController()
     {
         m_SinglePlayerGameManager = new SimpleObjectProperty<>();
+        m_MultiPlayerGameManager = new SimpleObjectProperty<>();
     }
 
 
@@ -100,8 +103,8 @@ public class SettingsMenuController
 
         m_P1HeadColor.valueProperty().bindBidirectional(m_SinglePlayerGameManager.get().getSnake().headColorProperty());
         m_P1BodyColor.valueProperty().bindBidirectional(m_SinglePlayerGameManager.get().getSnake().bodyColorProperty());
-        //m_P2HeadColor.valueProperty().bindBidirectional(m_MultiPlayerGameManager.get().getOtherSnake().headColorProperty());
-        //m_P2BodyColor.valueProperty().bindBidirectional(m_SinglePlayerGameManager.get().getOtherSnake().bodyColorProperty());
+        m_P2HeadColor.valueProperty().bindBidirectional(((MultiPlayerGameManager) m_MultiPlayerGameManager.get()).getSnake2().headColorProperty());
+        m_P2BodyColor.valueProperty().bindBidirectional(((MultiPlayerGameManager) m_MultiPlayerGameManager.get()).getSnake2().bodyColorProperty());
 
         m_AppleColor.valueProperty().bindBidirectional(Food.appleColorProperty());
         m_CucumberColor.valueProperty().bindBidirectional(Food.cucumberColorProperty());
@@ -109,12 +112,15 @@ public class SettingsMenuController
         m_BananaColor.valueProperty().bindBidirectional(Food.bananaColorProperty());
 
         m_P1NameInput.textProperty().bindBidirectional(m_SinglePlayerGameManager.get().playerNameProperty());
-        //m_P2NameInput.textProperty().bindBidirectional(m_SinglePlayerGameManager.get().playerNameProperty());
+        m_MultiPlayerGameManager.get().playerNameProperty().bind(m_P1NameInput.textProperty());
+
+        m_P2NameInput.textProperty().bindBidirectional(((MultiPlayerGameManager) m_MultiPlayerGameManager.get()).player2NameProperty());
     }
 
 
     /* PROPERTY GETTERS */
-    public ObjectProperty<GameManager> singlePlayerControllerProperty() { return m_SinglePlayerGameManager; }
+    public ObjectProperty<GameManager> singlePlayerGameManagerProperty() { return m_SinglePlayerGameManager; }
+    public ObjectProperty<GameManager> multiPlayerGameManagerProperty() { return m_MultiPlayerGameManager; }
 
 
     @FXML

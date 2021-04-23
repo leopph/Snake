@@ -7,6 +7,7 @@ import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
@@ -14,6 +15,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 import java.net.URL;
@@ -74,7 +77,33 @@ public abstract class GameWindowController implements Initializable
 
 
     public abstract void start();
-    public abstract void reset();
+
+
+    public void reset()
+    {
+        /* CLEAR THE GRID OUT */
+        m_Grid.getChildren().clear();
+        m_Grid.getRowConstraints().clear();
+        m_Grid.getColumnConstraints().clear();
+
+
+        /* SET THE GRID UP ACCORDING TO MAP */
+        var sizeBinding = Bindings.min(m_Grid.widthProperty().divide(m_GameManager.get().getMap().getSizeX()),
+                m_Grid.heightProperty().divide(m_GameManager.get().getMap().getSizeY()));
+
+        for (int i = 0; i < m_GameManager.get().getMap().getSizeX(); i++)
+            for (int j = 0; j < m_GameManager.get().getMap().getSizeY(); j++)
+            {
+                var rect = new Rectangle();
+                rect.widthProperty().bind(sizeBinding);
+                rect.heightProperty().bind(sizeBinding);
+                rect.setFill(Color.BLACK);
+                m_Grid.add(rect, i, j);
+            }
+
+        /* START THE GAME THREAD */
+        m_GameManager.get().startGame();
+    }
     
     
     protected void keyCallback(KeyEvent event)

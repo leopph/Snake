@@ -75,6 +75,7 @@ public final class Snake implements Serializable
     public Color getHeadColor() { return m_HeadColor.get(); }
     public Color getBodyColor() { return m_BodyColor.get(); }
 
+    public void setCurrentDirection(Direction d) { m_CurrentDirection.setValue(d); }
     public void setNextDirection(Direction d)
     {
         m_NextDirection.setValue(d);

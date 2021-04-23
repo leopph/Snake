@@ -50,6 +50,20 @@ public class MultiPlayerGameManager extends GameManager
 
         /* TICK RATE IS HALF OF THE ACTUAL GAME SPEED TO HANDLE BOOSTING */
         m_Loop.periodProperty().bind(Bindings.createObjectBinding(() -> new Duration((1.0 / m_TickRate.get()) * 500), m_TickRate));
+
+
+        /* SET SNAKE BEGINNING POSITIONS */
+        m_Snake.get().flip();
+        m_Snake.get().rotate90Deg(Snake.Rotation.COUNTERCLOCKWISE);
+        m_Snake.get().translate(new Vector2(0, 2));
+        m_Snake.get().setCurrentDirection(Snake.Direction.DOWN);
+        m_Snake.get().setNextDirection(Snake.Direction.DOWN);
+
+        m_Snake2.get().translate(new Vector2(m_Map.get().getSizeX() - 3, 0));
+        m_Snake2.get().rotate90Deg(Snake.Rotation.CLOCKWISE);
+        m_Snake2.get().translate(new Vector2(0, 2));
+        m_Snake.get().setCurrentDirection(Snake.Direction.DOWN);
+        m_Snake.get().setNextDirection(Snake.Direction.DOWN);
     }
 
 
@@ -83,20 +97,21 @@ public class MultiPlayerGameManager extends GameManager
     @Override
     protected ScheduledService<Void> createLoop()
     {
-        return new ScheduledService<Void>()
+        return new ScheduledService<>()
         {
             @Override
             protected Task<Void> createTask()
             {
-                return new Task<Void>()
+                return new Task<>()
                 {
                     @Override
-                    protected Void call() throws Exception
+                    protected Void call()
                     {
                         try
                         {
                             m_Ticks.setValue(m_Ticks.get() + 1);
-                            m_HungerSkill.get().setTicks(m_HungerSkill.get().getTicks() + 1);
+                            m_HungerSkill.get().setTicks(m_Ticks.getValue());
+                            m_HungerSkill2.get().setTicks(m_Ticks.getValue());
 
                             var foodWasEaten = false;
 
