@@ -54,6 +54,9 @@ public class MultiPlayerGameManager extends GameManager
         /* TICK RATE IS HALF OF THE ACTUAL GAME SPEED TO HANDLE BOOSTING */
         m_Loop.periodProperty().unbind();
         m_Loop.periodProperty().bind(Bindings.createObjectBinding(() -> new Duration((1.0 / m_TickRate.get()) * 500), m_TickRate));
+
+        m_HungerSkill.get().ticksProperty().bind(m_Ticks);
+        m_HungerSkill2.get().ticksProperty().bind(m_Ticks);
     }
 
 
@@ -65,6 +68,8 @@ public class MultiPlayerGameManager extends GameManager
     public ObjectProperty<Boost> snake1BoostProperty() { return m_Boost1; }
     public ObjectProperty<Boost> snake2BoostProperty() { return m_Boost2; }
     public LongProperty ticksProperty() { return m_Ticks; }
+    public BooleanProperty snake1AliveProperty() { return m_Snake1Alive; }
+    public BooleanProperty snake2AliveProperty() { return m_Snake2Alive; }
 
     public Snake getSnake2() { return m_Snake2.get(); }
     public String getPlayer2Name() { return m_PlayerName2.get(); }
@@ -73,6 +78,8 @@ public class MultiPlayerGameManager extends GameManager
     public Boost getSnake1Boost() { return m_Boost1.get(); }
     public Boost getSnake2Boost() { return m_Boost2.get(); }
     public Long getTicks() { return m_Ticks.get(); }
+    public Boolean isSnake1Alive() { return m_Snake1Alive.get(); }
+    public Boolean isSnake2Alive() { return m_Snake2Alive.get(); }
 
     public void setSnake2(Snake value) { m_Snake2.setValue(value); }
     public void setPlayer2Name(String value) { m_PlayerName2.setValue(value); }
@@ -81,6 +88,8 @@ public class MultiPlayerGameManager extends GameManager
     public void setSnake1Boost(Boost value) { m_Boost1.setValue(value); }
     public void setSnake2Boost(Boost value) { m_Boost2.setValue(value); }
     public void setTicks(Long value) { m_Ticks.setValue(value); }
+    public void setSnake1Alive(Boolean value) { m_Snake1Alive.set(value); }
+    public void setSnake2Alive(Boolean value) { m_Snake2Alive.set(value); }
 
 
     @Override
@@ -90,6 +99,8 @@ public class MultiPlayerGameManager extends GameManager
             m_Loop.cancel();
 
         m_Loop.reset();
+
+        m_Ticks.set(0L);
 
         m_Snake.get().reset();
         m_Snake2.get().reset();
@@ -136,8 +147,6 @@ public class MultiPlayerGameManager extends GameManager
                         try
                         {
                             m_Ticks.setValue(m_Ticks.get() + 1);
-                            m_HungerSkill.get().setTicks(m_Ticks.getValue());
-                            m_HungerSkill2.get().setTicks(m_Ticks.getValue());
 
                             var foodWasEaten = false;
 
@@ -191,9 +200,26 @@ public class MultiPlayerGameManager extends GameManager
                                 return null;
                             }
 
-                            if (m_Snake1Alive.get())
+                            if (m_Snake1Alive.get() && m_Snake2Alive.get())
                             {
+                                if (m_Snake2.get().getBodyCoords().contains(m_Snake.get().getBodyCoords().get(0)))
+                                    m_Snake1Alive.set(false);
+                                else if (m_Snake.get().getBodyCoords().contains(m_Snake2.get().getBodyCoords().get(0)))
+                                    m_Snake2Alive.set(false);
+                            }
 
+                            if (m_Snake1Alive.get() && !m_Snake2Alive.get() && m_Snake.get().getBodyCoords().size() == m_Map.get().getSizeX() * m_Map.get().getSizeY())
+                            {
+                                Platform.runLater(() -> m_State.setValue(GameState.P1_WON));
+                                Platform.runLater(m_Loop::cancel);
+                                return null;
+                            }
+
+                            if (!m_Snake1Alive.get() && m_Snake2Alive.get() && m_Snake2.get().getBodyCoords().size() == m_Map.get().getSizeX() * m_Map.get().getSizeY())
+                            {
+                                Platform.runLater(() -> m_State.setValue(GameState.P2_WON));
+                                Platform.runLater(m_Loop::cancel);
+                                return null;
                             }
                         }
                         catch (Exception e) { e.printStackTrace(); }

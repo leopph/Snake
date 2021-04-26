@@ -3,7 +3,6 @@ package hu.alkfejl.controller;
 import hu.alkfejl.model.MultiPlayerGameManager;
 import hu.alkfejl.model.Snake;
 import hu.alkfejl.model.Vector2;
-import javafx.fxml.FXML;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -33,18 +32,28 @@ public class MultiPlayerController extends GameWindowController
 
                 var pos = new Vector2(GridPane.getColumnIndex(child), GridPane.getRowIndex(child));
 
-                if (manager.getSnake().getBodyCoords().get(0).equals(pos))
-                    ((Rectangle) child).setFill(manager.getSnake().getHeadColor());
-                else if (manager.getSnake2().getBodyCoords().get(0).equals(pos))
-                    ((Rectangle) child).setFill(manager.getSnake2().getHeadColor());
-                else if (manager.getSnake().getBodyCoords().contains(pos))
-                    ((Rectangle) child).setFill(manager.getSnake().getBodyColor());
-                else if (manager.getSnake2().getBodyCoords().contains(pos))
-                    ((Rectangle) child).setFill(manager.getSnake2().getBodyColor());
-                else if (manager.getMap().getFood() != null && manager.getMap().getFood().getKey().equals(pos))
+
+
+                if (manager.getMap().getFood() != null && manager.getMap().getFood().getKey().equals(pos))
                     ((Rectangle) child).setFill(manager.getMap().getFood().getValue().getColor());
                 else
                     ((Rectangle) child).setFill(Color.BLACK);
+
+                if (manager.isSnake1Alive())
+                {
+                    if (manager.getSnake().getBodyCoords().get(0).equals(pos))
+                        ((Rectangle) child).setFill(manager.getSnake().getHeadColor());
+                    else if (manager.getSnake().getBodyCoords().contains(pos))
+                        ((Rectangle) child).setFill(manager.getSnake().getBodyColor());
+                }
+
+                if (manager.isSnake2Alive())
+                {
+                    if (manager.getSnake2().getBodyCoords().get(0).equals(pos))
+                    ((Rectangle) child).setFill(manager.getSnake2().getHeadColor());
+                    else if (manager.getSnake2().getBodyCoords().contains(pos))
+                        ((Rectangle) child).setFill(manager.getSnake2().getBodyColor());
+                }
             }
         });
 
