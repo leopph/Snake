@@ -16,7 +16,7 @@ public class MultiPlayerGameManager extends GameManager
     /* REPRESENTS SNAKE SPEED */
     public enum Boost
     {
-        SLOW(4), FAST(2), NONE(1);
+        SLOW(4), FAST(1), NONE(2);
         private final int m_Value;
         Boost(int value) { m_Value = value; }
         public int getValue() { return m_Value; }
@@ -52,6 +52,7 @@ public class MultiPlayerGameManager extends GameManager
         m_HungerSkill2.get().setDuration(m_HungerSkill.get().getDuration());
 
         /* TICK RATE IS HALF OF THE ACTUAL GAME SPEED TO HANDLE BOOSTING */
+        m_Loop.periodProperty().unbind();
         m_Loop.periodProperty().bind(Bindings.createObjectBinding(() -> new Duration((1.0 / m_TickRate.get()) * 500), m_TickRate));
     }
 

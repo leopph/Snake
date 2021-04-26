@@ -79,6 +79,8 @@ public class SettingsMenuController
                     }
                 });
 
+        m_MultiPlayerGameManager.get().tickRateProperty().bind(m_SinglePlayerGameManager.get().tickRateProperty());
+
         var mapSizeConverter = new StringConverter<Number>()
         {
             @Override

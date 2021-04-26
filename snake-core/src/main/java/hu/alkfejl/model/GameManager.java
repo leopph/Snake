@@ -54,8 +54,7 @@ public abstract class GameManager implements Serializable
         m_HungerSkill.get().setCooldown(java.time.Duration.ofSeconds(10));
         m_HungerSkill.get().setDuration(java.time.Duration.ofSeconds(3));
 
-        if (!m_Loop.periodProperty().isBound())
-            m_Loop.periodProperty().bind(Bindings.createObjectBinding(() -> new Duration((1.0 / m_TickRate.get()) * 1000), m_TickRate));
+        m_Loop.periodProperty().bind(Bindings.createObjectBinding(() -> new Duration((1.0 / m_TickRate.get()) * 1000), m_TickRate));
     }
 
 
