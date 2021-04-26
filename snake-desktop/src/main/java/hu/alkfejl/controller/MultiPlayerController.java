@@ -67,14 +67,17 @@ public class MultiPlayerController extends GameWindowController
             {
                 case P1_WON:
                     System.out.println("p1 won");
+                    returnToMain();
                     return;
 
                 case P2_WON:
                     System.out.println("p2 won");
+                    returnToMain();
                     return;
 
                 case ALL_DEAD:
                     System.out.println("nobody won");
+                    returnToMain();
             }
         });
 

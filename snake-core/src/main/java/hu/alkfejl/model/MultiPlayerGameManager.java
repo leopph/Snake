@@ -107,6 +107,9 @@ public class MultiPlayerGameManager extends GameManager
         m_Snake.get().reset();
         m_Snake2.get().reset();
 
+        m_Snake1Alive.setValue(true);
+        m_Snake2Alive.setValue(true);
+
         m_Points.setValue(0);
         m_Points2.setValue(0);
 
@@ -210,6 +213,16 @@ public class MultiPlayerGameManager extends GameManager
                             if (foodWasEaten)
                                 placeFood(Food.Random(), Stream.concat(m_Snake.get().getBodyCoords().stream(), m_Snake2.get().getBodyCoords().stream()).collect(Collectors.toList()), m_Map.get());
 
+
+                            /* IF BOTH ALIVE THEY MIGHT BE EATING EACH OTHER */
+                            if (m_Snake1Alive.get() && m_Snake2Alive.get())
+                            {
+                                if (m_Snake2.get().getBodyCoords().contains(m_Snake.get().getBodyCoords().get(0)))
+                                    m_Snake1Alive.set(false);
+                                if (m_Snake.get().getBodyCoords().contains(m_Snake2.get().getBodyCoords().get(0)))
+                                    m_Snake2Alive.set(false);
+                            }
+
                             // IF BOTH DEAD GAME IS OVER */
                             if (!m_Snake1Alive.get() && !m_Snake2Alive.get())
                             {
@@ -218,17 +231,8 @@ public class MultiPlayerGameManager extends GameManager
                                 return null;
                             }
 
-                            /* IF BOTH ALIVE THEY MIGHT BE EATING EACH OTHER */
-                            if (m_Snake1Alive.get() && m_Snake2Alive.get())
-                            {
-                                if (m_Snake2.get().getBodyCoords().contains(m_Snake.get().getBodyCoords().get(0)))
-                                    m_Snake1Alive.set(false);
-                                else if (m_Snake.get().getBodyCoords().contains(m_Snake2.get().getBodyCoords().get(0)))
-                                    m_Snake2Alive.set(false);
-                            }
-
                             /* IF ONLY SNAKE 1 IS ALIVE IT MIGHT HAVE WON */
-                            if (m_Snake1Alive.get() && !m_Snake2Alive.get() && m_Snake.get().getBodyCoords().size() == m_Map.get().getSizeX() * m_Map.get().getSizeY())
+                            if (m_Snake1Alive.get() && !m_Snake2Alive.get())
                             {
                                 Platform.runLater(() -> m_State.setValue(GameState.P1_WON));
                                 Platform.runLater(m_Loop::cancel);
@@ -236,7 +240,7 @@ public class MultiPlayerGameManager extends GameManager
                             }
 
                             /* IF ONLY SNAKE 2 IS ALIVE IT MIGHT HAVE WON */
-                            if (!m_Snake1Alive.get() && m_Snake2Alive.get() && m_Snake2.get().getBodyCoords().size() == m_Map.get().getSizeX() * m_Map.get().getSizeY())
+                            if (!m_Snake1Alive.get() && m_Snake2Alive.get())
                             {
                                 Platform.runLater(() -> m_State.setValue(GameState.P2_WON));
                                 Platform.runLater(m_Loop::cancel);

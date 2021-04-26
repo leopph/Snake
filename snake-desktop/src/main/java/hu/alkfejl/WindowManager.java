@@ -31,7 +31,13 @@ public class WindowManager
         var scene = m_Scenes.get(name);
         if (scene == null)
             return false;
+
+        var width = m_Stage.getWidth();
+        var height = m_Stage.getHeight();
         m_Stage.setScene(scene);
+        m_Stage.setWidth(width);
+        m_Stage.setHeight(height);
+
         m_Stage.show();
         return true;
     }

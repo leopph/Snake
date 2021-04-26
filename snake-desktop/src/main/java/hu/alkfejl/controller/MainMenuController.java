@@ -73,7 +73,7 @@ public class MainMenuController implements Initializable
             App.getWindowManager().showScene("MultiPlayer");
         }
         else
-            m_MultiPlayerController.start();
+            m_MultiPlayerController.reset();
     }
 
 
