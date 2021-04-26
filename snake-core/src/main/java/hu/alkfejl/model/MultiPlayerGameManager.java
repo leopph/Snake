@@ -9,6 +9,8 @@ import javafx.util.Duration;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public class MultiPlayerGameManager extends GameManager
@@ -156,12 +158,16 @@ public class MultiPlayerGameManager extends GameManager
                                 if (hitWall(m_Snake.get()))
                                     m_Snake1Alive.setValue(false);
 
+                                /* MOVE OR GROW SNAKE */
                                 else
                                 {
                                     var nextPos = m_Snake.get().nextHeadPosition(m_Map.get().getSizeX(), m_Map.get().getSizeY());
                                     var willEat = m_Map.get().getFood() != null && m_Map.get().getFood().getKey().equals(nextPos);
                                     foodWasEaten = willEat;
                                     m_Snake.get().move(willEat, m_Map.get().getSizeX(), m_Map.get().getSizeY());
+
+                                    if (willEat)
+                                        m_Points.setValue(m_Points.get() + m_Map.get().getFood().getValue().getPoint());
 
                                     if (m_Snake.get().isSelfEating())
                                     {
@@ -179,20 +185,32 @@ public class MultiPlayerGameManager extends GameManager
                                 if (hitWall(m_Snake2.get()))
                                     m_Snake2Alive.setValue(false);
 
-                                var nextPos = m_Snake2.get().nextHeadPosition(m_Map.get().getSizeX(), m_Map.get().getSizeY());
-                                var willEat = m_Map.get().getFood() != null && m_Map.get().getFood().getKey().equals(nextPos);
-                                foodWasEaten = foodWasEaten || willEat;
-                                m_Snake2.get().move(willEat, m_Map.get().getSizeX(), m_Map.get().getSizeY());
-
-                                if (m_Snake2.get().isSelfEating())
+                                /* MOVE OR GROW SNAKE */
+                                else
                                 {
-                                    if (m_HungerSkill.get().isInUse())
-                                        m_Snake2.get().getBodyCoords().remove(m_Snake2.get().getBodyCoords().lastIndexOf(m_Snake2.get().getBodyCoords().get(0)), m_Snake2.get().getBodyCoords().size());
-                                    else
-                                        m_Snake2Alive.setValue(false);
+                                    var nextPos = m_Snake2.get().nextHeadPosition(m_Map.get().getSizeX(), m_Map.get().getSizeY());
+                                    var willEat = m_Map.get().getFood() != null && m_Map.get().getFood().getKey().equals(nextPos);
+                                    foodWasEaten = foodWasEaten || willEat;
+                                    m_Snake2.get().move(willEat, m_Map.get().getSizeX(), m_Map.get().getSizeY());
+
+                                    if (willEat)
+                                        m_Points2.setValue(m_Points2.get() + m_Map.get().getFood().getValue().getPoint());
+
+                                    if (m_Snake2.get().isSelfEating())
+                                    {
+                                        if (m_HungerSkill.get().isInUse())
+                                            m_Snake2.get().getBodyCoords().remove(m_Snake2.get().getBodyCoords().lastIndexOf(m_Snake2.get().getBodyCoords().get(0)), m_Snake2.get().getBodyCoords().size());
+                                        else
+                                            m_Snake2Alive.setValue(false);
+                                    }
                                 }
                             }
 
+                            /* IF NEW FOOD HAS TO BE SPAWNED, SPAWN IT */
+                            if (foodWasEaten)
+                                placeFood(Food.Random(), Stream.concat(m_Snake.get().getBodyCoords().stream(), m_Snake2.get().getBodyCoords().stream()).collect(Collectors.toList()), m_Map.get());
+
+                            // IF BOTH DEAD GAME IS OVER */
                             if (!m_Snake1Alive.get() && !m_Snake2Alive.get())
                             {
                                 Platform.runLater(() -> m_State.setValue(GameState.ALL_DEAD));
@@ -200,6 +218,7 @@ public class MultiPlayerGameManager extends GameManager
                                 return null;
                             }
 
+                            /* IF BOTH ALIVE THEY MIGHT BE EATING EACH OTHER */
                             if (m_Snake1Alive.get() && m_Snake2Alive.get())
                             {
                                 if (m_Snake2.get().getBodyCoords().contains(m_Snake.get().getBodyCoords().get(0)))
@@ -208,6 +227,7 @@ public class MultiPlayerGameManager extends GameManager
                                     m_Snake2Alive.set(false);
                             }
 
+                            /* IF ONLY SNAKE 1 IS ALIVE IT MIGHT HAVE WON */
                             if (m_Snake1Alive.get() && !m_Snake2Alive.get() && m_Snake.get().getBodyCoords().size() == m_Map.get().getSizeX() * m_Map.get().getSizeY())
                             {
                                 Platform.runLater(() -> m_State.setValue(GameState.P1_WON));
@@ -215,6 +235,7 @@ public class MultiPlayerGameManager extends GameManager
                                 return null;
                             }
 
+                            /* IF ONLY SNAKE 2 IS ALIVE IT MIGHT HAVE WON */
                             if (!m_Snake1Alive.get() && m_Snake2Alive.get() && m_Snake2.get().getBodyCoords().size() == m_Map.get().getSizeX() * m_Map.get().getSizeY())
                             {
                                 Platform.runLater(() -> m_State.setValue(GameState.P2_WON));
@@ -231,6 +252,7 @@ public class MultiPlayerGameManager extends GameManager
     }
 
 
+    /* HELPER TO CALCULATE WALL COLLISION */
     private boolean hitWall(Snake snake)
     {
         /* POSITION WITHOUT WALLS TAKEN INTO ACCOUNT */
