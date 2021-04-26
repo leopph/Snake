@@ -16,8 +16,10 @@ public class MultiPlayerController extends GameWindowController
     @Override
     public void start()
     {
+        // SET INPUT HANDLER
         m_Grid.getScene().setOnKeyPressed(this::keyCallback);
 
+        // RENDER "CYCLE"
         ((MultiPlayerGameManager) m_GameManager.get()).ticksProperty().addListener(event ->
         {
             var manager = ((MultiPlayerGameManager) m_GameManager.get());
@@ -54,6 +56,24 @@ public class MultiPlayerController extends GameWindowController
                     else if (manager.getSnake2().getBodyCoords().contains(pos))
                         ((Rectangle) child).setFill(manager.getSnake2().getBodyColor());
                 }
+            }
+        });
+
+        // END GAME NOTIFICATION
+        m_GameManager.get().gameStateProperty().addListener((event, oldValue, newValue) ->
+        {
+            switch (newValue)
+            {
+                case P1_WON:
+                    System.out.println("p1 won");
+                    return;
+
+                case P2_WON:
+                    System.out.println("p2 won");
+                    return;
+
+                case ALL_DEAD:
+                    System.out.println("nobody won");
             }
         });
 
