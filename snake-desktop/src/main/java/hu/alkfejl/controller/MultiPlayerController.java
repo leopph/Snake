@@ -18,6 +18,7 @@ public class MultiPlayerController extends GameWindowController
     {
         // SET INPUT HANDLER
         m_Grid.getScene().setOnKeyPressed(this::keyCallback);
+        m_Grid.getScene().setOnKeyReleased(this::keyCallback);
 
         // RENDER "CYCLE"
         ((MultiPlayerGameManager) m_GameManager.get()).ticksProperty().addListener(event ->
@@ -86,83 +87,107 @@ public class MultiPlayerController extends GameWindowController
     {
         var manager = (MultiPlayerGameManager) m_GameManager.get();
 
-        switch (event.getCode())
+        if (event.getEventType() == KeyEvent.KEY_PRESSED)
+            switch (event.getCode())
+            {
+                case W:
+                    if (manager.getSnake().getCurrentDirection() == Snake.Direction.UP)
+                        manager.setSnake1Boost(MultiPlayerGameManager.Boost.FAST);
+                    else if (manager.getSnake().getCurrentDirection() == Snake.Direction.DOWN)
+                        manager.setSnake1Boost(MultiPlayerGameManager.Boost.SLOW);
+                    else
+                        manager.getSnake().setNextDirection(Snake.Direction.UP);
+                    return;
+
+                case UP:
+                    if (manager.getSnake2().getCurrentDirection() == Snake.Direction.UP)
+                        manager.setSnake2Boost(MultiPlayerGameManager.Boost.FAST);
+                    else if (manager.getSnake2().getCurrentDirection() == Snake.Direction.DOWN)
+                        manager.setSnake2Boost(MultiPlayerGameManager.Boost.SLOW);
+                    else
+                        manager.getSnake2().setNextDirection(Snake.Direction.UP);
+                    return;
+
+                case S:
+                    if (manager.getSnake().getCurrentDirection() == Snake.Direction.DOWN)
+                        manager.setSnake1Boost(MultiPlayerGameManager.Boost.FAST);
+                    else if (manager.getSnake().getCurrentDirection() == Snake.Direction.UP)
+                        manager.setSnake1Boost(MultiPlayerGameManager.Boost.SLOW);
+                    else
+                        manager.getSnake().setNextDirection(Snake.Direction.DOWN);
+                    return;
+
+                case DOWN:
+                    if (manager.getSnake2().getCurrentDirection() == Snake.Direction.DOWN)
+                        manager.setSnake2Boost(MultiPlayerGameManager.Boost.FAST);
+                    else if (manager.getSnake2().getCurrentDirection() == Snake.Direction.UP)
+                        manager.setSnake2Boost(MultiPlayerGameManager.Boost.SLOW);
+                    else
+                        manager.getSnake2().setNextDirection(Snake.Direction.DOWN);
+                    return;
+
+                case A:
+                    if (manager.getSnake().getCurrentDirection() == Snake.Direction.LEFT)
+                        manager.setSnake1Boost(MultiPlayerGameManager.Boost.FAST);
+                    else if (manager.getSnake().getCurrentDirection() == Snake.Direction.RIGHT)
+                        manager.setSnake1Boost(MultiPlayerGameManager.Boost.SLOW);
+                    else
+                        manager.getSnake().setNextDirection(Snake.Direction.LEFT);
+                    return;
+
+                case LEFT:
+                    if (manager.getSnake2().getCurrentDirection() == Snake.Direction.LEFT)
+                        manager.setSnake2Boost(MultiPlayerGameManager.Boost.FAST);
+                    else if (manager.getSnake2().getCurrentDirection() == Snake.Direction.RIGHT)
+                        manager.setSnake2Boost(MultiPlayerGameManager.Boost.SLOW);
+                    else
+                        manager.getSnake2().setNextDirection(Snake.Direction.LEFT);
+                    return;
+
+                case D:
+                    if (manager.getSnake().getCurrentDirection() == Snake.Direction.RIGHT)
+                        manager.setSnake1Boost(MultiPlayerGameManager.Boost.FAST);
+                    else if (manager.getSnake().getCurrentDirection() == Snake.Direction.LEFT)
+                        manager.setSnake1Boost(MultiPlayerGameManager.Boost.SLOW);
+                    else
+                        manager.getSnake().setNextDirection(Snake.Direction.RIGHT);
+                    return;
+
+                case RIGHT:
+                    if (manager.getSnake2().getCurrentDirection() == Snake.Direction.RIGHT)
+                        manager.setSnake2Boost(MultiPlayerGameManager.Boost.FAST);
+                    else if (manager.getSnake2().getCurrentDirection() == Snake.Direction.LEFT)
+                        manager.setSnake2Boost(MultiPlayerGameManager.Boost.SLOW);
+                    else
+                        manager.getSnake2().setNextDirection(Snake.Direction.RIGHT);
+                    return;
+
+                case E:
+                    if (!manager.getHungerSkill().isOnCooldown())
+                        manager.getHungerSkill().setLastUsed(Instant.now());
+                    return;
+
+                case M:
+                    if (!manager.getHungerSkill2().isOnCooldown())
+                        manager.getHungerSkill2().setLastUsed(Instant.now());
+            }
+        else
         {
-            case W:
-                if (manager.getSnake().getCurrentDirection() == Snake.Direction.UP)
-                    manager.setSnake1Boost(MultiPlayerGameManager.Boost.FAST);
-                else if (manager.getSnake().getCurrentDirection() == Snake.Direction.DOWN)
-                    manager.setSnake1Boost(MultiPlayerGameManager.Boost.SLOW);
-                else
-                    manager.getSnake().setNextDirection(Snake.Direction.UP);
-                return;
+            switch (event.getCode())
+            {
+                case W:
+                case A:
+                case S:
+                case D:
+                    manager.setSnake1Boost(MultiPlayerGameManager.Boost.NONE);
+                    return;
 
-            case UP:
-                if (manager.getSnake2().getCurrentDirection() == Snake.Direction.UP)
-                    manager.setSnake2Boost(MultiPlayerGameManager.Boost.FAST);
-                else if (manager.getSnake2().getCurrentDirection() == Snake.Direction.DOWN)
-                    manager.setSnake2Boost(MultiPlayerGameManager.Boost.SLOW);
-                else
-                    manager.getSnake2().setNextDirection(Snake.Direction.UP);
-                return;
-
-            case S:
-                if (manager.getSnake().getCurrentDirection() == Snake.Direction.DOWN)
-                    manager.setSnake1Boost(MultiPlayerGameManager.Boost.FAST);
-                else if (manager.getSnake().getCurrentDirection() == Snake.Direction.UP)
-                    manager.setSnake1Boost(MultiPlayerGameManager.Boost.SLOW);
-                else
-                    manager.getSnake().setNextDirection(Snake.Direction.DOWN);
-                return;
-
-            case DOWN:
-                if (manager.getSnake2().getCurrentDirection() == Snake.Direction.DOWN)
-                    manager.setSnake2Boost(MultiPlayerGameManager.Boost.FAST);
-                else if (manager.getSnake2().getCurrentDirection() == Snake.Direction.UP)
-                    manager.setSnake2Boost(MultiPlayerGameManager.Boost.SLOW);
-                else
-                    manager.getSnake2().setNextDirection(Snake.Direction.DOWN);
-                return;
-
-            case A:
-                if (manager.getSnake().getCurrentDirection() == Snake.Direction.LEFT)
-                    manager.setSnake1Boost(MultiPlayerGameManager.Boost.FAST);
-                else if (manager.getSnake().getCurrentDirection() == Snake.Direction.RIGHT)
-                    manager.setSnake1Boost(MultiPlayerGameManager.Boost.SLOW);
-                else
-                    manager.getSnake().setNextDirection(Snake.Direction.LEFT);
-                return;
-
-            case LEFT:
-                if (manager.getSnake2().getCurrentDirection() == Snake.Direction.LEFT)
-                    manager.setSnake2Boost(MultiPlayerGameManager.Boost.FAST);
-                else if (manager.getSnake2().getCurrentDirection() == Snake.Direction.RIGHT)
-                    manager.setSnake2Boost(MultiPlayerGameManager.Boost.SLOW);
-                else
-                    manager.getSnake2().setNextDirection(Snake.Direction.LEFT);
-                return;
-
-            case D:
-                if (manager.getSnake().getCurrentDirection() == Snake.Direction.RIGHT)
-                    manager.setSnake1Boost(MultiPlayerGameManager.Boost.FAST);
-                else if (manager.getSnake().getCurrentDirection() == Snake.Direction.LEFT)
-                    manager.setSnake1Boost(MultiPlayerGameManager.Boost.SLOW);
-                else
-                    manager.getSnake().setNextDirection(Snake.Direction.RIGHT);
-                return;
-
-            case RIGHT:
-                if (manager.getSnake2().getCurrentDirection() == Snake.Direction.RIGHT)
-                    manager.setSnake2Boost(MultiPlayerGameManager.Boost.FAST);
-                else if (manager.getSnake2().getCurrentDirection() == Snake.Direction.LEFT)
-                    manager.setSnake2Boost(MultiPlayerGameManager.Boost.SLOW);
-                else
-                    manager.getSnake2().setNextDirection(Snake.Direction.RIGHT);
-                return;
-
-            case M:
-                if (!manager.getHungerSkill2().isOnCooldown())
-                    manager.getHungerSkill2().setLastUsed(Instant.now());
+                case UP:
+                case LEFT:
+                case DOWN:
+                case RIGHT:
+                    manager.setSnake2Boost(MultiPlayerGameManager.Boost.NONE);
+            }
         }
     }
 }
