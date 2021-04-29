@@ -9,40 +9,27 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-
-<AnchorPane fx:id="root" stylesheets="@../css/settings_menu.css" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.alkfejl.controller.SettingsMenuController">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../css/settings_menu.css" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.alkfejl.controller.SettingsMenuController">
    <children>
-      <Label fx:id="settingsTitleLabel" text="Settings" AnchorPane.leftAnchor="500.0" AnchorPane.rightAnchor="500.0" AnchorPane.topAnchor="0.0" />
-      <VBox fx:id="wallEditVbox" alignment="CENTER" fillWidth="false" styleClass="labeledContentBox" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="150.0">
+      <Label fx:id="settingsTitleLabel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" text="Settings" AnchorPane.leftAnchor="500.0" AnchorPane.rightAnchor="500.0" AnchorPane.topAnchor="0.0" />
+      <HBox alignment="CENTER" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="150.0">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" minWidth="40.0" styleClass="wallsLabel" text="Walls" textAlignment="CENTER">
-               <font>
-                  <Font name="Comic Sans MS" size="36.0" />
-               </font>
-            </Label>
-            <HBox alignment="CENTER" fillHeight="false" styleClass="wallHbox">
+            <VBox alignment="CENTER">
                <children>
-                  <CheckBox fx:id="m_UpWallCheck" mnemonicParsing="false" text="Upper Wall">
-                  </CheckBox>
-                  <CheckBox fx:id="m_DownWallCheck" mnemonicParsing="false" text="Bottom Wall" />
-                  <CheckBox fx:id="m_LeftWallCheck" mnemonicParsing="false" text="Left Wall" />
-                  <CheckBox fx:id="m_RightWallCheck" mnemonicParsing="false" text="Right Wall" />
+                  <Label text="Player 1 Name" />
+                  <TextField fx:id="m_P1NameInput" />
                </children>
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-            </HBox>
+            </VBox>
+            <VBox alignment="CENTER">
+               <children>
+                  <Label text="Player 2 Name" />
+                  <TextField fx:id="m_P2NameInput" />
+               </children>
+            </VBox>
          </children>
-      </VBox>
-      <VBox id="speedBox" alignment="CENTER" fillWidth="false" styleClass="labeledContentBox" AnchorPane.leftAnchor="550.0" AnchorPane.rightAnchor="510.0" AnchorPane.topAnchor="150.0">
-         <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" text="Game Tick Speed" />
-            <TextField fx:id="m_GameSpeedInput" />
-         </children>
-      </VBox>
-      <HBox alignment="CENTER" AnchorPane.topAnchor="400.0">
+      </HBox>
+      <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="90.0" spacing="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="220.0">
          <children>
             <VBox alignment="CENTER">
                <children>
@@ -70,7 +57,7 @@
             </VBox>
          </children>
       </HBox>
-      <HBox alignment="CENTER" AnchorPane.topAnchor="500.0">
+      <HBox alignment="CENTER" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="370.0">
          <children>
             <VBox alignment="CENTER">
                <children>
@@ -98,23 +85,30 @@
             </VBox>
          </children>
       </HBox>
-      <HBox alignment="CENTER" AnchorPane.topAnchor="600.0">
+      <VBox fx:id="wallEditVbox" alignment="CENTER" fillWidth="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="550.0" styleClass="labeledContentBox" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="470.0">
          <children>
-            <VBox alignment="CENTER">
+            <Label alignment="CENTER" contentDisplay="CENTER" text="Walls" textAlignment="CENTER" />
+            <HBox alignment="CENTER" fillHeight="false" styleClass="wallHbox">
                <children>
-                  <Label text="Player 1 Name" />
-                  <TextField fx:id="m_P1NameInput" />
+                  <CheckBox fx:id="m_UpWallCheck" mnemonicParsing="false" text="Upper Wall">
+                  </CheckBox>
+                  <CheckBox fx:id="m_DownWallCheck" mnemonicParsing="false" text="Bottom Wall" />
+                  <CheckBox fx:id="m_LeftWallCheck" mnemonicParsing="false" text="Left Wall" />
+                  <CheckBox fx:id="m_RightWallCheck" mnemonicParsing="false" text="Right Wall" />
                </children>
-            </VBox>
-            <VBox alignment="CENTER">
-               <children>
-                  <Label text="Player 2 Name" />
-                  <TextField fx:id="m_P2NameInput" />
-               </children>
-            </VBox>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </HBox>
          </children>
-      </HBox>
-      <HBox alignment="CENTER" styleClass="labeledContentBox" AnchorPane.rightAnchor="75.0" AnchorPane.topAnchor="150.0">
+      </VBox>
+      <VBox id="speedBox" alignment="CENTER" fillWidth="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="250.0" styleClass="labeledContentBox" AnchorPane.leftAnchor="550.0" AnchorPane.rightAnchor="470.0" AnchorPane.topAnchor="470.0">
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" text="Game Tick Speed" />
+            <TextField fx:id="m_GameSpeedInput" />
+         </children>
+      </VBox>
+      <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="470.0" spacing="10.0" styleClass="labeledContentBox" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="470.0">
          <children>
             <VBox alignment="CENTER" fillWidth="false">
                <children>

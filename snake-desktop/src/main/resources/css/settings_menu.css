@@ -3,49 +3,13 @@
     -fx-font-family: "Comic Sans MS";
 }
 
-#root
-{
-    -fx-min-width: 960;
-    -fx-min-height: 540;
-    -fx-pref-width: 1280;
-    -fx-pref-height: 720;
-}
-
 .label
 {
     -fx-alignment: center;
-    -fx-font-size: 24
+    -fx-font-size: 20;
 }
 
 #settingsTitleLabel
 {
     -fx-font-size: 36;
-}
-
-.check-box
-{
-    -fx-min-width: 80;
-    -fx-font-size: 16;
-}
-
-.labeledContentBox
-{
-    -fx-padding: 10, 0, 0, 0;
-    -fx-border-color: blue;
-}
-
-.wallHbox
-{
-    -fx-spacing: 20;
-    -fx-padding: 10, 0, 0, 0;
-}
-
-#speedBox
-{
-
-}
-
-.button
-{
-    -fx-max-width: 100;
 }
