@@ -104,6 +104,9 @@ public class SinglePlayerController extends GameWindowController
         /* RENDER CYCLE FOR FOODS */
         m_GameManager.get().getMap().foodProperty().addListener((observable, oldValue, newValue) ->
         {
+            if (newValue == null)
+                return;
+
             for (var child : m_Grid.getChildren())
             {
                 var x = GridPane.getColumnIndex(child);

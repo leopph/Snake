@@ -1,18 +1,17 @@
 package hu.alkfejl.controller;
 
-import hu.alkfejl.model.MultiPlayerGameManager;
-import hu.alkfejl.model.Skill;
-import hu.alkfejl.model.Snake;
-import hu.alkfejl.model.Vector2;
+import hu.alkfejl.model.*;
 import javafx.animation.Animation;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.StageStyle;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -123,22 +122,42 @@ public class MultiPlayerController extends GameWindowController
         // END GAME NOTIFICATION
         m_GameManager.get().gameStateProperty().addListener((event, oldValue, newValue) ->
         {
+            if (newValue != GameManager.GameState.P1_WON && newValue != GameManager.GameState.P2_WON && newValue != GameManager.GameState.ALL_DEAD)
+                return;
+
+            var alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.initStyle(StageStyle.UNDECORATED);
+            alert.setGraphic(null);
+
+            var p1HasName = m_GameManager.get().getPlayerName() != null && !m_GameManager.get().getPlayerName().isEmpty();
+            var p2HasName = ((MultiPlayerGameManager) m_GameManager.get()).getPlayer2Name() != null && !((MultiPlayerGameManager) m_GameManager.get()).getPlayer2Name().isEmpty();
+
             switch (newValue)
             {
                 case P1_WON:
-                    System.out.println("p1 won");
-                    returnToMain();
-                    return;
+                    alert.setTitle((p1HasName ? m_GameManager.get().getPlayerName() : "Player 1") + " won");
+                    alert.setHeaderText("A great victory was achieved today.");
+                    alert.setContentText("If only anybody cared...");
+                    break;
 
                 case P2_WON:
-                    System.out.println("p2 won");
-                    returnToMain();
-                    return;
+                    alert.setTitle((p2HasName ? ((MultiPlayerGameManager) m_GameManager.get()).getPlayer2Name() : "Player 2") + " won");
+                    alert.setHeaderText("Tales will be sung about this victory.");
+                    alert.setContentText("Though I'm not sure anyone would want to listen...");
+                    break;
 
                 case ALL_DEAD:
-                    System.out.println("nobody won");
-                    returnToMain();
+                    alert.setTitle("Death");
+                    alert.setHeaderText("Everybody died.");
+                    alert.setContentText("It was only a matter of time...");
             }
+
+            alert.setContentText(alert.getContentText() + "\n" +
+                    (p1HasName ? m_GameManager.get().getPlayerName() : "Player 1") + "'s score was " + m_GameManager.get().getPoints() + ".\n" +
+                    (p2HasName ? ((MultiPlayerGameManager) m_GameManager.get()).getPlayer2Name() : "Player 2") + "'s score was " + ((MultiPlayerGameManager) m_GameManager.get()).getPlayer2Points() + ".");
+            alert.showAndWait();
+
+
         });
 
 
