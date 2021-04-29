@@ -7,6 +7,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.paint.Color;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -28,6 +29,9 @@ public class MainMenuController implements Initializable
         Snake p1Snake = new Snake();
         Snake p2Snake = new Snake();
         Map map = new Map();
+
+        // MAKE SNAKE 2 DIFFERENT BY DEFAULT
+        p2Snake.setHeadColor(Color.BLUEVIOLET);
 
         // GAMES MANAGERS STORE THESE
         m_SinglePlayerGameManager = new SimpleObjectProperty<>(new SinglePlayerGameManager());
