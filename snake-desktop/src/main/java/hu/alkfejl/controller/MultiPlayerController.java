@@ -1,24 +1,82 @@
 package hu.alkfejl.controller;
 
 import hu.alkfejl.model.MultiPlayerGameManager;
+import hu.alkfejl.model.Skill;
 import hu.alkfejl.model.Snake;
 import hu.alkfejl.model.Vector2;
+import javafx.animation.Animation;
+import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+import java.time.Duration;
 import java.time.Instant;
 
 
 public class MultiPlayerController extends GameWindowController
 {
+    @FXML private Label m_PlayerNameLabel1;
+    @FXML private Label m_PlayerNameLabel2;
+    @FXML private Label m_ScoreLabel2;
+    @FXML private Label m_SkillLabel2;
+
+
     @Override
     public void start()
     {
         // SET INPUT HANDLER
         m_Grid.getScene().setOnKeyPressed(this::keyCallback);
         m_Grid.getScene().setOnKeyReleased(this::keyCallback);
+
+
+        // CONFIGURE PLAYER NAME DISPLAY
+        m_PlayerNameLabel1.textProperty().bind(Bindings.createStringBinding(() ->
+        {
+            var manager = (MultiPlayerGameManager) m_GameManager.get();
+            if (manager.getPlayerName() != null && !manager.getPlayerName().isEmpty())
+                return manager.getPlayerName();
+            return "Player 1";
+        }, m_GameManager.get().playerNameProperty()));
+
+        m_PlayerNameLabel2.textProperty().bind(Bindings.createStringBinding(() ->
+        {
+            var manager = (MultiPlayerGameManager) m_GameManager.get();
+            if (manager.getPlayer2Name() != null && !manager.getPlayer2Name().isEmpty())
+                return manager.getPlayer2Name();
+            return "Player 1";
+        }, ((MultiPlayerGameManager) m_GameManager.get()).player2NameProperty()));
+
+
+        // CONFIGURE SCORE DISPLAY
+        m_ScoreLabel.textProperty().bind(Bindings.createStringBinding(() -> "Score: " + m_GameManager.get().getPoints(), m_GameManager.get().pointsProperty()));
+        m_ScoreLabel2.textProperty().bind(Bindings.createStringBinding(() -> "Score: " + ((MultiPlayerGameManager) m_GameManager.get()).getPlayer2Points(), ((MultiPlayerGameManager) m_GameManager.get()).player2PointsProperty()));
+
+
+        // CONFIGURE HUNGER SKILL DISPLAYS
+        m_GameManager.get().hungerSkillProperty().get().ticksProperty().addListener((event, oldValue, newValue) ->
+                Platform.runLater(() -> setSkillLabel(m_GameManager.get().getHungerSkill(), m_SkillLabel, "Hunger")));
+        ((MultiPlayerGameManager) m_GameManager.get()).hungerSkill2Property().get().ticksProperty().addListener((event, oldValue, newValue) ->
+                Platform.runLater(() -> setSkillLabel(((MultiPlayerGameManager) m_GameManager.get()).getHungerSkill2(), m_SkillLabel2, "Hunger")));
+
+
+        // CONFIGURE FOOD PICKUP DISPLAY
+        m_GameManager.get().getMap().foodProperty().addListener((event, oldValue, newValue) -> Platform.runLater(() ->
+        {
+            if (m_FoodPickUpAnimation.getStatus() == Animation.Status.RUNNING)
+                m_FoodPickUpAnimation.stop();
+
+            if (oldValue == null)
+                return;
+
+            m_FoodPickUpLabel.setText("Picked up " + oldValue.getValue().getName() + " for " + oldValue.getValue().getPoint() + " points.");
+            m_FoodPickUpAnimation.play();
+        }));
+
 
         // RENDER "CYCLE"
         ((MultiPlayerGameManager) m_GameManager.get()).ticksProperty().addListener(event ->
@@ -34,8 +92,6 @@ public class MultiPlayerController extends GameWindowController
                     return;
 
                 var pos = new Vector2(GridPane.getColumnIndex(child), GridPane.getRowIndex(child));
-
-
 
                 if (manager.getMap().getFood() != null && manager.getMap().getFood().getKey().equals(pos))
                     ((Rectangle) child).setFill(manager.getMap().getFood().getValue().getColor());
@@ -60,6 +116,7 @@ public class MultiPlayerController extends GameWindowController
             }
         });
 
+
         // END GAME NOTIFICATION
         m_GameManager.get().gameStateProperty().addListener((event, oldValue, newValue) ->
         {
@@ -81,7 +138,27 @@ public class MultiPlayerController extends GameWindowController
             }
         });
 
+
+        // CREATE LAYOUT
         reset();
+    }
+
+
+    /* CHANGE SKILL LABELS */
+    private void setSkillLabel(Skill skill, Label label, String name)
+    {
+        if (skill.isInUse())
+        {
+            var durationLeft = Duration.between(Instant.now(), skill.getLastUsed().plus(skill.getDuration()));
+            label.setText(name + " is active! " + durationLeft.toSeconds() + " seconds left.");
+        }
+        else if (skill.isOnCooldown())
+        {
+            var cooldown = Duration.between(Instant.now(), skill.getLastUsed().plus(skill.getCooldown()));
+            label.setText(name + " is on cooldown! " + cooldown.toSeconds() + " seconds left.");
+        }
+        else
+            label.setText("");
     }
 
 
