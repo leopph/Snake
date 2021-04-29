@@ -116,6 +116,7 @@ public class MultiPlayerGameManager extends GameManager
         m_HungerSkill.get().setLastUsed(Instant.MIN);
         m_HungerSkill2.get().setLastUsed(Instant.MIN);
 
+        m_Map.get().setFood(null);
         placeFood(Food.Random(), List.of(), m_Map.get());
         m_State.setValue(GameState.IN_PROGRESS);
 

@@ -96,6 +96,8 @@ public abstract class GameManager implements Serializable
         m_Points.setValue(0);
         m_HungerSkill.get().setLastUsed(Instant.MIN);
 
+        m_Map.get().setFood(null);
+
         placeFood(Food.Random(), List.of(), m_Map.get());
         m_State.setValue(GameState.IN_PROGRESS);
         m_Loop.start();

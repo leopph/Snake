@@ -70,8 +70,11 @@ public class MultiPlayerController extends GameWindowController
             if (m_FoodPickUpAnimation.getStatus() == Animation.Status.RUNNING)
                 m_FoodPickUpAnimation.stop();
 
-            if (oldValue == null)
+            if (oldValue == null || newValue == null)
+            {
+                m_FoodPickUpLabel.setText("");
                 return;
+            }
 
             m_FoodPickUpLabel.setText("Picked up " + oldValue.getValue().getName() + " for " + oldValue.getValue().getPoint() + " points.");
             m_FoodPickUpAnimation.play();
