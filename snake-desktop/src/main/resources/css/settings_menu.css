@@ -9,7 +9,17 @@
     -fx-font-size: 20;
 }
 
+.hbox
+{
+    -fx-spacing: 10;
+}
+
 #settingsTitleLabel
 {
     -fx-font-size: 36;
+}
+
+#snakeColorHbox
+{
+    -fx-spacing: 20;
 }
