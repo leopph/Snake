@@ -51,12 +51,12 @@ public class SinglePlayerController extends GameWindowController
             {
                 var cooldown = Duration.between(Instant.now(), skill.getLastUsed().plus(skill.getCooldown()));
                 var durationLeft = Duration.between(Instant.now(), skill.getLastUsed().plus(skill.getDuration()));
-                m_SkillLabel.setText("Hunger is active!\nTime left: " + durationLeft.toSeconds() + "\nCooldown: " + cooldown.toSeconds() + ".");
+                m_SkillLabel.setText("Hunger is active! " + durationLeft.toSeconds() + " seconds left.");
             }
             else if (skill.isOnCooldown())
             {
                 var cooldown = Duration.between(Instant.now(), skill.getLastUsed().plus(skill.getCooldown()));
-                m_SkillLabel.setText("Hunger is on cooldown. " + cooldown.toSeconds() + " seconds left.");
+                m_SkillLabel.setText("Hunger is on cooldown! " + cooldown.toSeconds() + " seconds left.");
             }
             else
                 m_SkillLabel.setText("");

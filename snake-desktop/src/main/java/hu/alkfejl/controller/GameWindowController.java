@@ -47,26 +47,10 @@ public abstract class GameWindowController implements Initializable
     {
         m_FoodPickUpAnimation = new Timeline(
                 new KeyFrame(
-                        Duration.seconds(0),
-                        new KeyValue(
-                                m_FoodPickUpLabel.opacityProperty(),
-                                1,
-                                Interpolator.DISCRETE
-                        )
-                ),
-                new KeyFrame(
-                        Duration.seconds(2),
-                        new KeyValue(
-                                m_FoodPickUpLabel.opacityProperty(),
-                                1,
-                                Interpolator.DISCRETE
-                        )
-                ),
-                new KeyFrame(
                         Duration.seconds(3),
                         new KeyValue(
-                                m_FoodPickUpLabel.opacityProperty(),
-                                0,
+                                m_FoodPickUpLabel.textProperty(),
+                                "",
                                 Interpolator.DISCRETE
                         )
                 )
