@@ -8,10 +8,13 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.net.URL;
@@ -19,6 +22,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 
@@ -72,11 +76,15 @@ public class LeaderboardController implements Initializable
                     var dialog = new Dialog<Boolean>()
                     {
                         {
+                            initStyle(StageStyle.UNDECORATED);
+
                             var loader = new FXMLLoader(App.class.getResource("/fxml/edit_score.fxml"));
+
                             try
                             {
                                 var root = loader.<Parent>load();
                                 getDialogPane().setContent(root);
+                                getDialogPane().getContent().setStyle("-fx-padding: 0 ;"); // I SUFFERED HOURS WITH THIS
                                 loader.<ScoreEditController>getController().start(result, this);
                             }
                             catch (IOException exception) { exception.printStackTrace(); }
