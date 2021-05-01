@@ -13,6 +13,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
@@ -85,6 +86,7 @@ public abstract class GameWindowController implements Initializable
                 rect.widthProperty().bind(sizeBinding);
                 rect.heightProperty().bind(sizeBinding);
                 rect.setFill(Color.BLACK);
+                GridPane.setMargin(rect, new Insets(-1, -1, -1, -1));
                 m_Grid.add(rect, i, j);
             }
 
