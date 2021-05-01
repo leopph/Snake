@@ -225,11 +225,13 @@ public class MultiPlayerGameManager extends GameManager
                                     m_Snake2.get().move(willEat, m_Map.get().getSizeX(), m_Map.get().getSizeY());
 
                                     if (willEat)
+                                    {
                                         Platform.runLater(() -> m_Points2.setValue(m_Points2.get() + m_Map.get().getFood().getValue().getPoint()));
 
-                                    /* IF SNAKE ATE MAGIC FOOD, RESET CANNIBAL COOLDOWN */
-                                    if (m_Map.get().getFood().getValue().getName().equals(Food.getMagicFoodName()))
-                                        m_CannibalSkill2.get().setLastUsed(Instant.MIN);
+                                        /* IF SNAKE ATE MAGIC FOOD, RESET CANNIBAL COOLDOWN */
+                                        if (m_Map.get().getFood().getValue().getName().equals(Food.getMagicFoodName()))
+                                            m_CannibalSkill2.get().setLastUsed(Instant.MIN);
+                                    }
 
                                     if (m_Snake2.get().isSelfEating())
                                     {

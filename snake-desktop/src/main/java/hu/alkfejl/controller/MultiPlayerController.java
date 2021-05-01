@@ -24,6 +24,8 @@ public class MultiPlayerController extends GameWindowController
     @FXML private Label m_PlayerNameLabel2;
     @FXML private Label m_ScoreLabel2;
     @FXML private Label m_SkillLabel2;
+    @FXML private Label m_CannibalLabel1;
+    @FXML private Label m_CannibalLabel2;
 
 
     @Override
@@ -62,6 +64,12 @@ public class MultiPlayerController extends GameWindowController
                 Platform.runLater(() -> setSkillLabel(m_GameManager.get().getHungerSkill(), m_SkillLabel, "Hunger")));
         ((MultiPlayerGameManager) m_GameManager.get()).hungerSkill2Property().get().ticksProperty().addListener((event, oldValue, newValue) ->
                 Platform.runLater(() -> setSkillLabel(((MultiPlayerGameManager) m_GameManager.get()).getHungerSkill2(), m_SkillLabel2, "Hunger")));
+
+        // CONFIGURE CANNIBAL SKILL DISPLAYS
+        ((MultiPlayerGameManager) m_GameManager.get()).getCannibalSkill1().ticksProperty().addListener((event, oldValue, newValue) ->
+                Platform.runLater(() -> setSkillLabel(((MultiPlayerGameManager) m_GameManager.get()).getCannibalSkill1(), m_CannibalLabel1, "Cannibal")));
+        ((MultiPlayerGameManager) m_GameManager.get()).getCannibalSkill2().ticksProperty().addListener((event, oldValue, newValue) ->
+                Platform.runLater(() -> setSkillLabel(((MultiPlayerGameManager) m_GameManager.get()).getCannibalSkill2(), m_CannibalLabel2, "Cannibal")));
 
 
         // CONFIGURE FOOD PICKUP DISPLAY
