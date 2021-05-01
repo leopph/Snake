@@ -1,18 +1,19 @@
 package hu.alkfejl.controller;
 
+import hu.alkfejl.App;
 import hu.alkfejl.dao.ScoreDAO;
 import hu.alkfejl.model.Result;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.Parent;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -57,10 +58,40 @@ public class LeaderboardController implements Initializable
 
         m_ActionColumn.setCellFactory(param -> new TableCell<>()
         {
-            private final Button m_DeleteButton = new Button("Delete");
+            private final Button editButton = new Button("Edit");
+            private final Button deleteButton = new Button("Delete");
 
             {
-                m_DeleteButton.setOnAction(event ->
+                editButton.setOnAction(event ->
+                {
+                    var result = getTableRow().getItem();
+
+                    if (result == null)
+                        return;
+
+                    var dialog = new Dialog<Boolean>()
+                    {
+                        {
+                            var loader = new FXMLLoader(App.class.getResource("/fxml/edit_score.fxml"));
+                            try
+                            {
+                                var root = loader.<Parent>load();
+                                getDialogPane().setContent(root);
+                                loader.<ScoreEditController>getController().start(result, this);
+                            }
+                            catch (IOException exception) { exception.printStackTrace(); }
+                        }
+                    };
+
+                    dialog.showAndWait();
+
+                    if (dialog.getResult())
+                        m_DAO.update(result).setOnSucceeded(param -> reset());
+
+                    reset();
+                });
+
+                deleteButton.setOnAction(event ->
                 {
                     var result = getTableRow().getItem();
 
@@ -82,7 +113,7 @@ public class LeaderboardController implements Initializable
                 else
                 {
                     var hbox = new HBox();
-                    hbox.getChildren().add(m_DeleteButton);
+                    hbox.getChildren().addAll(editButton, deleteButton);
                     setGraphic(hbox);
                 }
             }

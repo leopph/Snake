@@ -20,16 +20,19 @@ public class ScoreDAO
     private static final String DELETE_SINGLE_STATEMENT;
     private static final String DELETE_GAMEMODE_STATEMENT;
     private static final String DELETE_ALL_STATEMENT;
+    private static final String UPDATE_SINGLE_STATEMENT;
 
     static
     {
         INSERT_STATEMENT = "INSERT INTO RESULT (playername, score, date, gamemode) VALUES (?, ?, ?, ?)";
 
-        SELECT_GAMEMODE_STATEMENT = "SELECT * FROM RESULT WHERE gamemode = ? ORDER BY score";
+        SELECT_GAMEMODE_STATEMENT = "SELECT id, playername, score, date, gamemode FROM RESULT WHERE gamemode = ? ORDER BY score DESC";
 
-        DELETE_SINGLE_STATEMENT = "DELETE FROM RESULT WHERE playername = ? AND score = ? AND gamemode = ?";
+        DELETE_SINGLE_STATEMENT = "DELETE FROM RESULT WHERE id = ?";
         DELETE_GAMEMODE_STATEMENT = "DELETE FROM RESULT WHERE gamemode = ?";
         DELETE_ALL_STATEMENT = "DELETE FROM RESULT";
+
+        UPDATE_SINGLE_STATEMENT = "UPDATE RESULT SET playername = ?, score = ?, date = ?, gamemode = ? WHERE id = ?";
     }
 
 
@@ -64,6 +67,7 @@ public class ScoreDAO
             while (results.next())
             {
                 var result = new Result();
+                result.setID(results.getLong("id"));
                 result.setGameMode(gameMode);
                 result.setPlayerName(results.getString("playername"));
                 result.setScore(results.getInt("score"));
@@ -107,6 +111,35 @@ public class ScoreDAO
     }
 
 
+    public Task<Void> update(Result r)
+    {
+        var updateTask = new Task<Void>()
+        {
+            @Override
+            protected Void call()
+            {
+                try (var connection = DriverManager.getConnection(Configuration.getValue("DATABASE_URL"));
+                     var statement = connection.prepareStatement(UPDATE_SINGLE_STATEMENT))
+                {
+                    statement.setString(1, r.getPlayerName());
+                    statement.setInt(2, r.getScore());
+                    statement.setString(3, r.getDate().toString());
+                    statement.setString(4, r.getGameMode().name);
+                    statement.setLong(5, r.getID());
+
+                    statement.execute();
+                }
+                catch (SQLException exception) { exception.printStackTrace(); }
+
+                return null;
+            }
+        };
+
+        new Thread(updateTask).start();
+        return updateTask;
+    }
+
+
     public Task<Void> delete(Result r)
     {
         var deleteTask = new Task<Void>()
@@ -117,9 +150,7 @@ public class ScoreDAO
                 try (var connection = DriverManager.getConnection(Configuration.getValue("DATABASE_URL"));
                 var statement = connection.prepareStatement(DELETE_SINGLE_STATEMENT))
                 {
-                    statement.setString(1, r.getPlayerName());
-                    statement.setInt(2, r.getScore());
-                    statement.setString(3, r.getGameMode().name);
+                    statement.setLong(1, r.getID());
 
                     statement.execute();
                 }
