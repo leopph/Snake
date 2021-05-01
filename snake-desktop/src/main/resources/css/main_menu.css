@@ -20,6 +20,5 @@
 
 .button
 {
-    /*-fx-graphic: url('../graphics/button.png');*/
     -fx-content-display: center;
 }

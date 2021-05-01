@@ -3,10 +3,23 @@
     -fx-font-family: "Comic Sans MS";
 }
 
+.root
+{
+    -fx-background-image: url("../images/snaek_vibe.jpg");
+    -fx-effect: innershadow(gaussian, black, 127, 0, 0, 0);
+}
+
 .label
 {
     -fx-alignment: center;
-    -fx-font-size: 20;
+    -fx-font-size: 24;
+    -fx-text-fill: #adada6;
+}
+
+.label .text
+{
+    -fx-stroke: #307275;
+    -fx-stroke-width: 1px;
 }
 
 .hbox
@@ -22,4 +35,25 @@
 #snakeColorHbox
 {
     -fx-spacing: 20;
+}
+
+.color-picker
+{
+    -fx-background-color: #bc7ac2;
+}
+
+.color-picker > .label
+{
+    -fx-font-size: 12;
+}
+
+.text-field
+{
+    -fx-alignment: center;
+    -fx-background-color: #ada58c;
+}
+
+.check-box
+{
+    -fx-text-fill: #364196;
 }
