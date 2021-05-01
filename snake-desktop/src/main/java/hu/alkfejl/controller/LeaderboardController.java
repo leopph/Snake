@@ -2,6 +2,8 @@ package hu.alkfejl.controller;
 
 import hu.alkfejl.dao.ScoreDAO;
 import hu.alkfejl.model.Result;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -9,9 +11,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Callback;
 
 import java.net.URL;
-import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 
@@ -21,7 +28,7 @@ public class LeaderboardController implements Initializable
     @FXML private Button m_ModeButton;
     @FXML private TableColumn<Result, String> m_NameColumn;
     @FXML private TableColumn<Result, Integer> m_ScoreColumn;
-    @FXML private TableColumn<Result, Instant> m_DateColumn;
+    @FXML private TableColumn<Result, String> m_DateColumn;
 
     private final ScoreDAO m_DAO;
     private Result.GameMode m_CurrentMode;
@@ -41,7 +48,10 @@ public class LeaderboardController implements Initializable
 
         m_NameColumn.setCellValueFactory(new PropertyValueFactory<>("playerName"));
         m_ScoreColumn.setCellValueFactory(new PropertyValueFactory<>("score"));
-        m_DateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+        m_DateColumn.setCellValueFactory(features -> new SimpleObjectProperty<>(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT)
+                .withLocale(Locale.getDefault())
+                .withZone(ZoneId.systemDefault())
+                .format(features.getValue().getDate())));
     }
 
 
