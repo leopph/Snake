@@ -1,0 +1,7 @@
+.table-view .column-header-background{
+    -fx-background-color: rgba(255,0,255,0.5);
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+}

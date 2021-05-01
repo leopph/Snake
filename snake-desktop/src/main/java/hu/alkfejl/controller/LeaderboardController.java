@@ -8,12 +8,10 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
@@ -22,7 +20,6 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 
@@ -58,6 +55,11 @@ public class LeaderboardController implements Initializable
                 .withLocale(Locale.getDefault())
                 .withZone(ZoneId.systemDefault())
                 .format(features.getValue().getDate())));
+
+        m_NameColumn.prefWidthProperty().bind(m_Table.widthProperty().divide(4));
+        m_ScoreColumn.prefWidthProperty().bind(m_Table.widthProperty().divide(4));
+        m_DateColumn.prefWidthProperty().bind(m_Table.widthProperty().divide(4));
+        m_ActionColumn.prefWidthProperty().bind(m_Table.widthProperty().divide(4));
 
 
         m_ActionColumn.setCellFactory(param -> new TableCell<>()
@@ -160,5 +162,26 @@ public class LeaderboardController implements Initializable
         }
 
         reset();
+    }
+
+
+    @FXML
+    private void onBack()
+    {
+        App.getWindowManager().showScene("MainMenu");
+    }
+
+    @FXML
+    private void onDeleteCategory()
+    {
+        m_DAO.deleteByCategory(m_CurrentMode)
+        .setOnSucceeded(event -> reset());
+    }
+
+    @FXML
+    private void onDeleteAll()
+    {
+        m_DAO.deleteAll()
+        .setOnSucceeded(event -> reset());
     }
 }

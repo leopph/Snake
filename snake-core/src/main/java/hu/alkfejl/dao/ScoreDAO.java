@@ -163,4 +163,46 @@ public class ScoreDAO
         new Thread(deleteTask).start();
         return deleteTask;
     }
+
+
+    public Task<Void> deleteAll()
+    {
+        var deleteTask = new Task<Void>()
+        {
+            @Override
+            protected Void call()
+            {
+                try (var connection = DriverManager.getConnection(Configuration.getValue("DATABASE_URL")))
+                { connection.createStatement().execute(DELETE_ALL_STATEMENT); }
+                catch (SQLException exception) { exception.printStackTrace(); }
+                return null;
+            }
+        };
+
+        new Thread(deleteTask).start();
+        return deleteTask;
+    }
+
+
+    public Task<Void> deleteByCategory(Result.GameMode gameMode)
+    {
+        var deleteTask = new Task<Void>()
+        {
+            @Override
+            protected Void call()
+            {
+                try (var connection = DriverManager.getConnection(Configuration.getValue("DATABASE_URL"));
+                    var statement = connection.prepareStatement(DELETE_GAMEMODE_STATEMENT))
+                {
+                    statement.setString(1, gameMode.name);
+                    statement.execute();
+                }
+                catch (SQLException exception) { exception.printStackTrace(); }
+                return null;
+            }
+        };
+
+        new Thread(deleteTask).start();
+        return deleteTask;
+    }
 }
