@@ -36,7 +36,10 @@ public class SinglePlayerController extends GameWindowController
                 m_FoodPickUpAnimation.stop();
 
             if (oldValue == null)
+            {
+                m_FoodPickUpLabel.setText("");
                 return;
+            }
 
             m_FoodPickUpLabel.setText("Picked up " + oldValue.getValue().getName() + " for " + oldValue.getValue().getPoint() + " points.");
             m_FoodPickUpAnimation.play();
