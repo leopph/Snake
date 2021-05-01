@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane id="BorderPane" stylesheets="@../css/single_player.css" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.alkfejl.controller.SinglePlayerController">
+<BorderPane id="BorderPane" stylesheets="@../css/game_window.css" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.alkfejl.controller.SinglePlayerController">
     <center>
         <GridPane fx:id="m_Grid" BorderPane.alignment="CENTER" />
     </center>

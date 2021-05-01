@@ -20,6 +20,7 @@ public class MainMenuController implements Initializable
 
     private ObjectProperty<GameManager> m_MultiPlayerGameManager;
     private MultiPlayerController m_MultiPlayerController;
+    private LeaderboardController m_LeaderboardController;
 
 
     @Override
@@ -79,6 +80,21 @@ public class MainMenuController implements Initializable
         }
         else
             m_MultiPlayerController.reset();
+    }
+
+
+    @FXML
+    private void openLeaderboard()
+    {
+        if (!App.getWindowManager().showScene("Leaderboard"))
+        {
+            var loader = App.getWindowManager().createScene("Leaderboard", "leaderboard.fxml");
+            m_LeaderboardController = loader.getController();
+            m_LeaderboardController.start();
+            App.getWindowManager().showScene("Leaderboard");
+        }
+        else
+            m_LeaderboardController.reset();
     }
 
 

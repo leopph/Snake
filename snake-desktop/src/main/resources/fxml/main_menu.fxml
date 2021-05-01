@@ -12,6 +12,7 @@
          <children>
             <Button mnemonicParsing="false" onAction="#startSinglePlayer" text="Play alone :(" textAlignment="CENTER" />
             <Button mnemonicParsing="false" onAction="#startMultiPlayer" text="Play with an acquaintance :|" textAlignment="CENTER" />
+            <Button mnemonicParsing="false" onAction="#openLeaderboard" text="Leaderboard" />
             <Button mnemonicParsing="false" onAction="#openSettings" text="Settings" textAlignment="CENTER" />
             <Button mnemonicParsing="false" onAction="#exitApp" text="Exit" textAlignment="CENTER" />
          </children>

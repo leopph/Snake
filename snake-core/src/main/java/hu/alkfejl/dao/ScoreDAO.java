@@ -7,6 +7,7 @@ import javafx.concurrent.Task;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,6 @@ public class ScoreDAO
     /* SQL STATEMENT TEMPLATES */
     private static final String INSERT_STATEMENT;
     private static final String SELECT_GAMEMODE_STATEMENT;
-    private static final String SELECT_ALL_STATEMENT;
     private static final String DELETE_SINGLE_STATEMENT;
     private static final String DELETE_GAMEMODE_STATEMENT;
     private static final String DELETE_ALL_STATEMENT;
@@ -26,7 +26,6 @@ public class ScoreDAO
         INSERT_STATEMENT = "INSERT INTO RESULT (playername, score, date, gamemode) VALUES (?, ?, ?, ?)";
 
         SELECT_GAMEMODE_STATEMENT = "SELECT * FROM RESULT WHERE gamemode = ? ORDER BY score";
-        SELECT_ALL_STATEMENT = "SELECT * FROM RESULT ORDER BY score";
 
         DELETE_SINGLE_STATEMENT = "DELETE FROM RESULT WHERE name = ? and score = ? gamemode = ?";
         DELETE_GAMEMODE_STATEMENT = "DELETE FROM RESULT WHERE gamemode =?";
@@ -35,10 +34,7 @@ public class ScoreDAO
 
 
     /* INSTANCE HOLDER */
-    private static class Singleton
-    {
-        private static final ScoreDAO s_Instance = new ScoreDAO();
-    }
+    private static class Singleton { private static final ScoreDAO s_Instance = new ScoreDAO(); }
 
 
     public static ScoreDAO getInstance()
@@ -55,25 +51,28 @@ public class ScoreDAO
     }
 
 
-    public List<Result> findAll()
+    public List<Result> findAllByGameMode(Result.GameMode gameMode)
     {
         var ret = new ArrayList<Result>();
 
         try (var connection = DriverManager.getConnection(Configuration.getValue("DATABASE_URL"));
-            var results = connection.createStatement().executeQuery(SELECT_ALL_STATEMENT))
+            var statement = connection.prepareStatement(SELECT_GAMEMODE_STATEMENT))
         {
+            statement.setString(1, gameMode.name);
+            var results = statement.executeQuery();
+
             while (results.next())
             {
                 var result = new Result();
+                result.setGameMode(gameMode);
                 result.setPlayerName(results.getString("playername"));
                 result.setScore(results.getInt("score"));
-                result.setDate((Instant) results.getObject("date"));
-                result.setGameMode(results.getString("gamemode").equals("SINGLE") ? Result.GameMode.SINGLE : Result.GameMode.MULTI);
+                result.setDate(Instant.parse(results.getString("date")));
 
                 ret.add(result);
             }
         }
-        catch (SQLException exception) { exception.printStackTrace(); }
+        catch (SQLException e) { e.printStackTrace(); }
 
         return ret;
     }
@@ -92,7 +91,7 @@ public class ScoreDAO
                 {
                     statement.setString(1, r.getPlayerName());
                     statement.setInt(2, r.getScore());
-                    statement.setObject(3, r.getDate().atZone(ZoneId.systemDefault()).toLocalDateTime());
+                    statement.setString(3, r.getDate().toString());
                     statement.setString(4, r.getGameMode().name);
 
                     statement.execute();

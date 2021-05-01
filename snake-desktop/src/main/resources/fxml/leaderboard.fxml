@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hu.alkfejl.controller.LeaderboardController">
+   <center>
+      <TableView fx:id="m_Table" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <columns>
+          <TableColumn fx:id="m_NameColumn" prefWidth="75.0" text="Name" />
+          <TableColumn fx:id="m_ScoreColumn" prefWidth="75.0" text="Score" />
+            <TableColumn fx:id="m_DateColumn" prefWidth="75.0" text="Date" />
+        </columns>
+      </TableView>
+   </center>
+   <bottom>
+      <AnchorPane prefHeight="40.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="m_ModeButton" onAction="#onModeChange" mnemonicParsing="false" text="Multiplayer" />
+         </children>
+      </AnchorPane>
+   </bottom>
+</BorderPane>
