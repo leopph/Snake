@@ -15,6 +15,8 @@ public class Food implements Serializable
     private static final ObjectProperty<Color> CUCUMBER_COLOR;
     private static final ObjectProperty<Color> PEACH_COLOR;
     private static final ObjectProperty<Color> BANANA_COLOR;
+    private static final ObjectProperty<Color> MAGIC_FOOD_COLOR;
+    private static final ReadOnlyStringProperty MAGIC_FOOD_NAME;
 
     static
     {
@@ -22,6 +24,8 @@ public class Food implements Serializable
         CUCUMBER_COLOR = new SimpleObjectProperty<>(Color.GREEN);
         PEACH_COLOR = new SimpleObjectProperty<>(Color.PEACHPUFF);
         BANANA_COLOR = new SimpleObjectProperty<>(Color.YELLOW);
+        MAGIC_FOOD_COLOR = new SimpleObjectProperty<>(Color.GOLD);
+        MAGIC_FOOD_NAME = new SimpleStringProperty("Magic Food");
     }
 
     /* INSTANCE PROPERTIES */
@@ -40,7 +44,7 @@ public class Food implements Serializable
 
 
     /* FACTORIES */
-    public static Food Apple()
+    private static Food Apple()
     {
         var ret = new Food();
         ret.m_Point.set(100);
@@ -50,7 +54,7 @@ public class Food implements Serializable
     }
 
 
-    public static Food Cucumber()
+    private static Food Cucumber()
     {
         var ret = new Food();
         ret.m_Point.set(150);
@@ -60,7 +64,7 @@ public class Food implements Serializable
     }
 
 
-    public static Food Peach()
+    private static Food Peach()
     {
         var ret = new Food();
         ret.m_Point.set(200);
@@ -70,7 +74,7 @@ public class Food implements Serializable
     }
 
 
-    public static Food Banana()
+    private static Food Banana()
     {
         var ret = new Food();
         ret.m_Point.set(250);
@@ -80,14 +84,29 @@ public class Food implements Serializable
     }
 
 
+    private static Food Magic()
+    {
+        var ret = new Food();
+        ret.m_Point.set(0);
+        ret.m_Color.set(MAGIC_FOOD_COLOR.get());
+        ret.m_Name.set(MAGIC_FOOD_NAME.get());
+        return ret;
+    }
+
+
     public static Food Random()
     {
-        switch (s_Random.nextInt(4))
+        switch (s_Random.nextInt(9))
         {
-            case 0: return Apple();
-            case 1: return Cucumber();
-            case 2: return Peach();
-            case 3: return Banana();
+            case 0:
+            case 1: return Apple();
+            case 2:
+            case 3: return Cucumber();
+            case 4:
+            case 5: return Peach();
+            case 6:
+            case 7: return Banana();
+            case 8: return Magic();
         }
 
         return null;
@@ -99,16 +118,21 @@ public class Food implements Serializable
     public static ObjectProperty<Color> cucumberColorProperty() { return CUCUMBER_COLOR; }
     public static ObjectProperty<Color> peachColorProperty() { return PEACH_COLOR; }
     public static ObjectProperty<Color> bananaColorProperty() { return BANANA_COLOR; }
+    public static ObjectProperty<Color> magicFoodColorProperty() { return MAGIC_FOOD_COLOR; }
+    public static ReadOnlyStringProperty magicFoodNameProperty() { return MAGIC_FOOD_NAME; }
 
     public static Color getAppleColor() { return APPLE_COLOR.get(); }
     public static Color getCucumberColor() { return CUCUMBER_COLOR.get(); }
     public static Color getPeachColor() { return PEACH_COLOR.get(); }
     public static Color getBananaColor() { return BANANA_COLOR.get(); }
+    public static Color getMagicFoodColor() { return MAGIC_FOOD_COLOR.get(); }
+    public static String getMagicFoodName() { return MAGIC_FOOD_NAME.get(); }
 
     public static void setAppleColor(Color newVal) { APPLE_COLOR.setValue(newVal); }
     public static void setCucumberColor(Color newVal) { CUCUMBER_COLOR.setValue(newVal); }
     public static void setPeachColor(Color newVal) { PEACH_COLOR.setValue(newVal); }
     public static void setBananaColor(Color newVal) { BANANA_COLOR.setValue(newVal); }
+    public static void setMagicFoodColor(Color newVal) { MAGIC_FOOD_COLOR.setValue(newVal); }
 
 
     /* INSTANCE PROPERTY GETTERS, GETTERS, SETTERS */

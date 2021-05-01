@@ -326,6 +326,16 @@ public class MultiPlayerController extends GameWindowController
                 case M:
                     if (!manager.getHungerSkill2().isOnCooldown())
                         manager.getHungerSkill2().setLastUsed(Instant.now());
+                    return;
+
+                case Q:
+                    if (!manager.getCannibalSkill1().isOnCooldown())
+                        manager.getCannibalSkill1().setLastUsed(Instant.now());
+                    return;
+
+                case N:
+                    if (!manager.getCannibalSkill2().isOnCooldown())
+                        manager.getCannibalSkill2().setLastUsed(Instant.now());
             }
         else
         {

@@ -30,6 +30,8 @@ public class MultiPlayerGameManager extends GameManager
     private final StringProperty m_PlayerName2;
     private final IntegerProperty m_Points2;
     private final ObjectProperty<Skill> m_HungerSkill2;
+    private final ObjectProperty<Skill> m_CannibalSkill1;
+    private final ObjectProperty<Skill> m_CannibalSkill2;
     private final ObjectProperty<Boost> m_Boost1;
     private final ObjectProperty<Boost> m_Boost2;
     private final LongProperty m_Ticks;
@@ -44,6 +46,8 @@ public class MultiPlayerGameManager extends GameManager
         m_PlayerName2 = new SimpleStringProperty();
         m_Points2 = new SimpleIntegerProperty(0);
         m_HungerSkill2 = new SimpleObjectProperty<>(new Skill());
+        m_CannibalSkill1 = new SimpleObjectProperty<>(new Skill());
+        m_CannibalSkill2 = new SimpleObjectProperty<>(new Skill());
         m_Boost1 = new SimpleObjectProperty<>(Boost.NONE);
         m_Boost2 = new SimpleObjectProperty<>(Boost.NONE);
         m_Ticks = new SimpleLongProperty(0L);
@@ -53,12 +57,20 @@ public class MultiPlayerGameManager extends GameManager
         m_HungerSkill2.get().setCooldown(m_HungerSkill.get().getCooldown());
         m_HungerSkill2.get().setDuration(m_HungerSkill.get().getDuration());
 
+        m_CannibalSkill1.get().setCooldown(java.time.Duration.ofSeconds(120));
+        m_CannibalSkill2.get().setDuration(java.time.Duration.ofSeconds(2));
+
+        m_CannibalSkill2.get().setCooldown(m_CannibalSkill1.get().getCooldown());
+        m_CannibalSkill2.get().setDuration(m_CannibalSkill1.get().getDuration());
+
         /* TICK RATE IS HALF OF THE ACTUAL GAME SPEED TO HANDLE BOOSTING */
         m_Loop.periodProperty().unbind();
         m_Loop.periodProperty().bind(Bindings.createObjectBinding(() -> new Duration((1.0 / m_TickRate.get()) * 500), m_TickRate));
 
         m_HungerSkill.get().ticksProperty().bind(m_Ticks);
         m_HungerSkill2.get().ticksProperty().bind(m_Ticks);
+        m_CannibalSkill1.get().ticksProperty().bind(m_Ticks);
+        m_CannibalSkill2.get().ticksProperty().bind(m_Ticks);
     }
 
 
@@ -72,6 +84,8 @@ public class MultiPlayerGameManager extends GameManager
     public LongProperty ticksProperty() { return m_Ticks; }
     public BooleanProperty snake1AliveProperty() { return m_Snake1Alive; }
     public BooleanProperty snake2AliveProperty() { return m_Snake2Alive; }
+    public ObjectProperty<Skill> cannibalSkill1Property() { return m_CannibalSkill1; }
+    public ObjectProperty<Skill> cannibalSkill2Property() { return m_CannibalSkill2; }
 
     public Snake getSnake2() { return m_Snake2.get(); }
     public String getPlayer2Name() { return m_PlayerName2.get(); }
@@ -82,6 +96,8 @@ public class MultiPlayerGameManager extends GameManager
     public Long getTicks() { return m_Ticks.get(); }
     public Boolean isSnake1Alive() { return m_Snake1Alive.get(); }
     public Boolean isSnake2Alive() { return m_Snake2Alive.get(); }
+    public Skill getCannibalSkill1() { return m_CannibalSkill1.get(); }
+    public Skill getCannibalSkill2() { return m_CannibalSkill2.get(); }
 
     public void setSnake2(Snake value) { m_Snake2.setValue(value); }
     public void setPlayer2Name(String value) { m_PlayerName2.setValue(value); }
@@ -92,6 +108,8 @@ public class MultiPlayerGameManager extends GameManager
     public void setTicks(Long value) { m_Ticks.setValue(value); }
     public void setSnake1Alive(Boolean value) { m_Snake1Alive.set(value); }
     public void setSnake2Alive(Boolean value) { m_Snake2Alive.set(value); }
+    public void setCannibalSkill1(Skill value) { m_CannibalSkill1.setValue(value); }
+    public void setCannibalSkill2(Skill value) { m_CannibalSkill2.setValue(value); }
 
 
     @Override
@@ -115,6 +133,9 @@ public class MultiPlayerGameManager extends GameManager
 
         m_HungerSkill.get().setLastUsed(Instant.MIN);
         m_HungerSkill2.get().setLastUsed(Instant.MIN);
+
+        m_CannibalSkill1.get().setLastUsed(Instant.MIN);
+        m_CannibalSkill2.get().setLastUsed(Instant.MIN);
 
         m_Map.get().setFood(null);
         placeFood(Food.Random(), List.of(), m_Map.get());
@@ -171,7 +192,13 @@ public class MultiPlayerGameManager extends GameManager
                                     m_Snake.get().move(willEat, m_Map.get().getSizeX(), m_Map.get().getSizeY());
 
                                     if (willEat)
+                                    {
                                         Platform.runLater(() -> m_Points.setValue(m_Points.get() + m_Map.get().getFood().getValue().getPoint()));
+
+                                        /* IF SNAKE ATE MAGIC FOOD, RESET CANNIBAL COOLDOWN */
+                                        if (m_Map.get().getFood().getValue().getName().equals(Food.getMagicFoodName()))
+                                            m_CannibalSkill1.get().setLastUsed(Instant.MIN);
+                                    }
 
                                     if (m_Snake.get().isSelfEating())
                                     {
@@ -199,6 +226,10 @@ public class MultiPlayerGameManager extends GameManager
 
                                     if (willEat)
                                         Platform.runLater(() -> m_Points2.setValue(m_Points2.get() + m_Map.get().getFood().getValue().getPoint()));
+
+                                    /* IF SNAKE ATE MAGIC FOOD, RESET CANNIBAL COOLDOWN */
+                                    if (m_Map.get().getFood().getValue().getName().equals(Food.getMagicFoodName()))
+                                        m_CannibalSkill2.get().setLastUsed(Instant.MIN);
 
                                     if (m_Snake2.get().isSelfEating())
                                     {
@@ -235,17 +266,35 @@ public class MultiPlayerGameManager extends GameManager
                             /* IF ONLY SNAKE 1 IS ALIVE IT MIGHT HAVE WON */
                             if (m_Snake1Alive.get() && !m_Snake2Alive.get())
                             {
-                                Platform.runLater(() -> m_State.setValue(GameState.P1_WON));
-                                Platform.runLater(m_Loop::cancel);
-                                return null;
+                                /* IF SNAKE 2 WAS CANNIBAL, IT DIDNT ACTUALLY DIE */
+                                if (m_CannibalSkill2.get().isInUse())
+                                {
+                                    m_Snake2Alive.setValue(true);
+                                    m_Snake.get().getBodyCoords().remove(m_Snake.get().getBodyCoords().lastIndexOf(m_Snake2.get().getBodyCoords().get(0)), m_Snake.get().getBodyCoords().size());
+                                }
+                                else
+                                {
+                                    Platform.runLater(() -> m_State.setValue(GameState.P1_WON));
+                                    Platform.runLater(m_Loop::cancel);
+                                    return null;
+                                }
                             }
 
                             /* IF ONLY SNAKE 2 IS ALIVE IT MIGHT HAVE WON */
                             if (!m_Snake1Alive.get() && m_Snake2Alive.get())
                             {
-                                Platform.runLater(() -> m_State.setValue(GameState.P2_WON));
-                                Platform.runLater(m_Loop::cancel);
-                                return null;
+                                /* IF SNAKE 1 WAS CANNIBAL, IT DIDNT ACTUALLY DIE */
+                                if (m_CannibalSkill1.get().isInUse())
+                                {
+                                    m_Snake1Alive.setValue(true);
+                                    m_Snake2.get().getBodyCoords().remove(m_Snake2.get().getBodyCoords().lastIndexOf(m_Snake.get().getBodyCoords().get(0)), m_Snake2.get().getBodyCoords().size());
+                                }
+                                else
+                                {
+                                    Platform.runLater(() -> m_State.setValue(GameState.P2_WON));
+                                    Platform.runLater(m_Loop::cancel);
+                                    return null;
+                                }
                             }
                         }
                         catch (Exception e) { e.printStackTrace(); }
