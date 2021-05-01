@@ -58,7 +58,7 @@ public class MultiPlayerGameManager extends GameManager
         m_HungerSkill2.get().setDuration(m_HungerSkill.get().getDuration());
 
         m_CannibalSkill1.get().setCooldown(java.time.Duration.ofSeconds(120));
-        m_CannibalSkill2.get().setDuration(java.time.Duration.ofSeconds(2));
+        m_CannibalSkill1.get().setDuration(java.time.Duration.ofSeconds(2));
 
         m_CannibalSkill2.get().setCooldown(m_CannibalSkill1.get().getCooldown());
         m_CannibalSkill2.get().setDuration(m_CannibalSkill1.get().getDuration());
