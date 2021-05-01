@@ -1,0 +1,134 @@
+package hu.alkfejl.dao;
+
+import hu.alkfejl.config.Configuration;
+import hu.alkfejl.model.Result;
+import javafx.concurrent.Task;
+
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.List;
+
+public class ScoreDAO
+{
+    /* SQL STATEMENT TEMPLATES */
+    private static final String INSERT_STATEMENT;
+    private static final String SELECT_GAMEMODE_STATEMENT;
+    private static final String SELECT_ALL_STATEMENT;
+    private static final String DELETE_SINGLE_STATEMENT;
+    private static final String DELETE_GAMEMODE_STATEMENT;
+    private static final String DELETE_ALL_STATEMENT;
+
+    static
+    {
+        INSERT_STATEMENT = "INSERT INTO RESULT (playername, score, date, gamemode) VALUES (?, ?, ?, ?)";
+
+        SELECT_GAMEMODE_STATEMENT = "SELECT * FROM RESULT WHERE gamemode = ? ORDER BY score";
+        SELECT_ALL_STATEMENT = "SELECT * FROM RESULT ORDER BY score";
+
+        DELETE_SINGLE_STATEMENT = "DELETE FROM RESULT WHERE name = ? and score = ? gamemode = ?";
+        DELETE_GAMEMODE_STATEMENT = "DELETE FROM RESULT WHERE gamemode =?";
+        DELETE_ALL_STATEMENT = "DELETE FROM RESULT";
+    }
+
+
+    /* INSTANCE HOLDER */
+    private static class Singleton
+    {
+        private static final ScoreDAO s_Instance = new ScoreDAO();
+    }
+
+
+    public static ScoreDAO getInstance()
+    {
+        return Singleton.s_Instance;
+    }
+
+
+    /* PREVENT UNWANTED INSTANCE CREATIONS */
+    private ScoreDAO()
+    {
+        if (Singleton.s_Instance != null)
+            throw new InstantiationError("SINGLETON INSTANCE ALREADY EXISTS");
+    }
+
+
+    public List<Result> findAll()
+    {
+        var ret = new ArrayList<Result>();
+
+        try (var connection = DriverManager.getConnection(Configuration.getValue("DATABASE_URL"));
+            var results = connection.createStatement().executeQuery(SELECT_ALL_STATEMENT))
+        {
+            while (results.next())
+            {
+                var result = new Result();
+                result.setPlayerName(results.getString("playername"));
+                result.setScore(results.getInt("score"));
+                result.setDate((Instant) results.getObject("date"));
+                result.setGameMode(results.getString("gamemode").equals("SINGLE") ? Result.GameMode.SINGLE : Result.GameMode.MULTI);
+
+                ret.add(result);
+            }
+        }
+        catch (SQLException exception) { exception.printStackTrace(); }
+
+        return ret;
+    }
+
+
+    /* CREATE A NEW THREAD THAT DELETES DATA THEN RETURN */
+    public void insert(Result r)
+    {
+        var insertTask = new Task<Void>()
+        {
+            @Override
+            protected Void call()
+            {
+                try (var connection = DriverManager.getConnection(Configuration.getValue("DATABASE_URL"));
+                    var statement = connection.prepareStatement(INSERT_STATEMENT))
+                {
+                    statement.setString(1, r.getPlayerName());
+                    statement.setInt(2, r.getScore());
+                    statement.setObject(3, r.getDate().atZone(ZoneId.systemDefault()).toLocalDateTime());
+                    statement.setString(4, r.getGameMode().name);
+
+                    statement.execute();
+                }
+                catch (SQLException exception) { exception.printStackTrace(); }
+
+                return null;
+            }
+        };
+
+        new Thread(insertTask).start();
+    }
+
+
+    public void delete(Result r)
+    {
+        var deleteTask = new Task<Void>()
+        {
+            @Override
+            protected Void call()
+            {
+                try (var connection = DriverManager.getConnection(Configuration.getValue("DATABASE_URL"));
+                var statement = connection.prepareStatement(DELETE_SINGLE_STATEMENT))
+                {
+                    statement.setString(1, r.getPlayerName());
+                    statement.setInt(2, r.getScore());
+                    statement.setString(3, r.getGameMode().name);
+
+                    statement.execute();
+                }
+                catch (SQLException exception) { exception.printStackTrace(); }
+
+                return null;
+            }
+        };
+
+        new Thread(deleteTask).start();
+    }
+}

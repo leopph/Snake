@@ -1,6 +1,5 @@
 package hu.alkfejl.controller;
 
-import hu.alkfejl.dao.SinglePlayerScoreDAO;
 import hu.alkfejl.model.*;
 
 import javafx.animation.Animation;
@@ -21,15 +20,6 @@ import java.time.Instant;
 
 public class SinglePlayerController extends GameWindowController
 {
-    private final SinglePlayerScoreDAO m_DAO;
-
-
-    public SinglePlayerController()
-    {
-        m_DAO = SinglePlayerScoreDAO.getInstance();
-    }
-
-
     @Override
     public void start()
     {
@@ -178,6 +168,7 @@ public class SinglePlayerController extends GameWindowController
             var result = new Result();
             result.setPlayerName(m_GameManager.get().getPlayerName());
             result.setScore(m_GameManager.get().getPoints());
+            result.setDate(Instant.now());
             result.setGameMode(Result.GameMode.SINGLE);
             m_DAO.insert(result);
 

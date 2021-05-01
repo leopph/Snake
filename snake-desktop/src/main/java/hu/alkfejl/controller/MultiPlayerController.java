@@ -7,6 +7,7 @@ import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -152,12 +153,65 @@ public class MultiPlayerController extends GameWindowController
                     alert.setContentText("It was only a matter of time...");
             }
 
+            if (!p1HasName)
+            {
+                var nameDialog = new TextInputDialog();
+                nameDialog.setGraphic(null);
+                nameDialog.setTitle("Missing name");
+                nameDialog.setHeaderText("Please enter Player 1's name. This will be display on the leaderboard!");
+
+                while (true)
+                {
+                    nameDialog.showAndWait();
+                    var result = nameDialog.getResult();
+                    if (result != null && !result.isEmpty())
+                    {
+                        m_GameManager.get().setPlayerName(result);
+                        break;
+                    }
+                }
+            }
+
+            if (!p2HasName)
+            {
+                var nameDialog = new TextInputDialog();
+                nameDialog.setGraphic(null);
+                nameDialog.setTitle("Missing name");
+                nameDialog.setHeaderText("Please enter Player 2's name. This will be display on the leaderboard!");
+
+                while (true)
+                {
+                    nameDialog.showAndWait();
+                    var result = nameDialog.getResult();
+                    if (result != null && !result.isEmpty())
+                    {
+                        ((MultiPlayerGameManager) m_GameManager.get()).setPlayer2Name(result);
+                        break;
+                    }
+                }
+            }
+
             alert.setContentText(alert.getContentText() + "\n" +
-                    (p1HasName ? m_GameManager.get().getPlayerName() : "Player 1") + "'s score was " + m_GameManager.get().getPoints() + ".\n" +
-                    (p2HasName ? ((MultiPlayerGameManager) m_GameManager.get()).getPlayer2Name() : "Player 2") + "'s score was " + ((MultiPlayerGameManager) m_GameManager.get()).getPlayer2Points() + ".");
+                    m_GameManager.get().getPlayerName() + "'s score was " + m_GameManager.get().getPoints() + ".\n" +
+                    ((MultiPlayerGameManager) m_GameManager.get()).getPlayer2Name() + "'s score was " + ((MultiPlayerGameManager) m_GameManager.get()).getPlayer2Points() + ".");
             alert.showAndWait();
 
+            var result1 = new Result();
+            result1.setPlayerName(m_GameManager.get().getPlayerName());
+            result1.setScore(m_GameManager.get().getPoints());
+            result1.setDate(Instant.now());
+            result1.setGameMode(Result.GameMode.MULTI);
 
+            var result2 = new Result();
+            result2.setPlayerName(((MultiPlayerGameManager) m_GameManager.get()).getPlayer2Name());
+            result2.setScore(((MultiPlayerGameManager) m_GameManager.get()).getPlayer2Points());
+            result2.setDate(Instant.now());
+            result2.setGameMode(Result.GameMode.MULTI);
+
+            m_DAO.insert(result1);
+            m_DAO.insert(result2);
+
+            returnToMain();
         });
 
 

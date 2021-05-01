@@ -1,6 +1,7 @@
 package hu.alkfejl.controller;
 
 import hu.alkfejl.App;
+import hu.alkfejl.dao.ScoreDAO;
 import hu.alkfejl.model.GameManager;
 import hu.alkfejl.model.Snake;
 import javafx.animation.Interpolator;
@@ -32,11 +33,13 @@ public abstract class GameWindowController implements Initializable
     @FXML protected Label m_SkillLabel;
     protected ObjectProperty<GameManager> m_GameManager;
     protected Timeline m_FoodPickUpAnimation;
+    protected ScoreDAO m_DAO;
 
 
     public GameWindowController()
     {
         m_GameManager = new SimpleObjectProperty<>();
+        m_DAO = ScoreDAO.getInstance();
     }
 
 
