@@ -27,8 +27,8 @@ public class ScoreDAO
 
         SELECT_GAMEMODE_STATEMENT = "SELECT * FROM RESULT WHERE gamemode = ? ORDER BY score";
 
-        DELETE_SINGLE_STATEMENT = "DELETE FROM RESULT WHERE name = ? and score = ? gamemode = ?";
-        DELETE_GAMEMODE_STATEMENT = "DELETE FROM RESULT WHERE gamemode =?";
+        DELETE_SINGLE_STATEMENT = "DELETE FROM RESULT WHERE playername = ? AND score = ? AND gamemode = ?";
+        DELETE_GAMEMODE_STATEMENT = "DELETE FROM RESULT WHERE gamemode = ?";
         DELETE_ALL_STATEMENT = "DELETE FROM RESULT";
     }
 
@@ -79,7 +79,7 @@ public class ScoreDAO
 
 
     /* CREATE A NEW THREAD THAT DELETES DATA THEN RETURN */
-    public void insert(Result r)
+    public Task<Void> insert(Result r)
     {
         var insertTask = new Task<Void>()
         {
@@ -103,10 +103,11 @@ public class ScoreDAO
         };
 
         new Thread(insertTask).start();
+        return insertTask;
     }
 
 
-    public void delete(Result r)
+    public Task<Void> delete(Result r)
     {
         var deleteTask = new Task<Void>()
         {
@@ -129,5 +130,6 @@ public class ScoreDAO
         };
 
         new Thread(deleteTask).start();
+        return deleteTask;
     }
 }

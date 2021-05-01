@@ -90,7 +90,6 @@ public class MainMenuController implements Initializable
         {
             var loader = App.getWindowManager().createScene("Leaderboard", "leaderboard.fxml");
             m_LeaderboardController = loader.getController();
-            m_LeaderboardController.start();
             App.getWindowManager().showScene("Leaderboard");
         }
         else
