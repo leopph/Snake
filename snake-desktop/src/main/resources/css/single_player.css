@@ -12,3 +12,18 @@
     -fx-text-fill: white;
     -fx-alignment: center;
 }
+
+.menu-bar
+{
+    -fx-background-color: purple;
+}
+
+.menu
+{
+    -fx-background-color: purple;
+}
+
+.menu-item
+{
+    -fx-background-color: purple;
+}
