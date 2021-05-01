@@ -114,8 +114,6 @@ public class SettingsMenuController
         m_BananaColor.valueProperty().bindBidirectional(Food.bananaColorProperty());
 
         m_P1NameInput.textProperty().bindBidirectional(m_SinglePlayerGameManager.get().playerNameProperty());
-        m_MultiPlayerGameManager.get().playerNameProperty().bind(m_P1NameInput.textProperty());
-
         m_P2NameInput.textProperty().bindBidirectional(((MultiPlayerGameManager) m_MultiPlayerGameManager.get()).player2NameProperty());
     }
 

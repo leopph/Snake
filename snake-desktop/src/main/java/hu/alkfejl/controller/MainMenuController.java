@@ -41,6 +41,7 @@ public class MainMenuController implements Initializable
         m_MultiPlayerGameManager = new SimpleObjectProperty<>(new MultiPlayerGameManager());
         m_MultiPlayerGameManager.get().setSnake(p1Snake);
         ((MultiPlayerGameManager) m_MultiPlayerGameManager.get()).setSnake2(p2Snake);
+        m_MultiPlayerGameManager.get().playerNameProperty().bindBidirectional(m_SinglePlayerGameManager.get().playerNameProperty());
         m_MultiPlayerGameManager.get().setMap(map);
     }
 
