@@ -2,13 +2,10 @@ package hu.alkfejl.dao;
 
 import hu.alkfejl.config.Configuration;
 import hu.alkfejl.model.Result;
-import javafx.concurrent.Task;
 
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,126 +80,68 @@ public class ScoreDAO
 
 
     /* CREATE A NEW THREAD THAT DELETES DATA THEN RETURN */
-    public Task<Void> insert(Result r)
+    public void insert(Result r)
     {
-        var insertTask = new Task<Void>()
+        try (var connection = DriverManager.getConnection(Configuration.getValue("DATABASE_URL"));
+             var statement = connection.prepareStatement(INSERT_STATEMENT))
         {
-            @Override
-            protected Void call()
-            {
-                try (var connection = DriverManager.getConnection(Configuration.getValue("DATABASE_URL"));
-                    var statement = connection.prepareStatement(INSERT_STATEMENT))
-                {
-                    statement.setString(1, r.getPlayerName());
-                    statement.setInt(2, r.getScore());
-                    statement.setString(3, r.getDate().toString());
-                    statement.setString(4, r.getGameMode().name);
+            statement.setString(1, r.getPlayerName());
+            statement.setInt(2, r.getScore());
+            statement.setString(3, r.getDate().toString());
+            statement.setString(4, r.getGameMode().name);
 
-                    statement.execute();
-                }
-                catch (SQLException exception) { exception.printStackTrace(); }
-
-                return null;
-            }
-        };
-
-        new Thread(insertTask).start();
-        return insertTask;
+            statement.execute();
+        }
+        catch (SQLException exception) { exception.printStackTrace(); }
     }
 
 
-    public Task<Void> update(Result r)
+    public void update(Result r)
     {
-        var updateTask = new Task<Void>()
+        try (var connection = DriverManager.getConnection(Configuration.getValue("DATABASE_URL"));
+             var statement = connection.prepareStatement(UPDATE_SINGLE_STATEMENT))
         {
-            @Override
-            protected Void call()
-            {
-                try (var connection = DriverManager.getConnection(Configuration.getValue("DATABASE_URL"));
-                     var statement = connection.prepareStatement(UPDATE_SINGLE_STATEMENT))
-                {
-                    statement.setString(1, r.getPlayerName());
-                    statement.setInt(2, r.getScore());
-                    statement.setString(3, r.getDate().toString());
-                    statement.setString(4, r.getGameMode().name);
-                    statement.setLong(5, r.getID());
+            statement.setString(1, r.getPlayerName());
+            statement.setInt(2, r.getScore());
+            statement.setString(3, r.getDate().toString());
+            statement.setString(4, r.getGameMode().name);
+            statement.setLong(5, r.getID());
 
-                    statement.execute();
-                }
-                catch (SQLException exception) { exception.printStackTrace(); }
-
-                return null;
-            }
-        };
-
-        new Thread(updateTask).start();
-        return updateTask;
+            statement.execute();
+        }
+        catch (SQLException exception) { exception.printStackTrace(); }
     }
 
 
-    public Task<Void> delete(Result r)
+    public void delete(Result r)
     {
-        var deleteTask = new Task<Void>()
+        try (var connection = DriverManager.getConnection(Configuration.getValue("DATABASE_URL"));
+             var statement = connection.prepareStatement(DELETE_SINGLE_STATEMENT))
         {
-            @Override
-            protected Void call()
-            {
-                try (var connection = DriverManager.getConnection(Configuration.getValue("DATABASE_URL"));
-                var statement = connection.prepareStatement(DELETE_SINGLE_STATEMENT))
-                {
-                    statement.setLong(1, r.getID());
+            statement.setLong(1, r.getID());
 
-                    statement.execute();
-                }
-                catch (SQLException exception) { exception.printStackTrace(); }
-
-                return null;
-            }
-        };
-
-        new Thread(deleteTask).start();
-        return deleteTask;
+            statement.execute();
+        }
+        catch (SQLException exception) { exception.printStackTrace(); }
     }
 
 
-    public Task<Void> deleteAll()
+    public void deleteAll()
     {
-        var deleteTask = new Task<Void>()
-        {
-            @Override
-            protected Void call()
-            {
-                try (var connection = DriverManager.getConnection(Configuration.getValue("DATABASE_URL")))
-                { connection.createStatement().execute(DELETE_ALL_STATEMENT); }
-                catch (SQLException exception) { exception.printStackTrace(); }
-                return null;
-            }
-        };
-
-        new Thread(deleteTask).start();
-        return deleteTask;
+        try (var connection = DriverManager.getConnection(Configuration.getValue("DATABASE_URL")))
+        { connection.createStatement().execute(DELETE_ALL_STATEMENT); }
+        catch (SQLException exception) { exception.printStackTrace(); }
     }
 
 
-    public Task<Void> deleteByCategory(Result.GameMode gameMode)
+    public void deleteByCategory(Result.GameMode gameMode)
     {
-        var deleteTask = new Task<Void>()
+        try (var connection = DriverManager.getConnection(Configuration.getValue("DATABASE_URL"));
+             var statement = connection.prepareStatement(DELETE_GAMEMODE_STATEMENT))
         {
-            @Override
-            protected Void call()
-            {
-                try (var connection = DriverManager.getConnection(Configuration.getValue("DATABASE_URL"));
-                    var statement = connection.prepareStatement(DELETE_GAMEMODE_STATEMENT))
-                {
-                    statement.setString(1, gameMode.name);
-                    statement.execute();
-                }
-                catch (SQLException exception) { exception.printStackTrace(); }
-                return null;
-            }
-        };
-
-        new Thread(deleteTask).start();
-        return deleteTask;
+            statement.setString(1, gameMode.name);
+            statement.execute();
+        }
+        catch (SQLException exception) { exception.printStackTrace(); }
     }
 }

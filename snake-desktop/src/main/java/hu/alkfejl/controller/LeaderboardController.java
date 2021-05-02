@@ -96,7 +96,21 @@ public class LeaderboardController implements Initializable
                     dialog.showAndWait();
 
                     if (dialog.getResult())
-                        m_DAO.update(result).setOnSucceeded(param -> reset());
+                    {
+                        var task = new Task<Void>()
+                        {
+                            @Override
+                            protected Void call() throws Exception
+                            {
+                                m_DAO.update(result);
+                                return null;
+                            }
+                        };
+
+                        task.setOnSucceeded(param -> reset());
+                        new Thread(task).start();
+                    }
+
 
                     reset();
                 });
@@ -108,7 +122,18 @@ public class LeaderboardController implements Initializable
                     if (result == null)
                         return;
 
-                    m_DAO.delete(result).setOnSucceeded(param -> reset());
+                    var task = new Task<Void>()
+                    {
+                        @Override
+                        protected Void call() throws Exception
+                        {
+                            m_DAO.delete(result);
+                            return null;
+                        }
+                    };
+
+                    task.setOnSucceeded(param -> reset());
+                    new Thread(task).start();
                 });
             }
 
@@ -174,14 +199,34 @@ public class LeaderboardController implements Initializable
     @FXML
     private void onDeleteCategory()
     {
-        m_DAO.deleteByCategory(m_CurrentMode)
-        .setOnSucceeded(event -> reset());
+        var task = new Task<Void>()
+        {
+            @Override
+            protected Void call() throws Exception
+            {
+                m_DAO.deleteByCategory(m_CurrentMode);
+                return null;
+            }
+        };
+
+        task.setOnSucceeded(event -> reset());
+        new Thread(task).start();
     }
 
     @FXML
     private void onDeleteAll()
     {
-        m_DAO.deleteAll()
-        .setOnSucceeded(event -> reset());
+        var task = new Task<Void>()
+        {
+            @Override
+            protected Void call() throws Exception
+            {
+                m_DAO.deleteAll();
+                return null;
+            }
+        };
+
+        task.setOnSucceeded(event -> reset());
+        new Thread(task).start();
     }
 }
