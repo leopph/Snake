@@ -2,6 +2,7 @@ package hu.alkfejl.controller;
 
 import hu.alkfejl.dao.ScoreDAO;
 import hu.alkfejl.model.Result;
+import hu.alkfejl.utility.ResultDeserializer;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,13 +28,12 @@ public class UpdateResultController extends HttpServlet
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
-        var result = new Result();
-
-        result.setID(Long.parseLong(req.getParameter("id")));
-        result.setPlayerName(req.getParameter("name"));
-        result.setScore(Integer.parseInt(req.getParameter("score")));
-        result.setDate(Instant.parse(req.getParameter("date")));
-        result.setGameMode(req.getParameter("gamemode").equals("SINGLE") ? Result.GameMode.SINGLE : Result.GameMode.MULTI);
+        var result = ResultDeserializer.deserialize(
+                req.getParameter("id"),
+                req.getParameter("name"),
+                req.getParameter("score"),
+                req.getParameter("date"),
+                req.getParameter("gamemode"));
 
         m_DAO.update(result);
         resp.sendRedirect("/snake");

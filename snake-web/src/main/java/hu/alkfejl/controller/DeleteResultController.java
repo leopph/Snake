@@ -1,6 +1,6 @@
 package hu.alkfejl.controller;
 
-import hu.alkfejl.model.Result;
+import hu.alkfejl.dao.ScoreDAO;
 import hu.alkfejl.utility.ResultDeserializer;
 
 import javax.servlet.ServletException;
@@ -9,12 +9,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.Instant;
 
 
-@WebServlet("/resultController")
-public class ResultController extends HttpServlet
+@WebServlet("/deleteResultController")
+public class DeleteResultController extends HttpServlet
 {
+    private final ScoreDAO m_DAO;
+
+
+    public DeleteResultController()
+    {
+        m_DAO = ScoreDAO.getInstance();
+    }
+
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
@@ -25,7 +33,7 @@ public class ResultController extends HttpServlet
                 req.getParameter("date"),
                 req.getParameter("gamemode"));
 
-        req.setAttribute("result", result);
-        req.getRequestDispatcher("updateResult.jsp").forward(req, resp);
+        m_DAO.delete(result);
+        resp.sendRedirect("/snake");
     }
 }
