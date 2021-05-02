@@ -14,7 +14,7 @@
         <br/>
 
         <label for="score">Score: </label>
-        <input id="score" name="score" value="${result.score}">
+        <input id="score" name="score" pattern="^[0-9]+$" value="${result.score}">
 
         <input type="hidden" name="gamemode" value="${result.gameMode}">
         <input type="hidden" name="id" value="${result.ID}">
