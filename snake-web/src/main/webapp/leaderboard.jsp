@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="leopph" %>
 
 
 <html>
@@ -20,7 +21,7 @@
                 <tr>
                     <td>${result.playerName}</td>
                     <td>${result.score}</td>
-                    <td>${result.date}</td>
+                    <td><leopph:formatInstant arg="${result.date}"/></td>
                     <td>
                         <form method="post" action="resultController">
                             <input type="hidden" name="id" value="${result.ID}">
