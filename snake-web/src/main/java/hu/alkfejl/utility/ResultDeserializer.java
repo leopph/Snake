@@ -25,6 +25,7 @@ public class ResultDeserializer
                 result.setID(Long.parseLong(args[0]));
                 break;
             default:
+                throw new IllegalArgumentException("Cannot deserialize result. Number of arguments is invalid.");
         }
 
         return result;
