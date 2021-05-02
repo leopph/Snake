@@ -1,7 +1,42 @@
+*
+{
+    -fx-font-family: "Comic Sans MS";
+}
+
+.root
+{
+    -fx-background-image: url("../images/snaek_sad.jpg");
+    -fx-background-size: contain;
+}
+
+.table-view
+{
+    -fx-background-color: transparent;
+}
+
 .table-view .column-header-background{
-    -fx-background-color: rgba(255,0,255,0.5);
+    -fx-background-color: #f5d142;
 }
 
 .table-view .column-header {
     -fx-background-color: transparent;
+    -fx-font-size: 20;
+}
+
+.table-view .table-cell
+{
+    -fx-text-fill: white;
+    -fx-font-size: 16;
+    -fx-text-alignment: center;
+    -fx-alignment: center;
+}
+
+.table-row-cell: odd
+{
+    -fx-background-color: rgba(0, 127, 0, 0.5);
+}
+
+.table-row-cell: even
+{
+    -fx-background-color: rgba(127, 0, 127, 0.5);
 }
