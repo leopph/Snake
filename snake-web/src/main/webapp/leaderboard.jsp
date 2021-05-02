@@ -29,7 +29,16 @@
                             <input type="hidden" name="score" value="${result.score}">
                             <input type="hidden" name="gamemode" value="${result.gameMode}">
                             <input type="hidden" name="date" value="${result.date}">
-                            <button type="submit">test</button>
+                            <button type="submit">Modify</button>
+                        </form>
+
+                        <form method="post" action="deleteResultController">
+                            <input type="hidden" name="id" value="${result.ID}">
+                            <input type="hidden" name="name" value="${result.playerName}">
+                            <input type="hidden" name="score" value="${result.score}">
+                            <input type="hidden" name="gamemode" value="${result.gameMode}">
+                            <input type="hidden" name="date" value="${result.date}">
+                            <button type="submit">Delete</button>
                         </form>
                     </td>
                 </tr>
