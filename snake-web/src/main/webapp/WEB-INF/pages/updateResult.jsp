@@ -3,7 +3,7 @@
 <%@ taglib tagdir="/WEB-INF/tags" prefix="leopph" %>
 
 
-<leopph:template title="Update Leaderboard Entry" subtitle="Update Leaderboard Entry">
+<leopph:template title="Update Leaderboard Entry" subtitle="Update Leaderboard Entry" homeButton="true">
     <jsp:useBean id="result" type="hu.alkfejl.model.Result" scope="request"/>
 
     <form class="row" method="post" action="updateResultController">

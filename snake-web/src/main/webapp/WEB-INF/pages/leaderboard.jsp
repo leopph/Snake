@@ -3,7 +3,7 @@
 <%@ taglib tagdir="/WEB-INF/tags" prefix="leopph" %>
 
 
-<leopph:template title="${sessionScope.gamemode} Leaderboard" subtitle="${sessionScope.gamemode} Leaderboard">
+<leopph:template title="${sessionScope.gamemode} Leaderboard" subtitle="${sessionScope.gamemode} Leaderboard" homeButton="true">
     <table class="table table-dark table-striped">
         <tr>
             <th>#</th>

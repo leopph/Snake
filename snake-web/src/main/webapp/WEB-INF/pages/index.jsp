@@ -2,7 +2,7 @@
 <%@ taglib tagdir="/WEB-INF/tags" prefix="leopph" %>
 
 
-<leopph:template title="The Snake Strikes Back" subtitle="">
+<leopph:template title="The Snake Strikes Back">
     <form class="row g-1" method="get" action="leaderboardController">
         <div>
             <label for="gamemode">Select a gamemode to list:</label>

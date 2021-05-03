@@ -1,6 +1,9 @@
 <%@ tag description="General Page Template" pageEncoding="UTF-8" %>
 <%@ attribute name="title" required="true" type="java.lang.String" %>
-<%@ attribute name="subtitle" required="true" type="java.lang.String" %>
+<%@ attribute name="subtitle" required="false" type="java.lang.String" %>
+<%@ attribute name="homeButton" required="false" type="java.lang.Boolean"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 
 <html>
     <head>
@@ -12,6 +15,10 @@
         <div class="container text-center">
             <h1>The Snake Strikes Back </h1>
             <h2>${subtitle}</h2>
+
+            <c:if test="${homeButton != null && homeButton}">
+                <a class="btn btn-primary" href="${pageContext.request.contextPath}">Home</a>
+            </c:if>
 
             <jsp:doBody/>
         </div>
