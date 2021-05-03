@@ -42,6 +42,6 @@ public class LeaderboardController extends HttpServlet
         else
             throw new IllegalArgumentException("Game mode is invalid!");
 
-        resp.sendRedirect("leaderboard.jsp");
+        resp.sendRedirect("leaderboard");
     }
 }

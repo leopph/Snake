@@ -29,7 +29,7 @@ public class UpdateResultController extends HttpServlet
         if (!req.getParameter("score").matches("(^[0-9]+$)"))
         {
             System.out.println("Got invalid score format. Redirecting to home...");
-            resp.sendRedirect("/snake");
+            resp.sendRedirect("index");
             return;
         }
 

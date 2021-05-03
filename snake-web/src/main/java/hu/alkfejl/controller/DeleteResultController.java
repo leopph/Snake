@@ -34,6 +34,6 @@ public class DeleteResultController extends HttpServlet
                 req.getParameter("gamemode"));
 
         m_DAO.delete(result);
-        resp.sendRedirect("/snake");
+        resp.sendRedirect("leaderboardController?gamemode=" + result.getGameMode().name.toLowerCase());
     }
 }

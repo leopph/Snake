@@ -1,6 +1,5 @@
 package hu.alkfejl.controller;
 
-import hu.alkfejl.model.Result;
 import hu.alkfejl.utility.ResultDeserializer;
 
 import javax.servlet.ServletException;
@@ -9,7 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.Instant;
 
 
 @WebServlet("/resultController")
@@ -26,6 +24,6 @@ public class ResultController extends HttpServlet
                 req.getParameter("gamemode"));
 
         req.setAttribute("result", result);
-        req.getRequestDispatcher("updateResult.jsp").forward(req, resp);
+        req.getRequestDispatcher("updateResult").forward(req, resp);
     }
 }

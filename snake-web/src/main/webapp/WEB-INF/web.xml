@@ -1,3 +1,33 @@
 <web-app>
-  <display-name>Archetype Created Web Application</display-name>
+  <display-name>The Snake Strikes Back</display-name>
+
+  <servlet>
+    <servlet-name>index</servlet-name>
+    <jsp-file>/WEB-INF/pages/index.jsp</jsp-file>
+  </servlet>
+
+  <servlet>
+    <servlet-name>leaderboard</servlet-name>
+    <jsp-file>/WEB-INF/pages/leaderboard.jsp</jsp-file>
+  </servlet>
+
+  <servlet>
+    <servlet-name>updateResult</servlet-name>
+    <jsp-file>/WEB-INF/pages/updateResult.jsp</jsp-file>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>index</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>leaderboard</servlet-name>
+    <url-pattern>/leaderboard</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>updateResult</servlet-name>
+    <url-pattern>/updateResult</url-pattern>
+  </servlet-mapping>
 </web-app>
