@@ -12,14 +12,16 @@
     <body>
         <table class="table table-dark table-striped">
             <tr>
+                <th>#</th>
                 <th>Name</th>
                 <th>Score</th>
                 <th>Date</th>
                 <th>Actions</th>
             </tr>
 
-            <c:forEach items="${sessionScope.results}" var="result">
+            <c:forEach items="${sessionScope.results}" var="result" varStatus="loop">
                 <tr>
+                    <td>${loop.index + 1}</td>
                     <td>${result.playerName}</td>
                     <td>${result.score}</td>
                     <td><leopph:formatInstant arg="${result.date}"/></td>
