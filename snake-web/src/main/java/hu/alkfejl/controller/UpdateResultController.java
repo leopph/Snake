@@ -26,9 +26,9 @@ public class UpdateResultController extends HttpServlet
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
-        if (!req.getParameter("score").matches("(^[0-9]+$)"))
+        if (req.getParameter("name").isBlank() || !req.getParameter("score").matches("(^[0-9]+$)"))
         {
-            System.out.println("Got invalid score format. Redirecting to home...");
+            System.out.println("Got invalid parameter format. Redirecting to home...");
             resp.sendRedirect("index");
             return;
         }

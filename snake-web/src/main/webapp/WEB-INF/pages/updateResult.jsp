@@ -9,7 +9,7 @@
     <form class="row" method="post" action="updateResultController">
         <div class="col-12">
             <label for="name">Name: </label>
-            <input id="name" name="name" value="${result.playerName}">
+            <input id="name" name="name" required="required" value="${result.playerName}">
         </div>
         <div class="col-12">
             <label for="score">Score: </label>
