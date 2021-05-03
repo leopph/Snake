@@ -41,6 +41,6 @@ public class UpdateResultController extends HttpServlet
                 req.getParameter("gamemode"));
 
         m_DAO.update(result);
-        resp.sendRedirect("/snake");
+        resp.sendRedirect("leaderboardController?gamemode=" + result.getGameMode().name.toLowerCase());
     }
 }
