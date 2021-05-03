@@ -4,7 +4,8 @@
 A program az Alkalmazásfejlesztés I. tárgyra készült.
 A projekt a Maven build automatizáló szoftvert használja. Függőségei között megtalálható a Java 11, JavaFX 11.
 A projekt három modulból tevődik össze, amelyek **snake-core**, **snake-desktop**, **snake-web** névre hallgatnak.
-A core modul tartalmazza a játék általt felhasznált adattípusokat, a desktop modul felelős az asztali alkalmazásért, míg a web modul a webes felületért.
+A core modul tartalmazza a játék általt felhasznált adattípusokat, a desktop modul felelős az asztali alkalmazásért, míg a web modul a webes felületért.  
+Az asztali változat legegyszerűbben a Maven Java FX plugin segítségével, a webes változat az Apache Tomcat szerver 9-es verziójával indítható a core modul Maven repository-ba installálása után.
 
 
 ## Asztali változat
@@ -31,3 +32,21 @@ Ez az időtartam nullázható, ha a játékos megesz egy speciális, 0 pontot é
 Inaktív kannibál képesség esetén egy ilyen harapás végzetes a kezdeményező kígyó számára, és az ellenfél automatikusan győz.
 
 ### Beállítási lehetősek
+A beállítások menüben beállítható:
+- A játékosok neve
+- A játék alapsebessége
+- A játékterület mérete (szélesség és magasság külön)
+- A játékterületet körülvevő falak
+- A kígyók fej illetve test színe
+- Az egyes ételek színe (a speciális varázs étel kivételével)
+
+### Ranglista
+Az egyes játékok végén az elért eredmény egy ranglistába mentődik. Ez a ranglista megtekinthető az alkalmazásból.
+Megnyitás után egy gomb segítségével válthatunk egyjátékos és kétjátékos eredmények között, törölhetjük azokat egyesével, kategória szerint, vagy az összeset egyben.
+Továbbá lehetőség van az egyes bejegyzések szerkesztésére is.
+
+
+## Webes változat
+Webes felületen a ranglista megtekintésére és menedzselésére van lehetőség.
+A kezdőoldalon a játékmód kiválasztása után látható a jelenlegi rangsor táblázatba szedve.
+Itt a megfelelő gomb megnyomásával törölhető egy-egy bejegyzés. Módosításra az azonos nevű gomb megnyomása után, az űrlap kitöltésével és elküldésével van lehetőség.
